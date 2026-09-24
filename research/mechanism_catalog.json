@@ -1,0 +1,168 @@
+[
+  {
+    "mechanism": "typed_decision_contract",
+    "origin": ["TypeSafe System One", "Laya"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Public System One documentation defines typed Choice/Score/Noul; open Laya implementation exposes typed decisions.",
+    "our_use": "Implementation-independent core contract.",
+    "next_test": "real-data transfer and batch-independence verification"
+  },
+  {
+    "mechanism": "dynamic_candidate_scoring",
+    "origin": ["GLiClass"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Open dynamic-label classification pattern supports candidate labels supplied at inference time.",
+    "our_use": "Runtime outcome-space and scorer abstraction.",
+    "next_test": "candidate IDs versus semantic descriptions on real data"
+  },
+  {
+    "mechanism": "pairwise_scoring",
+    "origin": ["cross-encoder style baseline"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Implemented and tested; context-blind by construction.",
+    "our_use": "Smallest scorer baseline."
+  },
+  {
+    "mechanism": "deepsets_context",
+    "origin": ["Deep Sets"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Permutation-equivariant implementation passes structural tests; can underperform pairwise when candidate interaction is unnecessary.",
+    "our_use": "Low-cost candidate-set context."
+  },
+  {
+    "mechanism": "set_transformer_context",
+    "origin": ["Set Transformer"],
+    "status": "OPEN",
+    "evidence": "Structural permutation tests pass; no real-data superiority evidence.",
+    "our_use": "Research-only backend."
+  },
+  {
+    "mechanism": "explicit_relational_attention",
+    "origin": ["set/graph attention family"],
+    "status": "OPEN",
+    "evidence": "Structural tests pass; performance value is unresolved.",
+    "our_use": "Research-only backend."
+  },
+  {
+    "mechanism": "conditional_complexity",
+    "origin": ["mixture/gating pattern"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "One synthetic contrastive result showed improvement over pairwise; broad superiority was not established.",
+    "our_use": "Candidate conditional scorer, pending real-data evidence."
+  },
+  {
+    "mechanism": "shortlist_then_rerank",
+    "origin": ["dynamic-label systems", "retrieval/reranking"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Oracle-vector N=128 experiment retained 6.25 percent of candidates at K=8 with 0.9961 to 1.0 recall@1 across three seeds; K=16 was lossless.",
+    "our_use": "Scalability layer before expensive scoring.",
+    "next_test": "real encoder retrieval recall under hard negatives"
+  },
+  {
+    "mechanism": "temperature_calibration",
+    "origin": ["post-hoc calibration literature"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Implemented and tested on held-out synthetic data.",
+    "our_use": "Separate probabilistic reliability layer.",
+    "next_test": "domain/language shift"
+  },
+  {
+    "mechanism": "split_conformal_set_prediction",
+    "origin": ["conformal prediction"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Finite-sample set construction, coverage, set-size and abstention code passed local tests.",
+    "our_use": "Post-model uncertainty/selective layer.",
+    "next_test": "coverage under realistic distribution shift"
+  },
+  {
+    "mechanism": "proper_scoring",
+    "origin": ["proper scoring rule literature"],
+    "status": "ESTABLISHED",
+    "evidence": "Proper scoring rules provide probability-reporting objectives with established incentive properties.",
+    "our_use": "Training/evaluation basis for probabilistic decisions."
+  },
+  {
+    "mechanism": "diffusion_read_slots",
+    "origin": ["OpenJev / diffusion language-model patterns"],
+    "status": "OPEN",
+    "evidence": "Observed in open implementations; not integrated into canonical contract.",
+    "our_use": "Possible inference backend."
+  },
+  {
+    "mechanism": "probabilistic_circuit_composition",
+    "origin": ["probabilistic circuits"],
+    "status": "OPEN",
+    "evidence": "Relevant compositional inference literature; no project integration experiment yet.",
+    "our_use": "Possible post-scorer composition layer."
+  },
+  {
+    "mechanism": "reification",
+    "origin": ["programming-language systems"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local primitive probe: computation -> data.",
+    "our_use": "Make computation manipulable as machine data."
+  },
+  {
+    "mechanism": "unification",
+    "origin": ["logic programming"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local probe accepted compatible substitutions and rejected conflicts.",
+    "our_use": "Structural matching and constraint composition."
+  },
+  {
+    "mechanism": "memoization",
+    "origin": ["functional/system optimization"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local probe reused equivalent computation results.",
+    "our_use": "Remove repeated computation."
+  },
+  {
+    "mechanism": "content_identity",
+    "origin": ["content-addressed systems"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Canonicalized equivalent structures to the same identity in local tests.",
+    "our_use": "Stable artifact/cache identity."
+  },
+  {
+    "mechanism": "capability",
+    "origin": ["capability security"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local signature/verification probe distinguished authorized from unauthorized actions.",
+    "our_use": "Separate authority from model judgement."
+  },
+  {
+    "mechanism": "causal_order",
+    "origin": ["Lamport clocks"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local logical-clock probe preserved happens-before ordering.",
+    "our_use": "Machine event ordering."
+  },
+  {
+    "mechanism": "convergent_merge",
+    "origin": ["CRDTs"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local G-set merge probe converged to the same union.",
+    "our_use": "Conflict-free state convergence."
+  },
+  {
+    "mechanism": "associative_accumulation",
+    "origin": ["monoid/fold patterns", "MapReduce"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local fold probe preserved aggregate semantics.",
+    "our_use": "Composable accumulation and parallel reduction."
+  },
+  {
+    "mechanism": "explicit_control",
+    "origin": ["CPS/control systems"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local state-transition probe represented explicit next state.",
+    "our_use": "Make control state machine-readable."
+  },
+  {
+    "mechanism": "dynamic_scoring",
+    "origin": ["candidate scoring patterns"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Local query+candidates -> scores probe passed.",
+    "our_use": "Runtime candidate evaluation."
+  }
+]

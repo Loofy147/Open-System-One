@@ -1,0 +1,29 @@
+dataset:
+  name: PolyAI/banking77
+  source_repo: PolyAI-LDN/task-specific-datasets
+  source_commit: 57ec275d8078af65b7731c2a98be812d844a6d6b
+  sample_per_intent: 5
+
+candidate_sets:
+  k_values: [4, 8, 16, 32, 77]
+  nested: true
+  random_seed: banking77-random
+  hard_negative_source: train-only-prototype
+
+representations:
+  - label_only
+  - train_prototype
+
+scorers:
+  - pairwise
+  - set_aware
+  - conditional_mixture
+
+metrics:
+  - accuracy
+  - brier
+  - ece
+  - true_label_probability
+  - permutation_max_probability_delta
+  - candidate_set_sensitivity
+  - runtime_seconds
