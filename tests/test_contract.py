@@ -11,6 +11,11 @@ from open_system_one.contract import (
     validate_distribution,
     validate_request,
 )
+from open_system_one.policy import (
+    DecisionDisposition,
+    PolicyThresholds,
+    apply_policy,
+)
 
 
 def test_typed_questions_have_finite_outcome_spaces():
@@ -53,3 +58,24 @@ def test_score_order_is_semantic():
     question = ScoreQuestion("risk", "Rate risk", ("low", "medium", "high"))
     result = distribution_from_scores(question, [0.1, 0.2, 0.7])
     assert result.selected == "high"
+
+
+def test_policy_uses_explicit_caller_thresholds():
+    thresholds = PolicyThresholds(
+        accept_min_confidence=0.9,
+        review_min_confidence=0.6,
+    )
+    assert apply_policy(0.95, thresholds=thresholds) is DecisionDisposition.ACCEPT
+    assert apply_policy(0.75, thresholds=thresholds) is DecisionDisposition.REVIEW
+    assert apply_policy(0.20, thresholds=thresholds) is DecisionDisposition.ABSTAIN
+
+
+def test_invalid_policy_thresholds_fail():
+    with pytest.raises(ValueError):
+        apply_policy(
+            0.7,
+            thresholds=PolicyThresholds(
+                accept_min_confidence=0.5,
+                review_min_confidence=0.8,
+            ),
+        )
