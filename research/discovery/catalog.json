@@ -1,33 +1,78 @@
 {
   "status": "NON_CANONICAL_RESEARCH_INFRASTRUCTURE",
+  "classification_rule": "A FailureObservation is classified by explicit trigger tags. Matches are ordered by number of matched tags, then class key; no semantic confidence is inferred.",
+  "selection_rule": "Experiment selection is deterministic: maximize target failure-class coverage, then requested evidence-gap coverage, then minimize declared cost, then sort by experiment key.",
+  "authority_rule": "Control-plane authority experiments are selected in a separate scope and never merged into research/inference plans.",
   "failure_classes": [
     {
       "key": "candidate_interaction",
-      "description": "Candidate quality changes when other candidates are present."
+      "description": "Candidate quality changes when other candidates are present.",
+      "trigger_tags": [
+        "candidate_set_changes_output",
+        "competitor_effect",
+        "context_dependent_score"
+      ],
+      "scope": "research"
     },
     {
       "key": "retrieval_overload",
-      "description": "Too many candidates reach an expensive downstream scorer."
+      "description": "Too many candidates reach an expensive downstream scorer.",
+      "trigger_tags": [
+        "large_candidate_count",
+        "retrieval_latency",
+        "candidate_budget_exhausted"
+      ],
+      "scope": "research"
     },
     {
       "key": "repeated_compute",
-      "description": "Equivalent deterministic work is recomputed across runs or stages."
+      "description": "Equivalent deterministic work is recomputed across runs or stages.",
+      "trigger_tags": [
+        "same_input_repeated",
+        "duplicate_work",
+        "cache_miss"
+      ],
+      "scope": "research"
     },
     {
       "key": "provenance_drift",
-      "description": "Equivalent artifacts do not retain stable identity or lineage."
+      "description": "Equivalent artifacts do not retain stable identity or lineage.",
+      "trigger_tags": [
+        "hash_mismatch",
+        "lineage_mismatch",
+        "same_content_different_id"
+      ],
+      "scope": "research"
     },
     {
       "key": "ordering_conflict",
-      "description": "Events, updates, or evidence arrive in conflicting temporal order."
+      "description": "Events, updates, or evidence arrive in conflicting temporal order.",
+      "trigger_tags": [
+        "reordered_events",
+        "causal_inversion",
+        "inconsistent_merge"
+      ],
+      "scope": "research"
     },
     {
       "key": "composition_failure",
-      "description": "A multi-stage computation loses a required invariant at a stage boundary."
+      "description": "A multi-stage computation loses a required invariant at a stage boundary.",
+      "trigger_tags": [
+        "stage_boundary",
+        "intermediate_loss",
+        "hidden_failure"
+      ],
+      "scope": "research"
     },
     {
       "key": "authority_boundary",
-      "description": "Inference output is being confused with permission or execution authority."
+      "description": "Inference output is being confused with permission or execution authority.",
+      "trigger_tags": [
+        "confidence_used_for_action",
+        "missing_capability",
+        "unauthorized_execution"
+      ],
+      "scope": "control_plane"
     }
   ],
   "mechanisms": [
@@ -223,6 +268,208 @@
       "scope": "control_plane"
     }
   ],
-  "coordination_rule": "Select compatible recipes across one or more failure classes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.",
-  "authority_rule": "No inference recipe may contain the capability authority mechanism; authority_handoff remains a separate control-plane recipe."
+  "experiments": [
+    {
+      "key": "interaction_probe",
+      "failure_classes": [
+        "candidate_interaction"
+      ],
+      "recipe_keys": [
+        "interaction_probe"
+      ],
+      "mechanisms": [
+        "condition",
+        "relate",
+        "dynamic_score"
+      ],
+      "hypothesis": "Candidate interaction carries decision-relevant information in the tested workload.",
+      "intervention": "Matched interaction=0 and active-interaction runs over the same tasks and candidate budgets.",
+      "baseline": "Pairwise scorer under the same encoder, parameter-count order, training budget, and K.",
+      "control": "Interaction sensitivity: whether gains appear only when interaction is activated.",
+      "discriminator": "Interaction sensitivity: whether gains appear only when interaction is activated.",
+      "kill_test": "Reject if the effect disappears under matched controls, hard negatives, or permutation/identity tests.",
+      "evidence_required": [
+        "implementation_ref",
+        "matched_baseline",
+        "multiple_seeds",
+        "raw_accuracy_and_brier",
+        "failure_case"
+      ],
+      "cost": 2,
+      "scope": "research"
+    },
+    {
+      "key": "interaction_retrieval_guard",
+      "failure_classes": [
+        "candidate_interaction",
+        "retrieval_overload"
+      ],
+      "recipe_keys": [
+        "interaction_probe",
+        "retrieval_guard"
+      ],
+      "mechanisms": [
+        "identify",
+        "shortlist",
+        "dynamic_score",
+        "condition",
+        "relate"
+      ],
+      "hypothesis": "A safe retrieval gate can preserve the candidate-interaction signal while reducing expensive downstream candidate work.",
+      "intervention": "Compare full-candidate interaction-aware scoring with K-grid shortlist-then-rerank.",
+      "baseline": "Full candidate set plus pairwise baseline, with matched encoder and scoring budget.",
+      "control": "Safety/performance tradeoff: recall@K, downstream work, and interaction-aware decision metrics.",
+      "discriminator": "Safety/performance tradeoff: recall@K, downstream work, and interaction-aware decision metrics.",
+      "kill_test": "Reject if shortlist recall misses the declared safety target or interaction gains disappear after pruning.",
+      "evidence_required": [
+        "dataset_ref",
+        "K_grid",
+        "recall_at_K",
+        "compute_measure",
+        "raw_accuracy_and_brier"
+      ],
+      "cost": 3,
+      "scope": "research"
+    },
+    {
+      "key": "shortlist_safety",
+      "failure_classes": [
+        "retrieval_overload"
+      ],
+      "recipe_keys": [
+        "retrieval_guard"
+      ],
+      "mechanisms": [
+        "identify",
+        "shortlist",
+        "dynamic_score"
+      ],
+      "hypothesis": "Early candidate pruning can reduce downstream work without removing the required candidate.",
+      "intervention": "Evaluate K-grid recall before the expensive scorer across ordinary and hard-negative candidate sets.",
+      "baseline": "Full-candidate scoring.",
+      "control": "Retrieval safety: recall@K versus candidate work.",
+      "discriminator": "Retrieval safety: recall@K versus candidate work.",
+      "kill_test": "Reject if the declared recall threshold is missed or candidate identity is not preserved.",
+      "evidence_required": [
+        "dataset_ref",
+        "K_grid",
+        "recall_at_K",
+        "compute_measure",
+        "failure_case"
+      ],
+      "cost": 1,
+      "scope": "research"
+    },
+    {
+      "key": "artifact_reuse",
+      "failure_classes": [
+        "repeated_compute",
+        "provenance_drift"
+      ],
+      "recipe_keys": [
+        "deterministic_reuse"
+      ],
+      "mechanisms": [
+        "identify",
+        "cache"
+      ],
+      "hypothesis": "Stable artifact identity makes deterministic repeated work reusable without conflating distinct content.",
+      "intervention": "Repeat identical input, then mutate one semantic field and repeat.",
+      "baseline": "No-cache recomputation plus a changed-content control.",
+      "control": "Identity/cache discrimination: same content reuses; changed content does not.",
+      "discriminator": "Identity/cache discrimination: same content reuses; changed content does not.",
+      "kill_test": "Reject on changed-content cache collision or a value mismatch after reuse.",
+      "evidence_required": [
+        "content_fixtures",
+        "cache_hit_measure",
+        "mutation_kill_test"
+      ],
+      "cost": 1,
+      "scope": "research"
+    },
+    {
+      "key": "evidence_flow_guard",
+      "failure_classes": [
+        "repeated_compute",
+        "provenance_drift",
+        "ordering_conflict"
+      ],
+      "recipe_keys": [
+        "deterministic_reuse",
+        "ordered_merge"
+      ],
+      "mechanisms": [
+        "identify",
+        "cache",
+        "order",
+        "merge"
+      ],
+      "hypothesis": "Identity, reuse, logical order, and convergent merge can preserve an evidence flow across repeated and reordered updates.",
+      "intervention": "Replay the same evidence events with repeated inputs and multiple arrival orders.",
+      "baseline": "Fresh recomputation in canonical order.",
+      "control": "Evidence-flow invariance: final digest, reuse count, and order-independent convergence.",
+      "discriminator": "Evidence-flow invariance: final digest, reuse count, and order-independent convergence.",
+      "kill_test": "Reject on cache collision, provenance loss, or order-dependent final state.",
+      "evidence_required": [
+        "event_trace",
+        "content_fixtures",
+        "permutation_test",
+        "final_state_digest"
+      ],
+      "cost": 3,
+      "scope": "research"
+    },
+    {
+      "key": "continuation_failure_injection",
+      "failure_classes": [
+        "composition_failure"
+      ],
+      "recipe_keys": [
+        "composed_continuation"
+      ],
+      "mechanisms": [
+        "compose",
+        "reify"
+      ],
+      "hypothesis": "Explicit stage composition and reification expose the exact failure boundary without altering successful outputs.",
+      "intervention": "Inject a controlled failing stage and inspect the reified continuation.",
+      "baseline": "Successful pipeline with the same stages and inputs.",
+      "control": "Failure localization: boundary identity and continuation payload.",
+      "discriminator": "Failure localization: boundary identity and continuation payload.",
+      "kill_test": "Reject if the injected failure cannot be localized or if successful output semantics change.",
+      "evidence_required": [
+        "stage_fixture",
+        "failure_injection",
+        "output_equivalence"
+      ],
+      "cost": 2,
+      "scope": "research"
+    },
+    {
+      "key": "authority_handoff_negative",
+      "failure_classes": [
+        "authority_boundary"
+      ],
+      "recipe_keys": [
+        "authority_handoff"
+      ],
+      "mechanisms": [
+        "identify",
+        "capability_gate"
+      ],
+      "hypothesis": "Decision artifacts can be audited by identity while authorization remains external to inference.",
+      "intervention": "Attempt execution with no capability and with wrong capability scope.",
+      "baseline": "Valid capability with the required scope.",
+      "control": "Authority separation: probability/confidence cannot mint permission.",
+      "discriminator": "Authority separation: probability/confidence cannot mint permission.",
+      "kill_test": "Reject if either unauthorized execution path succeeds inside or through inference.",
+      "evidence_required": [
+        "decision_digest",
+        "capability_scope_test",
+        "negative_authorization"
+      ],
+      "cost": 1,
+      "scope": "control_plane"
+    }
+  ]
 }
