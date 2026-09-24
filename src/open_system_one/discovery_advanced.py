@@ -91,6 +91,7 @@ class HistoricalOutcome:
     experiment: str
     outcome: str
     evidence_ref: str
+    applies_to_current_design: bool = False
     scope: str = "research"
 
 
@@ -110,6 +111,7 @@ class AdaptiveExperiment:
     cost: int
     hypothesis_keys: tuple[str, ...]
     outcome_partition: tuple[tuple[str, str], ...]
+    status: str = "OPEN"
     scope: str = "research"
 
 
@@ -237,6 +239,7 @@ HISTORICAL_OUTCOMES = (
         "interaction_probe",
         "mixed_gain",
         "research/receipts/v03-results.md",
+        applies_to_current_design=False,
     ),
 )
 
@@ -261,6 +264,7 @@ ADAPTIVE_EXPERIMENTS = (
             ("interaction_unstable", "mixed_gain"),
             ("interaction_absent", "no_gain"),
         ),
+        status="COMPLETED_HISTORICAL_SCOPE",
     ),
     AdaptiveExperiment(
         "interaction_regime_map",
@@ -442,6 +446,8 @@ for hypothesis in HYPOTHESES:
 for experiment in ADAPTIVE_EXPERIMENTS:
     if any(item not in _HYPOTHESES for item in experiment.hypothesis_keys):
         raise ValueError(f"unknown hypothesis in {experiment.key}")
+    if experiment.status not in {"OPEN", "HYPOTHESIS", "COMPLETED_HISTORICAL_SCOPE", "CONTRADICTED"}:
+        raise ValueError(f"invalid experiment status in {experiment.key}")
     partition = dict(experiment.outcome_partition)
     if set(partition) != set(experiment.hypothesis_keys):
         raise ValueError(f"partition does not cover hypotheses in {experiment.key}")
@@ -464,8 +470,10 @@ def expected_information_gain(experiment_key: str) -> float:
         if _HYPOTHESES[key].status in {"OPEN", "HYPOTHESIS"}
     }
 
+    if experiment.status not in {"OPEN", "HYPOTHESIS"}:
+        return 0.0
     historical = _HISTORICAL.get(experiment_key)
-    if historical:
+    if historical and historical.applies_to_current_design:
         priors = {
             key: prior for key, prior in priors.items()
             if partition[key] == historical.outcome
@@ -606,6 +614,7 @@ def catalog() -> dict[str, object]:
                 "description": item.description,
                 "prior": item.prior,
                 "status": item.status,
+                "status": item.status,
                 "scope": item.scope,
             }
             for item in HYPOTHESES
@@ -615,6 +624,7 @@ def catalog() -> dict[str, object]:
                 "experiment": item.experiment,
                 "outcome": item.outcome,
                 "evidence_ref": item.evidence_ref,
+                "applies_to_current_design": item.applies_to_current_design,
                 "scope": item.scope,
             }
             for item in HISTORICAL_OUTCOMES
@@ -635,6 +645,7 @@ def catalog() -> dict[str, object]:
                 "cost": item.cost,
                 "hypothesis_keys": list(item.hypothesis_keys),
                 "outcome_partition": dict(item.outcome_partition),
+                "status": item.status,
                 "scope": item.scope,
                 "expected_information_gain_bits": expected_information_gain(item.key),
                 "historical_outcome": (
