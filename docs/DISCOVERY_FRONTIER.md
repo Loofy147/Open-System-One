@@ -74,9 +74,9 @@ Experiment selection is deterministic: maximize target failure-class coverage, t
 
 **Baseline:** Pairwise scorer under the same encoder, parameter-count order, training budget, and K.
 
-**Control:** Interaction sensitivity: whether gains appear only when interaction is activated.
+**Control:** Matched interaction=0 condition with the same encoder, K, and training budget.
 
-**Discriminator:** Interaction sensitivity: whether gains appear only when interaction is activated.
+**Discriminator:** Interaction sensitivity: whether any gain appears only when interaction is activated.
 
 **Kill test:** Reject if the effect disappears under matched controls, hard negatives, or permutation/identity tests.
 
@@ -90,9 +90,9 @@ Experiment selection is deterministic: maximize target failure-class coverage, t
 
 **Baseline:** Full candidate set plus pairwise baseline, with matched encoder and scoring budget.
 
-**Control:** Safety/performance tradeoff: recall@K, downstream work, and interaction-aware decision metrics.
+**Control:** Full-candidate interaction-aware scorer with the same K values and encoder.
 
-**Discriminator:** Safety/performance tradeoff: recall@K, downstream work, and interaction-aware decision metrics.
+**Discriminator:** Joint effect: whether pruning preserves interaction signal while reducing downstream work.
 
 **Kill test:** Reject if shortlist recall misses the declared safety target or interaction gains disappear after pruning.
 
@@ -106,9 +106,9 @@ Experiment selection is deterministic: maximize target failure-class coverage, t
 
 **Baseline:** Full-candidate scoring.
 
-**Control:** Retrieval safety: recall@K versus candidate work.
+**Control:** Full-candidate scoring with no pruning.
 
-**Discriminator:** Retrieval safety: recall@K versus candidate work.
+**Discriminator:** Retrieval safety: recall@K versus candidate work across ordinary and hard negatives.
 
 **Kill test:** Reject if the declared recall threshold is missed or candidate identity is not preserved.
 
@@ -122,7 +122,7 @@ Experiment selection is deterministic: maximize target failure-class coverage, t
 
 **Baseline:** No-cache recomputation plus a changed-content control.
 
-**Control:** Identity/cache discrimination: same content reuses; changed content does not.
+**Control:** Same-input repetition without mutation.
 
 **Discriminator:** Identity/cache discrimination: same content reuses; changed content does not.
 
@@ -138,7 +138,7 @@ Experiment selection is deterministic: maximize target failure-class coverage, t
 
 **Baseline:** Fresh recomputation in canonical order.
 
-**Control:** Evidence-flow invariance: final digest, reuse count, and order-independent convergence.
+**Control:** Same evidence events replayed once in canonical arrival order.
 
 **Discriminator:** Evidence-flow invariance: final digest, reuse count, and order-independent convergence.
 

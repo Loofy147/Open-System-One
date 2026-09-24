@@ -285,8 +285,8 @@
       "hypothesis": "Candidate interaction carries decision-relevant information in the tested workload.",
       "intervention": "Matched interaction=0 and active-interaction runs over the same tasks and candidate budgets.",
       "baseline": "Pairwise scorer under the same encoder, parameter-count order, training budget, and K.",
-      "control": "Interaction sensitivity: whether gains appear only when interaction is activated.",
-      "discriminator": "Interaction sensitivity: whether gains appear only when interaction is activated.",
+      "control": "Matched interaction=0 condition with the same encoder, K, and training budget.",
+      "discriminator": "Interaction sensitivity: whether any gain appears only when interaction is activated.",
       "kill_test": "Reject if the effect disappears under matched controls, hard negatives, or permutation/identity tests.",
       "evidence_required": [
         "implementation_ref",
@@ -318,8 +318,8 @@
       "hypothesis": "A safe retrieval gate can preserve the candidate-interaction signal while reducing expensive downstream candidate work.",
       "intervention": "Compare full-candidate interaction-aware scoring with K-grid shortlist-then-rerank.",
       "baseline": "Full candidate set plus pairwise baseline, with matched encoder and scoring budget.",
-      "control": "Safety/performance tradeoff: recall@K, downstream work, and interaction-aware decision metrics.",
-      "discriminator": "Safety/performance tradeoff: recall@K, downstream work, and interaction-aware decision metrics.",
+      "control": "Full-candidate interaction-aware scorer with the same K values and encoder.",
+      "discriminator": "Joint effect: whether pruning preserves interaction signal while reducing downstream work.",
       "kill_test": "Reject if shortlist recall misses the declared safety target or interaction gains disappear after pruning.",
       "evidence_required": [
         "dataset_ref",
@@ -347,8 +347,8 @@
       "hypothesis": "Early candidate pruning can reduce downstream work without removing the required candidate.",
       "intervention": "Evaluate K-grid recall before the expensive scorer across ordinary and hard-negative candidate sets.",
       "baseline": "Full-candidate scoring.",
-      "control": "Retrieval safety: recall@K versus candidate work.",
-      "discriminator": "Retrieval safety: recall@K versus candidate work.",
+      "control": "Full-candidate scoring with no pruning.",
+      "discriminator": "Retrieval safety: recall@K versus candidate work across ordinary and hard negatives.",
       "kill_test": "Reject if the declared recall threshold is missed or candidate identity is not preserved.",
       "evidence_required": [
         "dataset_ref",
@@ -376,7 +376,7 @@
       "hypothesis": "Stable artifact identity makes deterministic repeated work reusable without conflating distinct content.",
       "intervention": "Repeat identical input, then mutate one semantic field and repeat.",
       "baseline": "No-cache recomputation plus a changed-content control.",
-      "control": "Identity/cache discrimination: same content reuses; changed content does not.",
+      "control": "Same-input repetition without mutation.",
       "discriminator": "Identity/cache discrimination: same content reuses; changed content does not.",
       "kill_test": "Reject on changed-content cache collision or a value mismatch after reuse.",
       "evidence_required": [
@@ -407,7 +407,7 @@
       "hypothesis": "Identity, reuse, logical order, and convergent merge can preserve an evidence flow across repeated and reordered updates.",
       "intervention": "Replay the same evidence events with repeated inputs and multiple arrival orders.",
       "baseline": "Fresh recomputation in canonical order.",
-      "control": "Evidence-flow invariance: final digest, reuse count, and order-independent convergence.",
+      "control": "Same evidence events replayed once in canonical arrival order.",
       "discriminator": "Evidence-flow invariance: final digest, reuse count, and order-independent convergence.",
       "kill_test": "Reject on cache collision, provenance loss, or order-dependent final state.",
       "evidence_required": [
