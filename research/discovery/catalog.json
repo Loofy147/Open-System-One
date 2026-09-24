@@ -1,0 +1,228 @@
+{
+  "status": "NON_CANONICAL_RESEARCH_INFRASTRUCTURE",
+  "failure_classes": [
+    {
+      "key": "candidate_interaction",
+      "description": "Candidate quality changes when other candidates are present."
+    },
+    {
+      "key": "retrieval_overload",
+      "description": "Too many candidates reach an expensive downstream scorer."
+    },
+    {
+      "key": "repeated_compute",
+      "description": "Equivalent deterministic work is recomputed across runs or stages."
+    },
+    {
+      "key": "provenance_drift",
+      "description": "Equivalent artifacts do not retain stable identity or lineage."
+    },
+    {
+      "key": "ordering_conflict",
+      "description": "Events, updates, or evidence arrive in conflicting temporal order."
+    },
+    {
+      "key": "composition_failure",
+      "description": "A multi-stage computation loses a required invariant at a stage boundary."
+    },
+    {
+      "key": "authority_boundary",
+      "description": "Inference output is being confused with permission or execution authority."
+    }
+  ],
+  "mechanisms": [
+    {
+      "key": "condition",
+      "operation": "condition(score, context)",
+      "implementation": "conditional mixture / shared context",
+      "boundary": "inference"
+    },
+    {
+      "key": "relate",
+      "operation": "relate(candidate, candidate)",
+      "implementation": "set-aware / relational scorer",
+      "boundary": "inference"
+    },
+    {
+      "key": "shortlist",
+      "operation": "prune(candidates) before expensive scoring",
+      "implementation": "oracle or learned prefilter",
+      "boundary": "inference"
+    },
+    {
+      "key": "dynamic_score",
+      "operation": "score(query, candidate_set)",
+      "implementation": "candidate_scores / adaptive scorer",
+      "boundary": "inference"
+    },
+    {
+      "key": "identify",
+      "operation": "artifact -> canonical identity",
+      "implementation": "content_id",
+      "boundary": "control_plane"
+    },
+    {
+      "key": "cache",
+      "operation": "identity -> reusable result",
+      "implementation": "memoize",
+      "boundary": "control_plane"
+    },
+    {
+      "key": "order",
+      "operation": "event -> logical order",
+      "implementation": "LamportClock",
+      "boundary": "control_plane"
+    },
+    {
+      "key": "merge",
+      "operation": "compatible state -> converged state",
+      "implementation": "GSet",
+      "boundary": "control_plane"
+    },
+    {
+      "key": "compose",
+      "operation": "stage_1 -> stage_2 -> ...",
+      "implementation": "compose",
+      "boundary": "computation"
+    },
+    {
+      "key": "reify",
+      "operation": "continuation -> explicit data",
+      "implementation": "ReifiedContinuation",
+      "boundary": "computation"
+    },
+    {
+      "key": "capability_gate",
+      "operation": "decision -> externally authorized action",
+      "implementation": "CapabilityIssuer",
+      "boundary": "authority"
+    }
+  ],
+  "recipes": [
+    {
+      "key": "interaction_probe",
+      "failure_classes": [
+        "candidate_interaction"
+      ],
+      "mechanisms": [
+        "condition",
+        "relate",
+        "dynamic_score"
+      ],
+      "hypothesis": "If candidate interaction carries signal, conditioning or explicit relations should improve decisions when interaction is active.",
+      "predicted_effect": "Interaction-aware scoring should beat or complement pairwise under matched parameter and training budgets while preserving identity/permutation semantics.",
+      "kill_test": "Run matched interaction=0 and interaction>0 ablations against pairwise; reject if the gain disappears at interaction=0 or under hard negatives, or if permutation/identity invariants fail.",
+      "evidence_required": [
+        "implementation_ref",
+        "matched_baseline",
+        "multiple_seeds",
+        "raw_accuracy_and_brier",
+        "failure_case"
+      ],
+      "scope": "research"
+    },
+    {
+      "key": "retrieval_guard",
+      "failure_classes": [
+        "retrieval_overload"
+      ],
+      "mechanisms": [
+        "identify",
+        "shortlist",
+        "dynamic_score"
+      ],
+      "hypothesis": "Stable candidate identity plus an early gate can reduce downstream candidate work without silently removing the required candidate.",
+      "predicted_effect": "Candidate computation falls while recall of the downstream-relevant candidate remains above the declared safety threshold.",
+      "kill_test": "Measure recall@K before downstream scoring across seeds and hard negatives; reject if the safety recall target is missed or if identity is not preserved.",
+      "evidence_required": [
+        "dataset_ref",
+        "K_grid",
+        "recall_at_K",
+        "compute_measure",
+        "failure_case"
+      ],
+      "scope": "research"
+    },
+    {
+      "key": "deterministic_reuse",
+      "failure_classes": [
+        "repeated_compute",
+        "provenance_drift"
+      ],
+      "mechanisms": [
+        "identify",
+        "cache"
+      ],
+      "hypothesis": "Stable content identity should make deterministic repeated work reusable without conflating distinct artifacts.",
+      "predicted_effect": "Equivalent artifacts share a cache key; changed content produces a different key; reuse does not change the returned value.",
+      "kill_test": "Change one semantic input and require a cache miss; repeat the same input and require a single underlying computation.",
+      "evidence_required": [
+        "content_fixtures",
+        "cache_hit_measure",
+        "mutation_kill_test"
+      ],
+      "scope": "research"
+    },
+    {
+      "key": "ordered_merge",
+      "failure_classes": [
+        "ordering_conflict",
+        "provenance_drift"
+      ],
+      "mechanisms": [
+        "identify",
+        "order",
+        "merge"
+      ],
+      "hypothesis": "Stable artifact identity plus logical ordering and convergent merge can preserve evidence across distributed or reordered updates.",
+      "predicted_effect": "Equivalent merge inputs converge regardless of arrival order while provenance remains inspectable.",
+      "kill_test": "Permute event arrival order and require identical final state; reject on lost identity or non-convergent state.",
+      "evidence_required": [
+        "event_trace",
+        "permutation_test",
+        "final_state_digest"
+      ],
+      "scope": "research"
+    },
+    {
+      "key": "composed_continuation",
+      "failure_classes": [
+        "composition_failure"
+      ],
+      "mechanisms": [
+        "compose",
+        "reify"
+      ],
+      "hypothesis": "Making a multi-stage computation explicit and reified should expose stage-boundary failures instead of hiding them inside opaque control flow.",
+      "predicted_effect": "The composed pipeline preserves intermediate identity and makes continuation state inspectable at failure boundaries.",
+      "kill_test": "Inject a failing stage and require the failing boundary and continuation payload to be identifiable without changing successful outputs.",
+      "evidence_required": [
+        "stage_fixture",
+        "failure_injection",
+        "output_equivalence"
+      ],
+      "scope": "research"
+    },
+    {
+      "key": "authority_handoff",
+      "failure_classes": [
+        "authority_boundary"
+      ],
+      "mechanisms": [
+        "identify",
+        "capability_gate"
+      ],
+      "hypothesis": "Inference artifacts can be bound to an externally issued capability without allowing probability or confidence to mint authority.",
+      "predicted_effect": "The same decision artifact can be audited by identity while authorization remains independently verifiable and revocable by the capability layer.",
+      "kill_test": "Attempt execution with a valid-looking decision but no capability, and with the wrong capability scope; both must fail outside inference.",
+      "evidence_required": [
+        "decision_digest",
+        "capability_scope_test",
+        "negative_authorization"
+      ],
+      "scope": "control_plane"
+    }
+  ],
+  "coordination_rule": "Select compatible recipes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.",
+  "authority_rule": "No inference recipe may contain the capability authority mechanism; authority_handoff remains a separate control-plane recipe."
+}

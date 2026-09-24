@@ -12,35 +12,29 @@ Structured opaque state + typed questions + finite outcome spaces
 
 The contract is independent of encoder, scorer, runtime, provider, and action system.
 
-## Recovered research surface
+## Research and discovery
 
 - Pydantic typed schema: Choice, Score, Noul
 - batch-first DecisionEngine
-- causal-logit backend skeleton
-- diffusion read-slot backend protocol
-- compact learned DecisionStudent
-- pairwise / marker / set-aware / Set Transformer / relational / conditional scorers
-- temperature scaling and split conformal prediction
+- replaceable scorer architectures
+- probability, calibration, and selective layers
 - shortlist/prefilter
 - 12 machine-native primitive probes plus registered pair interactions
-- 31-test v0.3 structural suite
+- precomposed discovery recipes that map observed failure classes to candidate mechanisms, kill tests, and evidence requirements
+- deterministic generated discovery catalog and frontier documentation
+
+Discovery remains outside the canonical decision contract. A generated candidate is a HYPOTHESIS until an experiment receipt changes its status.
 
 ## Evidence status
 
 The repository deliberately distinguishes contract correctness from model truth and action authority.
 
-The strongest prior executable artifact is the recovered v0.3 frontier. A local execution of its suite produced 31 passed tests.
-
-Synthetic experiments provide conditional evidence:
-- set-aware can exploit candidate interaction, but is not universal
-- conditional mixture repeatedly improves Brier in several small interaction batches, with mixed top-1 accuracy
-- shortlist can be highly efficient under oracle-vector assumptions
-- calibration effects are task-dependent
+The recovered v0.3 frontier provides executable structural evidence and conditional synthetic results. It does not establish universal scorer superiority, pretrained real-NLP superiority, or production calibration.
 
 Real pretrained encoder evidence remains limited:
-- browser MiniLM inference has a user-provided successful receipt
+- browser MiniLM ONNX inference has a user-provided successful 384-d browser receipt
 - the 12-case browser benchmark is small and hand-authored
-- BANKING77 pilot is implemented but the reviewed numerical receipt is still pending
+- BANKING77 pilot review remains open
 
 ## Non-goals
 
@@ -52,8 +46,9 @@ Read:
 - docs/DECISION_CONTRACT_v0.1.md
 - docs/ARCHITECTURE_FULL.md
 - docs/RESEARCH_PROTOCOL.md
+- docs/DISCOVERY_FRONTIER.md
 - docs/EVIDENCE_LEDGER.md
-- docs/RECOVERY_AUDIT_2026-09-24.md
+- docs/RECOVERY_STATUS.md
 - docs/CONTRACT_DEBT.md
 
 Historical executable archives remain indexed in docs/LEGACY_ARTIFACTS.md.

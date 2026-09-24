@@ -64,13 +64,21 @@ Tool invocation, retries, side effects, and external state mutation remain outsi
 
 ## Layer 7 — Evidence/control plane
 
-Future integration can represent:
+The control plane represents:
 Question -> Candidate -> Decision -> Run -> Evidence
 
 and separately:
 Claim -> Evidence -> Verification -> Gate -> DecisionRevision
 
-This layer is deliberately not required for the core decision contract.
+This layer remains outside the core decision contract.
+
+## Layer 8 — Discovery
+
+Discovery turns unexplained behavior into explicit candidate mechanisms:
+
+Failure -> failure class -> precomposed recipes -> coordinated mechanism set -> discriminating experiment
+
+The discovery registry is deterministic research infrastructure. It can suggest inference mechanisms, computation/control-plane mechanisms, or an explicit authority handoff, but it cannot grant authority. Generated candidates remain HYPOTHESIS until the evidence ledger is updated by a reviewed receipt.
 
 ## Runtime boundary
 

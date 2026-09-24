@@ -18,3 +18,4 @@ jobs:
           python-version: "3.11"
       - run: python -m pip install -e ".[dev]"
       - run: pytest -q
+      - run: python scripts/build_discovery_docs.py --check

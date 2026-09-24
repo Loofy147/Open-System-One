@@ -4,6 +4,10 @@ Operating loop:
 
 Observe -> Identify -> Evidence -> Interpret -> Decide -> Record -> Revalidate
 
+Discovery extension:
+
+Failure -> Mechanism classification -> Precomposed candidate recipes -> Discriminating test -> Evidence -> Frontier update -> Next failure
+
 Every durable claim needs provenance, population/split, implementation reference, measured result, limits, and the next discriminating test.
 
 ## Status vocabulary
@@ -20,6 +24,15 @@ OPEN
 Repetition does not upgrade a claim.
 
 Negative results and killed ideas are recorded.
+
+## Discovery rules
+
+1. Generate mechanisms from observed failure structure, not only from named architectures.
+2. Prefer precomposed recipes that expose several compatible mechanisms before selecting one implementation.
+3. Every generated candidate must carry a hypothesis, predicted effect, kill test, and evidence requirements.
+4. Candidate generation is deterministic; ordering is part of the research receipt.
+5. Authority mechanisms remain outside inference discovery and require an explicit control-plane boundary.
+6. A new candidate does not change contract semantics until it survives the normal acceptance boundary.
 
 ## Experiment contract
 
