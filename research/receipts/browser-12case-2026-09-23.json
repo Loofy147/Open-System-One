@@ -1,0 +1,40 @@
+{
+  "status": "USER_REPORTED",
+  "provenance": "CONVERSATION-ONLY",
+  "note": "Receipt pasted by the user after running the browser benchmark. The original permutation flip metric was later found invalid and is not treated as evidence.",
+  "model": "onnx-community/all-MiniLM-L6-v2-ONNX",
+  "execution": "browser",
+  "backend": "WebGPU when available, otherwise browser ONNX/WASM",
+  "cases": 12,
+  "k_values": [
+    4,
+    8
+  ],
+  "raw_metrics_only": true,
+  "scorer_results": {
+    "pairwise": {
+      "accuracy": 0.6666666666666666,
+      "brier": 0.7242291137935059,
+      "ece": 0.41477209461306963,
+      "permutation_flip_rate": 0
+    },
+    "set_aware": {
+      "accuracy": 0.6666666666666666,
+      "brier": 0.7241933990680863,
+      "ece": 0.4114231795524944,
+      "permutation_flip_rate": 0
+    },
+    "conditional_mixture": {
+      "accuracy": 0.6666666666666666,
+      "brier": 0.7410992873654049,
+      "ece": 0.4238094081264391,
+      "permutation_flip_rate": 0
+    }
+  },
+  "uniform_brier_reference_used_at_the_time": 0.7916666666666666,
+  "validity_notes": [
+    "Historical permutation flip rate is superseded by a corrected implementation.",
+    "Historical mixed-K uniform Brier skill is not exact when using a single average-K baseline.",
+    "This is a small hand-authored transfer benchmark, not a standard NLP benchmark."
+  ]
+}
