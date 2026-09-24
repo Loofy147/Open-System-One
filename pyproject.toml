@@ -1,14 +1,25 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools>=70", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "open-system-one"
 version = "0.1.0"
-description = "Machine-native typed decision substrate"
-requires-python = ">=3.10"
-dependencies = []
+description = "Open, typed probabilistic decision primitive inspired by System One / Jev"
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.7"]
+
+[project.optional-dependencies]
+inference = ["torch>=2.3", "transformers>=4.45"]
+server = ["fastapi>=0.115", "uvicorn>=0.30"]
+training = ["torch>=2.3", "transformers>=4.45", "datasets>=2.20", "accelerate>=0.33"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+open-system-one = "open_system_one.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-testpaths = ["tests"]
