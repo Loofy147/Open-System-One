@@ -96,7 +96,7 @@ Every generated candidate remains a HYPOTHESIS until a provenance-complete exper
 
 ## Coordination
 
-Select compatible recipes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.
+Select compatible recipes across one or more failure classes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.
 
 No inference recipe may contain the capability authority mechanism; authority_handoff remains a separate control-plane recipe.
 

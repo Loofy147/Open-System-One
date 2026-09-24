@@ -223,6 +223,6 @@
       "scope": "control_plane"
     }
   ],
-  "coordination_rule": "Select compatible recipes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.",
+  "coordination_rule": "Select compatible recipes across one or more failure classes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.",
   "authority_rule": "No inference recipe may contain the capability authority mechanism; authority_handoff remains a separate control-plane recipe."
 }
