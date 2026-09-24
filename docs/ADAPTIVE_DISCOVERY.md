@@ -14,7 +14,7 @@ Convert structured evidence into failure classes, update the unresolved hypothes
 
 **Information gain:** Expected information gain is Shannon entropy reduction under declared research priors and deterministic outcome partitions. These priors are bookkeeping weights, not empirical probabilities.
 
-**History:** A completed historical outcome removes incompatible hypothesis mass only for that experiment's declared scope. It does not become a new probability.
+**History:** A historical outcome constrains a current experiment only when the record explicitly declares applies_to_current_design=True. Otherwise it remains related evidence and does not alter current priors.
 
 **Selection:** Deterministic order: target failure-class coverage, evidence-gap coverage, expected information gain, declared cost, stable experiment key.
 
