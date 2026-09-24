@@ -1,0 +1,38 @@
+{
+  "status": "USER_REPORTED",
+  "provenance": "CONVERSATION-ONLY",
+  "note": "Receipt pasted by the user after running the deployed browser lab; not independently re-executed in this review.",
+  "model": "onnx-community/all-MiniLM-L6-v2-ONNX",
+  "execution": "browser",
+  "dimensions": 384,
+  "pairwise": {
+    "selected": "Billing and payment issues",
+    "probabilities": [
+      0.32549192046343506,
+      0.25086313210186506,
+      0.2070496310810409,
+      0.21659531635365897
+    ],
+    "confidence": 0.32549192046343506
+  },
+  "set_aware": {
+    "selected": "Billing and payment issues",
+    "probabilities": [
+      0.3271309201655696,
+      0.2598732143429334,
+      0.2003932292862927,
+      0.21260263620520423
+    ],
+    "confidence": 0.3271309201655696
+  },
+  "conditional_mixture": {
+    "selected": "Billing and payment issues",
+    "probabilities": [
+      0.3069048954392041,
+      0.2579671197515769,
+      0.2127941307876594,
+      0.22233385402155967
+    ],
+    "confidence": 0.3069048954392041
+  }
+}
