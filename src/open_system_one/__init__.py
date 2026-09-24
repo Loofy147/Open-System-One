@@ -14,6 +14,15 @@ from .discovery import (
     build_plan,
     build_plans,
 )
+from .discovery_advanced import (
+    FailureEvidence,
+    AdaptiveExperiment,
+    AdaptiveSelection,
+    observation_from_evidence,
+    expected_information_gain,
+    select_adaptive_experiments,
+    build_adaptive_plan,
+)
 
 __all__ = [
     "ChoiceQuestion",
@@ -35,4 +44,11 @@ __all__ = [
     "select_experiments",
     "build_plan",
     "build_plans",
+    "FailureEvidence",
+    "AdaptiveExperiment",
+    "AdaptiveSelection",
+    "observation_from_evidence",
+    "expected_information_gain",
+    "select_adaptive_experiments",
+    "build_adaptive_plan",
 ]
