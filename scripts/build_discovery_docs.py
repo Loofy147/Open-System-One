@@ -21,15 +21,27 @@ def render_markdown(data: dict[str, object]) -> str:
         "<!-- GENERATED FILE: scripts/build_discovery_docs.py -->",
         "",
         "This is research infrastructure, not canonical decision-contract semantics.",
-        "Every generated candidate remains a HYPOTHESIS until a provenance-complete experiment receipt changes its status.",
+        "Generated classifications are tag-based observations; generated experiments remain HYPOTHESIS until a provenance-complete receipt changes their status.",
+        "",
+        "## Classification rule",
+        "",
+        data["classification_rule"],
+        "",
+        "## Selection rule",
+        "",
+        data["selection_rule"],
         "",
         "## Failure classes",
         "",
-        "| Key | Description |",
-        "|---|---|",
+        "| Key | Scope | Trigger tags | Description |",
+        "|---|---|---|---|",
     ]
     for row in data["failure_classes"]:
-        lines.append("| " + row["key"] + " | " + row["description"] + " |")
+        lines.append(
+            "| " + row["key"] + " | " + row["scope"] + " | "
+            + ", ".join(row["trigger_tags"]) + " | " + row["description"] + " |"
+        )
+
     lines.extend([
         "",
         "## Mechanisms",
@@ -42,41 +54,65 @@ def render_markdown(data: dict[str, object]) -> str:
             "| " + row["key"] + " | " + row["operation"] + " | "
             + row["implementation"] + " | " + row["boundary"] + " |"
         )
+
     lines.extend([
         "",
         "## Precomposed recipes",
         "",
-        "| Recipe | Trigger | Mechanisms | Predicted effect |",
+        "| Recipe | Trigger | Mechanisms | Scope |",
         "|---|---|---|---|",
     ])
     for row in data["recipes"]:
         lines.append(
             "| " + row["key"] + " | " + ", ".join(row["failure_classes"]) + " | "
-            + " -> ".join(row["mechanisms"]) + " | " + row["predicted_effect"] + " |"
+            + " -> ".join(row["mechanisms"]) + " | " + row["scope"] + " |"
         )
-    lines.extend(["", "## Kill tests and evidence", ""])
-    for row in data["recipes"]:
+
+    lines.extend([
+        "",
+        "## Experiment designs",
+        "",
+        "| Experiment | Trigger | Recipes | Mechanisms | Cost | Scope |",
+        "|---|---|---|---|---:|---|",
+    ])
+    for row in data["experiments"]:
+        lines.append(
+            "| " + row["key"] + " | " + ", ".join(row["failure_classes"]) + " | "
+            + ", ".join(row["recipe_keys"]) + " | "
+            + " -> ".join(row["mechanisms"]) + " | " + str(row["cost"]) + " | "
+            + row["scope"] + " |"
+        )
+
+    lines.extend(["", "## Experiment details", ""])
+    for row in data["experiments"]:
         lines.extend([
             "### " + row["key"],
             "",
             "**Hypothesis:** " + row["hypothesis"],
+            "",
+            "**Intervention:** " + row["intervention"],
+            "",
+            "**Baseline:** " + row["baseline"],
+            "",
+            "**Control:** " + row["control"],
+            "",
+            "**Discriminator:** " + row["discriminator"],
             "",
             "**Kill test:** " + row["kill_test"],
             "",
             "**Evidence required:** " + ", ".join(row["evidence_required"]),
             "",
         ])
+
     lines.extend([
-        "## Coordination",
-        "",
-        data["coordination_rule"],
+        "## Authority boundary",
         "",
         data["authority_rule"],
         "",
-        "The generator is deliberately deterministic: the same registered failure class yields the same candidate set and the same coordination order.",
+        "The classifier and selector are deterministic coordination aids. They do not infer truth from language by themselves, and they do not mint execution authority.",
         "",
     ])
-    return "\n".join(lines)
+    return "\n".join(lines) + "\n"
 
 
 def main() -> int:
@@ -86,7 +122,7 @@ def main() -> int:
 
     data = catalog()
     json_text = json.dumps(data, indent=2, ensure_ascii=False) + "\n"
-    md_text = render_markdown(data) + "\n"
+    md_text = render_markdown(data)
 
     if args.check:
         ok = True
