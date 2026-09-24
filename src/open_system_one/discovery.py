@@ -328,6 +328,7 @@ EXPERIMENTS = (
         "Attempt execution with no capability and with wrong capability scope.",
         "Valid capability with the required scope.",
         "Authority separation: probability/confidence cannot mint permission.",
+        "Authority separation: probability/confidence cannot mint permission.",
         "Reject if either unauthorized execution path succeeds inside or through inference.",
         ("decision_digest", "capability_scope_test", "negative_authorization"),
         1,
