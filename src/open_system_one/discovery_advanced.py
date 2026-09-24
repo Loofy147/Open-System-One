@@ -601,8 +601,8 @@ def catalog() -> dict[str, object]:
             "bookkeeping weights, not empirical probabilities."
         ),
         "history_rule": (
-            "A completed historical outcome removes incompatible hypothesis mass only "
-            "for that experiment's declared scope. It does not become a new probability."
+            "A historical outcome constrains a current experiment only when the record "
+            "explicitly declares applies_to_current_design=True. Otherwise it remains related evidence and does not alter current priors."
         ),
         "selection_rule": (
             "Deterministic order: target failure-class coverage, evidence-gap coverage, "
