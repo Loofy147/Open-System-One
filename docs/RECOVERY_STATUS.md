@@ -2,7 +2,7 @@
 
 ## Recovered
 
-The recovery branch contains the richer v0.3 implementation surface:
+The recovery branch contains the richer v0.3 implementation surface plus a deterministic discovery-planning layer:
 
 - schema.py
 - engine.py
@@ -18,6 +18,7 @@ The recovery branch contains the richer v0.3 implementation surface:
 - selective prediction
 - experiment scripts
 - evidence and research documentation
+- precomposed discovery recipes and multi-failure coordination
 
 A non-canonical evidence snapshot is now preserved under `research/recovered/v0.3/`, including the historical research frontier, the learned-encoder transfer source/result, the historical research catalog, archive hashes, and raw batch SHA-256 inventory.
 
@@ -42,6 +43,10 @@ The historical 24D learned bidirectional encoder surrogate was re-executed.
 - the script computes the result matrix but then fails on its fixed final write path when `/mnt/data/open-system-one-realtransfer/` is absent.
 
 Therefore the historical transfer result is retained as an immutable receipt, not silently replaced by the current rerun.
+
+## Discovery boundary
+
+The new discovery layer is deliberately NON-CANONICAL research infrastructure. It maps registered failure classes to precomposed mechanism recipes and can coordinate compatible recipes across multiple failures. It does not infer semantic failure classes from raw observations yet, and generated candidates remain HYPOTHESIS until a provenance-complete experiment receipt exists.
 
 ## Remaining recovery debt
 
