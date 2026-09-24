@@ -1,0 +1,58 @@
+{
+  "type": "recovered_research_snapshot",
+  "project": "Open System One",
+  "source_date": "2026-09-23",
+  "review_date": "2026-09-24",
+  "canonicality": "NON_CANONICAL_EVIDENCE_ARCHIVE",
+  "source_archives": {
+    "open-system-one-foundation-v0.3-stage.zip": {
+      "sha256": "2592f80ca68f3cd181a35c15b2d9cef4a80b2308f6de726fbc6366af26eda6d4",
+      "bytes": 224717
+    },
+    "open-system-one-foundation-v0.3-realtransfer.zip": {
+      "sha256": "f5f389c2a26de28f401e5d1510062059cb367a841fe23d90e4565bb8fd8ac13d",
+      "bytes": 230291
+    },
+    "open-system-one-decision-foundation-v0.2.zip": {
+      "sha256": "98a92763e4cae5b56c9891a59613103eee9d4cb6c9147a054e6a61ff047248f4",
+      "bytes": 149294
+    },
+    "open-system-one-foundation-impl.zip": {
+      "sha256": "52a3dc36c045fcbcc1181f25cb9199625d6a62d33dd6f2c7a0a6ced036e755eb",
+      "bytes": 65742
+    },
+    "open_system_one-0.1.0_foundation_killtested.whl": {
+      "sha256": "433dad4464b0d4574cd376eab753f47a032146463ae3fcff037d1c74b667ff30",
+      "bytes": 12737
+    }
+  },
+  "original_archive_verification": {
+    "command": "PYTHONPATH=src pytest -q",
+    "result": "31 passed in 2.90s",
+    "environment": {
+      "python": "3.13.5",
+      "torch": "2.10.0+cpu",
+      "numpy": "2.3.5"
+    }
+  },
+  "transfer_reexecution": {
+    "computed_rows": 24,
+    "same_environment_reruns_identical": true,
+    "max_accuracy_abs_delta_vs_archived": 0.026041666666666685,
+    "max_brier_abs_delta_vs_archived": 0.00003848473230996796,
+    "fixed_output_path_defect": "/mnt/data/open-system-one-realtransfer/results.json",
+    "status": "historical_receipt_retained"
+  },
+  "raw_batch_inventory": {
+    "batch_files": 19,
+    "raw_records": 38,
+    "total_bytes": 12425,
+    "note": "Exact per-file SHA-256 values are retained here so the external archive can be checked without changing the recovered raw measurements."
+  },
+  "excluded_from_recovered_snapshot": [
+    "Python __pycache__ bytecode",
+    "pytest cache",
+    "build outputs",
+    "wheel binary"
+  ]
+}
