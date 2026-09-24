@@ -1,4 +1,4 @@
-from open_system_one.discovery import catalog, coordinate, propose
+from open_system_one.discovery import catalog, coordinate, coordinate_failures, propose
 
 
 def test_candidate_interaction_has_multiple_precomposed_mechanisms():
@@ -30,3 +30,18 @@ def test_unknown_failure_class_is_rejected():
     except KeyError:
         return
     raise AssertionError("unknown failure class was accepted")
+
+
+def test_multi_failure_coordination_merges_recipe_sets():
+    plan = coordinate_failures(("repeated_compute", "provenance_drift"))
+    assert plan.failure_classes == ("repeated_compute", "provenance_drift")
+    assert plan.recipes == ("deterministic_reuse", "ordered_merge")
+    assert plan.mechanisms == ("identify", "cache", "order", "merge")
+
+
+def test_multi_failure_coordination_rejects_authority_mixing():
+    try:
+        coordinate_failures(("candidate_interaction", "authority_boundary"))
+    except ValueError:
+        return
+    raise AssertionError("authority and discovery recipes were incorrectly merged")

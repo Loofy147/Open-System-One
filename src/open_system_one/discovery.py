@@ -51,6 +51,16 @@ class CoordinatedPlan:
     evidence_required: tuple[str, ...]
 
 
+@dataclass(frozen=True)
+class MultiFailurePlan:
+    failure_classes: tuple[str, ...]
+    recipes: tuple[str, ...]
+    mechanisms: tuple[str, ...]
+    hypotheses: tuple[str, ...]
+    kill_tests: tuple[str, ...]
+    evidence_required: tuple[str, ...]
+
+
 FAILURE_CLASSES = (
     FailureClass("candidate_interaction", "Candidate quality changes when other candidates are present."),
     FailureClass("retrieval_overload", "Too many candidates reach an expensive downstream scorer."),
@@ -208,6 +218,52 @@ def coordinate(failure_class: str, recipe_keys: tuple[str, ...] | None = None) -
     )
 
 
+
+def coordinate_failures(failure_classes: tuple[str, ...]) -> MultiFailurePlan:
+    if not failure_classes:
+        raise ValueError("at least one failure class is required")
+    for failure_class in failure_classes:
+        if failure_class not in _FAILURES:
+            raise KeyError(failure_class)
+
+    candidates = []
+    seen_recipes: set[str] = set()
+    for failure_class in failure_classes:
+        for candidate in propose(failure_class):
+            if candidate.recipe not in seen_recipes:
+                candidates.append(candidate)
+                seen_recipes.add(candidate.recipe)
+
+    authority = [c for c in candidates if c.scope == "control_plane" and "capability_gate" in c.mechanisms]
+    non_authority = [c for c in candidates if c not in authority]
+    if authority and non_authority:
+        raise ValueError("authority recipe must remain separate from inference/computation discovery")
+
+    mechanisms: list[str] = []
+    hypotheses: list[str] = []
+    kill_tests: list[str] = []
+    evidence: list[str] = []
+    for candidate in sorted(candidates, key=lambda c: c.recipe):
+        for value in candidate.mechanisms:
+            if value not in mechanisms:
+                mechanisms.append(value)
+        if candidate.hypothesis not in hypotheses:
+            hypotheses.append(candidate.hypothesis)
+        if candidate.kill_test not in kill_tests:
+            kill_tests.append(candidate.kill_test)
+        for value in candidate.evidence_required:
+            if value not in evidence:
+                evidence.append(value)
+
+    return MultiFailurePlan(
+        failure_classes=tuple(failure_classes),
+        recipes=tuple(sorted(seen_recipes)),
+        mechanisms=tuple(mechanisms),
+        hypotheses=tuple(hypotheses),
+        kill_tests=tuple(kill_tests),
+        evidence_required=tuple(evidence),
+    )
+
 def catalog() -> dict[str, object]:
     return {
         "status": "NON_CANONICAL_RESEARCH_INFRASTRUCTURE",
@@ -236,6 +292,6 @@ def catalog() -> dict[str, object]:
             }
             for x in RECIPES
         ],
-        "coordination_rule": "Select compatible recipes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.",
+        "coordination_rule": "Select compatible recipes across one or more failure classes, deduplicate mechanism stages, and keep every hypothesis/kill-test/evidence requirement explicit.",
         "authority_rule": "No inference recipe may contain the capability authority mechanism; authority_handoff remains a separate control-plane recipe.",
     }
