@@ -27,31 +27,40 @@
     }
   },
   "important_file_lineage": {
-    "RESEARCH_FRONTIER.md": {
-      "archive_sha256": "unknown_from_archive_bytes_in_this_snapshot",
+    "docs/RESEARCH_FRONTIER.md": {
+      "archive_sha256": "b29a1d539cbff957ca935939013b3127b2f537ed279c1aadc2b3ce7f1d6952fc",
+      "archive_git_blob_sha1": "a369c533fbab818430199febc1c075257599f321",
       "recovered_git_blob_sha1": "a369c533fbab818430199febc1c075257599f321",
-      "status": "byte_content_recovered"
+      "status": "byte_exact"
     },
-    "real_encoder_transfer_surrogate.py": {
+    "experiments/real_encoder_transfer_surrogate.py": {
       "archive_git_blob_sha1": "37758dce46fed2099059431e1447d0ee9fa28279",
       "recovered_git_blob_sha1": "37758dce46fed2099059431e1447d0ee9fa28279",
       "status": "byte_exact"
     },
     "real_encoder_transfer_results.json": {
-      "archive_git_blob_sha1": "2334cf84a297c870357aac20869ed41bf0303e01",
+      "archive_sha256": "480e82dd9d345eb2d30b17f620e99af843d94b47732a750f90548664a852c2ee",
+      "archive_git_blob_sha1": "cb4a7883d60021069a0cf33ad534a821a0be6a52",
       "recovered_git_blob_sha1": "cb4a7883d60021069a0cf33ad534a821a0be6a52",
       "status": "byte_exact"
     },
-    "docs_REAL_ENCODER_TRANSFER_2026-09-23.md": {
+    "docs/REAL_ENCODER_TRANSFER_2026-09-23.md": {
       "archive_sha256": "2204703a5c5665da5986f1cea6a77e518f8c1c7336cf2f9841b4ee1f0fb3ae25",
       "archive_git_blob_sha1": "2334cf84a297c870357aac20869ed41bf0303e01",
       "recovered_git_blob_sha1": "2eef16f051b6fa90e4dc828b40327ddbf2642428",
       "status": "semantic_recovery_not_byte_exact"
+    },
+    "research_catalog.json": {
+      "archive_sha256": "27d98af0584b7b29488c193f7f8cded886a8d87341a798f4bf2d37bb462ed28a",
+      "archive_git_blob_sha1": "94fbd0095786d9016addaf545e60587d9cb36d52",
+      "recovered_git_blob_sha1": "94fbd0095786d9016addaf545e60587d9cb36d52",
+      "status": "byte_exact"
     }
   },
   "original_archive_verification": {
     "command": "PYTHONPATH=src pytest -q",
-    "result": "31 passed in 2.90s",
+    "historical_receipt": "31 passed in 2.24s",
+    "independent_rerun": "31 passed in 2.90s",
     "environment": {
       "python": "3.13.5",
       "torch": "2.10.0+cpu",
