@@ -1,0 +1,42 @@
+{
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "provenance": "LOCAL_EXECUTION_ARTIFACT",
+  "scope": "synthetic and learned-transfer surrogate experiments",
+  "representative_original_grid": {
+    "k": 8,
+    "interaction": 1.25,
+    "pairwise": {
+      "accuracy": 0.796875,
+      "brier": 0.024526942521333694
+    },
+    "marker_shared": {
+      "accuracy": 0.5859375,
+      "brier": 0.05595122277736664
+    },
+    "set_aware": {
+      "accuracy": 0.734375,
+      "brier": 0.028364747762680054
+    }
+  },
+  "learned_transfer_surrogate": {
+    "k": 8,
+    "interaction": 1.25,
+    "pairwise": {
+      "accuracy": 0.5520833333333334,
+      "brier": 0.05807871992389361
+    },
+    "marker": {
+      "accuracy": 0.5416666666666666,
+      "brier": 0.06285778433084488
+    },
+    "set_aware": {
+      "accuracy": 0.5833333333333334,
+      "brier": 0.05641663447022438
+    },
+    "conditional": {
+      "accuracy": 0.5520833333333334,
+      "brier": 0.05951437478264173
+    }
+  },
+  "caveat": "Synthetic/transfer evidence only; no pretrained real-NLP superiority claim."
+}
