@@ -435,7 +435,7 @@
       "intervention": "Inject a controlled failing stage and inspect the reified continuation.",
       "baseline": "Successful pipeline with the same stages and inputs.",
       "control": "Failure localization: boundary identity and continuation payload.",
-      "discriminator": "Failure localization: boundary identity and continuation payload.",
+      "discriminator": "Failure localization must remain observable at the injected stage without changing successful semantics.",
       "kill_test": "Reject if the injected failure cannot be localized or if successful output semantics change.",
       "evidence_required": [
         "stage_fixture",

@@ -156,7 +156,7 @@ Experiment selection is deterministic: maximize target failure-class coverage, t
 
 **Control:** Failure localization: boundary identity and continuation payload.
 
-**Discriminator:** Failure localization: boundary identity and continuation payload.
+**Discriminator:** Failure localization must remain observable at the injected stage without changing successful semantics.
 
 **Kill test:** Reject if the injected failure cannot be localized or if successful output semantics change.
 
