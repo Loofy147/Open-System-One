@@ -614,7 +614,6 @@ def catalog() -> dict[str, object]:
                 "description": item.description,
                 "prior": item.prior,
                 "status": item.status,
-                "status": item.status,
                 "scope": item.scope,
             }
             for item in HYPOTHESES

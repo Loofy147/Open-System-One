@@ -109,3 +109,14 @@ def test_adaptive_plan_exposes_mechanisms_and_receipt_fields():
     mechanisms, selections = build_adaptive_plan(observation, limit=1)
     assert mechanisms == ("identify", "shortlist", "dynamic_score", "condition", "relate")
     assert selections[0].reason.startswith("covers 2 target failure class(es)")
+
+
+def test_historical_reference_does_not_claim_exact_design_match():
+    from open_system_one.discovery_advanced import catalog
+    data = catalog()
+    history = data["historical_outcomes"][0]
+    assert history["applies_to_current_design"] is False
+    interaction = next(
+        row for row in data["experiments"] if row["key"] == "interaction_probe"
+    )
+    assert interaction["status"] == "COMPLETED_HISTORICAL_SCOPE"
