@@ -22,9 +22,10 @@ The contract is independent of encoder, scorer, runtime, provider, and action sy
 - 12 machine-native primitive probes plus registered pair interactions
 - precomposed discovery recipes that map observed failure classes to candidate mechanisms, kill tests, and evidence requirements
 - deterministic failure classification, experiment selection, and generated discovery catalog/frontier documentation
+- evidence-derived adaptive discovery with declared hypothesis spaces and expected entropy reduction
 - discovery run receipts generated from structured observations
 
-Discovery remains outside the canonical decision contract. A generated candidate is a HYPOTHESIS until an experiment receipt changes its status.
+The base discovery layer remains separate from the adaptive layer. Adaptive Discovery is research infrastructure, not canonical contract semantics.
 
 ## Evidence status
 
@@ -48,6 +49,7 @@ Read:
 - docs/ARCHITECTURE_FULL.md
 - docs/RESEARCH_PROTOCOL.md
 - docs/DISCOVERY_FRONTIER.md
+- docs/ADAPTIVE_DISCOVERY.md
 - docs/EVIDENCE_LEDGER.md
 - docs/RECOVERY_STATUS.md
 - docs/CONTRACT_DEBT.md

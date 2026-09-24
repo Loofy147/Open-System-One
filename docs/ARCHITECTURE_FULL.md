@@ -78,7 +78,21 @@ Discovery turns unexplained behavior into explicit candidate mechanisms:
 
 Failure -> failure class -> precomposed recipes -> coordinated mechanism set -> discriminating experiment
 
-The discovery registry is deterministic research infrastructure. A structured FailureObservation is classified by explicit trigger tags; the selector then chooses experiment designs by transparent coverage, evidence-gap coverage, declared cost, and stable key order. It can suggest inference mechanisms, computation/control-plane mechanisms, or an explicit authority handoff, but it cannot grant authority. Generated candidates remain HYPOTHESIS until the evidence ledger is updated by a reviewed receipt. Discovery planning is not itself an experiment result.
+Generated candidates remain HYPOTHESIS until the evidence ledger is updated by a reviewed receipt.
+
+## Layer 9 — Adaptive Discovery
+
+Adaptive Discovery consumes structured FailureEvidence, derives failure observations, consults the remaining hypothesis space, and selects the experiment with greatest declared expected entropy reduction after class/evidence-gap constraints.
+
+The layer is non-canonical and non-authoritative.
+
+Its information model is explicit:
+- priors are declared research weights
+- outcomes are declared partitions
+- historical outcomes constrain repeat information
+- expected information gain is computed mathematically, not guessed from model confidence
+- no free-form semantic confidence is inferred
+- no experiment is executed merely because it has high expected information gain
 
 ## Runtime boundary
 

@@ -8,6 +8,10 @@ Discovery extension:
 
 Failure -> Mechanism classification -> Precomposed candidate recipes -> Discriminating test -> Evidence -> Frontier update -> Next failure
 
+Adaptive extension:
+
+Structured FailureEvidence -> explicit failure tags -> remaining hypothesis space -> expected information gain -> experiment selection -> experiment receipt -> frontier update
+
 Every durable claim needs provenance, population/split, implementation reference, measured result, limits, and the next discriminating test.
 
 ## Status vocabulary
@@ -34,8 +38,32 @@ Negative results and killed ideas are recorded.
 5. Authority mechanisms remain outside inference discovery and require an explicit control-plane boundary.
 6. A new candidate does not change contract semantics until it survives the normal acceptance boundary.
 7. Failure classification is explicit and typed; free-form language is not treated as evidence or truth.
-8. Experiment selection optimizes transparent coverage/evidence-gap/cost ordering only; it does not claim predictive information gain.
-9. Discovery receipts record the proposed path, not the experimental result.
+8. Experiment selection may use expected information gain only when the hypothesis prior and outcome partition are declared explicitly.
+9. Expected information gain is a planning quantity, not an empirical probability of correctness.
+10. Historical outcomes constrain repeat information only inside their declared experiment scope.
+11. Discovery receipts record proposed paths, not experimental results.
+
+## Adaptive Discovery
+
+Structured FailureEvidence is converted into explicit trigger tags before the existing deterministic failure classifier is invoked.
+
+A hypothesis space contains:
+- a stable hypothesis key
+- a declared research prior
+- a status
+- an experiment outcome partition
+
+For an experiment E:
+
+H_before = entropy of the active hypothesis priors.
+
+H_after = expected posterior entropy after the declared outcome partition.
+
+Expected information gain = H_before - H_after.
+
+The implementation permits many hypotheses to map to the same outcome. Therefore a non-trivial experiment can have zero expected information gain when it cannot distinguish the remaining hypotheses.
+
+A recorded historical outcome can make a repeat experiment have zero remaining information in the declared scope. This is a constraint on planning, not a claim that future experiments are unnecessary.
 
 ## Experiment contract
 
@@ -50,6 +78,13 @@ Each experiment specifies:
 7. metrics
 8. composition candidates
 9. provenance
+
+Adaptive designs additionally specify:
+
+10. hypothesis keys
+11. outcome partition
+12. declared prior basis
+13. historical outcome scope
 
 ## Kill criteria
 

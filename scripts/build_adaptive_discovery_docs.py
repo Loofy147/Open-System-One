@@ -19,7 +19,10 @@ def render(data: dict[str, object]) -> str:
         "<!-- GENERATED FILE: scripts/build_adaptive_discovery_docs.py -->",
         "",
         "This is NON-CANONICAL research infrastructure.",
-        "Structured evidence is converted into failure classes; previous experiment outcomes constrain repeat information gain; selection uses explicit entropy reduction under declared research priors.",
+        "",
+        "## Purpose",
+        "",
+        "Convert structured evidence into failure classes, update the unresolved hypothesis space using recorded experiment outcomes, and select the next experiment by explicit expected entropy reduction.",
         "",
         "## Rules",
         "",
@@ -30,6 +33,8 @@ def render(data: dict[str, object]) -> str:
         "**History:** " + str(data["history_rule"]),
         "",
         "**Selection:** " + str(data["selection_rule"]),
+        "",
+        "Priors are research bookkeeping, not empirical probabilities or truth confidence.",
         "",
         "## Hypotheses",
         "",
@@ -59,49 +64,29 @@ def render(data: dict[str, object]) -> str:
         "",
         "## Adaptive experiments",
         "",
-        "| Experiment | Failure classes | Mechanisms | Cost | Expected IG (bits) | Historical outcome |",
+        "| Experiment | Failure classes | Mechanisms | Cost | Expected IG (bits) | Historical |",
         "|---|---|---|---:|---:|---|",
     ])
     for row in data["experiments"]:
-        historical = row["historical_outcome"] or "unobserved"
         lines.append(
             "| " + row["key"] + " | " + ", ".join(row["failure_classes"])
             + " | " + " -> ".join(row["mechanisms"]) + " | " + str(row["cost"])
             + " | " + f"{row['expected_information_gain_bits']:.6f}"
-            + " | " + historical + " |"
+            + " | " + (row["historical_outcome"] or "unobserved") + " |"
         )
 
-    lines.extend(["", "## Experiment details", ""])
-    for row in data["experiments"]:
-        lines.extend([
-            "### " + row["key"],
-            "",
-            "**Hypothesis:** " + row["hypothesis"],
-            "",
-            "**Intervention:** " + row["intervention"],
-            "",
-            "**Baseline:** " + row["baseline"],
-            "",
-            "**Control:** " + row["control"],
-            "",
-            "**Discriminator:** " + row["discriminator"],
-            "",
-            "**Kill test:** " + row["kill_test"],
-            "",
-            "**Evidence required:** " + ", ".join(row["evidence_required"]),
-            "",
-            "**Outcome partition:** " + "; ".join(
-                key + " -> " + value for key, value in row["outcome_partition"].items()
-            ),
-            "",
-        ])
-
     lines.extend([
+        "",
+        "## Deterministic examples",
+        "",
+        "- A candidate-interaction observation does not reselect interaction_probe after the recorded mixed_gain result; interaction_regime_map has expected IG 1.512888 bits.",
+        "- A combined candidate-interaction + candidate-overload observation can select interaction_retrieval_guard, which covers two failure classes and has expected IG 2.000000 bits under its declared four-state hypothesis partition.",
+        "",
         "## Boundary",
         "",
         data["authority_rule"],
         "",
-        "Priors are research bookkeeping, not truth probabilities. Discovery planning is not experimental evidence.",
+        "Discovery planning is a hypothesis generator and experiment planner. It is not experimental evidence, and it does not execute external side effects.",
         "",
     ])
     return "\n".join(lines) + "\n"

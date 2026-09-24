@@ -9,34 +9,29 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from open_system_one.discovery import classify_failure
-from open_system_one.discovery_advanced import FailureEvidence, build_adaptive_plan, observation_from_evidence
+from open_system_one.discovery import FAILURE_CLASSES, classify_failure
+from open_system_one.discovery_advanced import (
+    FailureEvidence,
+    build_adaptive_plan,
+    observation_from_evidence,
+)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    for name in (
+        "candidate-set-changes-output", "competitor-effect", "context-dependent-score",
+        "same-input-repeated", "duplicate-work", "cache-miss", "hash-mismatch",
+        "lineage-mismatch", "same-content-different-id", "reordered-events",
+        "causal-inversion", "inconsistent-merge", "stage-boundary",
+        "intermediate-loss", "hidden-failure", "confidence-used-for-action",
+        "missing-capability", "unauthorized-execution",
+    ):
+        parser.add_argument("--" + name, action="store_true")
     parser.add_argument("--candidate-count", type=int)
     parser.add_argument("--candidate-budget", type=int)
     parser.add_argument("--retrieval-latency-ms", type=float)
     parser.add_argument("--retrieval-latency-budget-ms", type=float)
-    parser.add_argument("--candidate-set-changes-output", action="store_true")
-    parser.add_argument("--competitor-effect", action="store_true")
-    parser.add_argument("--context-dependent-score", action="store_true")
-    parser.add_argument("--same-input-repeated", action="store_true")
-    parser.add_argument("--duplicate-work", action="store_true")
-    parser.add_argument("--cache-miss", action="store_true")
-    parser.add_argument("--hash-mismatch", action="store_true")
-    parser.add_argument("--lineage-mismatch", action="store_true")
-    parser.add_argument("--same-content-different-id", action="store_true")
-    parser.add_argument("--reordered-events", action="store_true")
-    parser.add_argument("--causal-inversion", action="store_true")
-    parser.add_argument("--inconsistent-merge", action="store_true")
-    parser.add_argument("--stage-boundary", action="store_true")
-    parser.add_argument("--intermediate-loss", action="store_true")
-    parser.add_argument("--hidden-failure", action="store_true")
-    parser.add_argument("--confidence-used-for-action", action="store_true")
-    parser.add_argument("--missing-capability", action="store_true")
-    parser.add_argument("--unauthorized-execution", action="store_true")
     parser.add_argument("--evidence-ref", action="append", default=[])
     parser.add_argument("--evidence-gap", action="append", default=[])
     parser.add_argument("--out", default="research/discovery/runs/adaptive-latest.json")
@@ -70,6 +65,8 @@ def main() -> int:
     )
     observation = observation_from_evidence(evidence)
     matches = classify_failure(observation)
+    match_scope = {item.key: item.scope for item in FAILURE_CLASSES}
+
     plans = []
     for scope in ("research", "control_plane"):
         mechanisms, selections = build_adaptive_plan(observation, scope=scope)
@@ -77,9 +74,11 @@ def main() -> int:
             plans.append({
                 "scope": scope,
                 "observation_tags": list(observation.tags),
-                "failure_matches": [asdict(match) for match in matches if (
-                    match.failure_class in {item.failure_class for item in matches}
-                )],
+                "failure_matches": [
+                    asdict(match)
+                    for match in matches
+                    if match_scope[match.failure_class] == scope
+                ],
                 "mechanisms": list(mechanisms),
                 "selections": [asdict(selection) for selection in selections],
             })
@@ -91,7 +90,10 @@ def main() -> int:
     }
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    out.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     print("generated: " + str(out))
     return 0
 

@@ -58,7 +58,6 @@ The learned 24D transfer surrogate is useful evidence but cannot substitute for 
 Required next comparison:
 representation x candidate regime x K x scorer, with fixed train/test provenance.
 
-
 ## D10 — Discovery evidence boundary
 
 The precomposed discovery registry is deterministic and structurally tested, but registry membership is not empirical evidence. A future promotion path must link each candidate recipe to an observed failure receipt, a discriminating experiment, and its resulting evidence-ledger revision.
@@ -66,3 +65,16 @@ The precomposed discovery registry is deterministic and structurally tested, but
 The current layer does not yet perform open-ended semantic failure classification from free-form observations, adaptive experiment selection from measured information gain, or autonomous experiment execution. Those remain discovery-frontier work, not established capability.
 
 The current selector uses explicit deterministic ordering only: target-class coverage, requested evidence-gap coverage, declared cost, then key. No learned utility score is used.
+
+## D11 — Adaptive Discovery epistemic model
+
+The adaptive layer computes expected information gain from declared priors and outcome partitions. This is a formal planning calculation, not calibrated belief about the world.
+
+Remaining debt:
+- priors are manually declared research weights
+- outcome partitions are manually declared
+- historical outcomes are coarse receipts, not a posterior likelihood model
+- experiment cost is a declared ordinal proxy, not measured resource cost
+- no empirical noise/likelihood model is used
+- free-form evidence-to-tag semantic classification remains open
+- automatic experiment execution and evidence-ledger revision remain open
