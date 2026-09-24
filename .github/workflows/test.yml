@@ -6,6 +6,7 @@ on:
     branches:
       - main
       - foundation/v0.1
+      - recovery/v0.3-frontier
 
 jobs:
   pytest:
@@ -15,5 +16,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m pip install -e . pytest
+      - run: python -m pip install -e ".[dev]"
       - run: pytest -q
