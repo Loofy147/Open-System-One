@@ -21,7 +21,8 @@ The contract is independent of encoder, scorer, runtime, provider, and action sy
 - shortlist/prefilter
 - 12 machine-native primitive probes plus registered pair interactions
 - precomposed discovery recipes that map observed failure classes to candidate mechanisms, kill tests, and evidence requirements
-- deterministic generated discovery catalog and frontier documentation
+- deterministic failure classification, experiment selection, and generated discovery catalog/frontier documentation
+- discovery run receipts generated from structured observations
 
 Discovery remains outside the canonical decision contract. A generated candidate is a HYPOTHESIS until an experiment receipt changes its status.
 

@@ -34,6 +34,9 @@ OPEN: explicitly awaiting a test or decision.
 | Candidate interaction is universally required | CONTRADICTED by synthetic comparison | Pairwise performs strongly when interaction is absent. |
 | Discovery can deterministically map an observed failure class to precomposed mechanism candidates | EXPERIMENTALLY_SUPPORTED | src/open_system_one/discovery.py plus tests/test_discovery.py; deterministic proposal, coordination, and authority-boundary checks are tested. |
 | Discovery candidates change the canonical contract | CONTRADICTED | Discovery is Layer 8 research infrastructure; contract semantics remain unchanged until acceptance evidence exists. |
+| Structured trigger tags can deterministically classify an observation into multiple registered failure classes | EXPERIMENTALLY_SUPPORTED structurally | `classify_failure` is typed and deterministic; it does not infer semantic truth from free-form language. |
+| The selector chooses experiments by explicit deterministic ordering | EXPERIMENTALLY_SUPPORTED structurally | Coverage, requested evidence-gap coverage, declared cost, and experiment key determine the selection order; this is not a predictive information-gain claim. |
+| Discovery run receipts are evidence of the proposed experiment, not of its outcome | ESTABLISHED | The receipt schema explicitly uses `DISCOVERY_PLAN_NOT_EVIDENCE`; empirical status still requires a completed experiment receipt. |
 
 ## Rules
 

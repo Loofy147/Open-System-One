@@ -63,4 +63,6 @@ representation x candidate regime x K x scorer, with fixed train/test provenance
 
 The precomposed discovery registry is deterministic and structurally tested, but registry membership is not empirical evidence. A future promotion path must link each candidate recipe to an observed failure receipt, a discriminating experiment, and its resulting evidence-ledger revision.
 
-The current layer does not yet perform open-ended semantic failure classification or autonomous experiment selection. Those remain discovery-frontier work, not established capability.
+The current layer does not yet perform open-ended semantic failure classification from free-form observations, adaptive experiment selection from measured information gain, or autonomous experiment execution. Those remain discovery-frontier work, not established capability.
+
+The current selector uses explicit deterministic ordering only: target-class coverage, requested evidence-gap coverage, declared cost, then key. No learned utility score is used.

@@ -78,7 +78,7 @@ Discovery turns unexplained behavior into explicit candidate mechanisms:
 
 Failure -> failure class -> precomposed recipes -> coordinated mechanism set -> discriminating experiment
 
-The discovery registry is deterministic research infrastructure. It can suggest inference mechanisms, computation/control-plane mechanisms, or an explicit authority handoff, but it cannot grant authority. Generated candidates remain HYPOTHESIS until the evidence ledger is updated by a reviewed receipt.
+The discovery registry is deterministic research infrastructure. A structured FailureObservation is classified by explicit trigger tags; the selector then chooses experiment designs by transparent coverage, evidence-gap coverage, declared cost, and stable key order. It can suggest inference mechanisms, computation/control-plane mechanisms, or an explicit authority handoff, but it cannot grant authority. Generated candidates remain HYPOTHESIS until the evidence ledger is updated by a reviewed receipt. Discovery planning is not itself an experiment result.
 
 ## Runtime boundary
 

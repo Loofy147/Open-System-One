@@ -33,6 +33,9 @@ Negative results and killed ideas are recorded.
 4. Candidate generation is deterministic; ordering is part of the research receipt.
 5. Authority mechanisms remain outside inference discovery and require an explicit control-plane boundary.
 6. A new candidate does not change contract semantics until it survives the normal acceptance boundary.
+7. Failure classification is explicit and typed; free-form language is not treated as evidence or truth.
+8. Experiment selection optimizes transparent coverage/evidence-gap/cost ordering only; it does not claim predictive information gain.
+9. Discovery receipts record the proposed path, not the experimental result.
 
 ## Experiment contract
 
