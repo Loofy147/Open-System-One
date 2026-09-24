@@ -1,0 +1,54 @@
+{
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "provenance": "LOCAL_EXECUTION_ARTIFACT",
+  "N": 128,
+  "dimension": 32,
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "results": {
+    "k4": {
+      "recall_at_1": [
+        0.98046875,
+        0.9609375,
+        0.97265625
+      ],
+      "candidate_fraction": 0.03125
+    },
+    "k8": {
+      "recall_at_1": [
+        1,
+        0.99609375,
+        0.99609375
+      ],
+      "candidate_fraction": 0.0625
+    },
+    "k16": {
+      "recall_at_1": [
+        1,
+        1,
+        1
+      ],
+      "candidate_fraction": 0.125
+    },
+    "k32": {
+      "recall_at_1": [
+        1,
+        1,
+        1
+      ],
+      "candidate_fraction": 0.25
+    },
+    "k128": {
+      "recall_at_1": [
+        1,
+        1,
+        1
+      ],
+      "candidate_fraction": 1
+    }
+  },
+  "caveat": "Oracle-vector proof-of-concept; not evidence for pretrained real encoder retrieval."
+}
