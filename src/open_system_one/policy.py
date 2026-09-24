@@ -12,16 +12,22 @@ class DecisionDisposition(str, Enum):
 
 @dataclass(frozen=True)
 class PolicyThresholds:
-    accept_min_confidence: float = 0.90
-    review_min_confidence: float = 0.60
+    """Caller-supplied policy parameters; no threshold is canonical here."""
+
+    accept_min_confidence: float
+    review_min_confidence: float
 
 
 def apply_policy(
     confidence: float,
     *,
-    thresholds: PolicyThresholds = PolicyThresholds(),
+    thresholds: PolicyThresholds,
 ) -> DecisionDisposition:
-    if not 0.0 <= thresholds.review_min_confidence <= thresholds.accept_min_confidence <= 1.0:
+    if not (
+        0.0 <= thresholds.review_min_confidence
+        <= thresholds.accept_min_confidence
+        <= 1.0
+    ):
         raise ValueError("Policy thresholds are invalid")
     if not 0.0 <= confidence <= 1.0:
         raise ValueError("Confidence must be in [0, 1]")
