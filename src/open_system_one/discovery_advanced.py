@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import log2
+from math import isfinite, log2
 from typing import Mapping
 
-from .discovery import FailureObservation, FAILURE_CLASSES, classify_failure
+from .discovery import FailureObservation, FAILURE_CLASSES, RECIPES, classify_failure
 
 
 @dataclass(frozen=True)
@@ -429,6 +429,8 @@ ADAPTIVE_EXPERIMENTS = (
 _HYPOTHESES = {item.key: item for item in HYPOTHESES}
 _EXPERIMENTS = {item.key: item for item in ADAPTIVE_EXPERIMENTS}
 _HISTORICAL = {item.experiment: item for item in HISTORICAL_OUTCOMES}
+_FAILURES = {item.key: item for item in FAILURE_CLASSES}
+_RECIPES = {item.key: item for item in RECIPES}
 
 _VALID_STATUSES = {"ESTABLISHED", "EXPERIMENTALLY_SUPPORTED", "HYPOTHESIS", "OPEN", "CONTRADICTED"}
 
@@ -440,23 +442,40 @@ if set(_HISTORICAL) != {item.experiment for item in HISTORICAL_OUTCOMES}:
     raise ValueError("duplicate historical outcome")
 
 for hypothesis in HYPOTHESES:
-    if hypothesis.prior < 0:
-        raise ValueError("hypothesis prior must be non-negative")
+    if not isfinite(hypothesis.prior) or hypothesis.prior < 0:
+        raise ValueError("hypothesis prior must be a finite non-negative number")
     if hypothesis.status not in _VALID_STATUSES:
         raise ValueError(f"invalid hypothesis status: {hypothesis.status}")
 
+for historical in HISTORICAL_OUTCOMES:
+    if historical.experiment not in _EXPERIMENTS:
+        raise ValueError(f"unknown historical experiment: {historical.experiment}")
+    if historical.scope != _EXPERIMENTS[historical.experiment].scope:
+        raise ValueError(f"historical scope mismatch in {historical.experiment}")
+    if historical.applies_to_current_design and historical.outcome not in dict(_EXPERIMENTS[historical.experiment].outcome_partition).values():
+        raise ValueError(f"historical outcome not in partition for {historical.experiment}")
+
 for experiment in ADAPTIVE_EXPERIMENTS:
+    if experiment.scope not in {"research", "control_plane"}:
+        raise ValueError(f"invalid experiment scope in {experiment.key}")
+    if any(item not in _FAILURES for item in experiment.failure_classes):
+        raise ValueError(f"unknown failure class in {experiment.key}")
+    if any(item not in _RECIPES for item in experiment.recipe_keys):
+        raise ValueError(f"unknown recipe in {experiment.key}")
     if any(item not in _HYPOTHESES for item in experiment.hypothesis_keys):
         raise ValueError(f"unknown hypothesis in {experiment.key}")
+    if len(set(experiment.hypothesis_keys)) != len(experiment.hypothesis_keys):
+        raise ValueError(f"duplicate hypothesis in {experiment.key}")
     if experiment.status not in {"OPEN", "HYPOTHESIS", "COMPLETED_HISTORICAL_SCOPE", "CONTRADICTED"}:
         raise ValueError(f"invalid experiment status in {experiment.key}")
+    if not experiment.outcome_partition:
+        raise ValueError(f"empty outcome partition in {experiment.key}")
+    if len(dict(experiment.outcome_partition)) != len(experiment.outcome_partition):
+        raise ValueError(f"duplicate hypothesis in outcome partition for {experiment.key}")
     partition = dict(experiment.outcome_partition)
     if set(partition) != set(experiment.hypothesis_keys):
         raise ValueError(f"partition does not cover hypotheses in {experiment.key}")
-    recipe_scopes = {
-        "control_plane" if key == "authority_handoff" else "research"
-        for key in experiment.recipe_keys
-    }
+    recipe_scopes = {_RECIPES[key].scope for key in experiment.recipe_keys}
     if recipe_scopes != {experiment.scope}:
         raise ValueError(f"scope mismatch in {experiment.key}")
 
@@ -531,6 +550,8 @@ def select_adaptive_experiments(
     rows = []
     for experiment in ADAPTIVE_EXPERIMENTS:
         if experiment.scope != scope or experiment.key in excluded_set:
+            continue
+        if experiment.status not in {"OPEN", "HYPOTHESIS"}:
             continue
         required_classes = set(experiment.failure_classes)
         if not required_classes.issubset(target_classes):
