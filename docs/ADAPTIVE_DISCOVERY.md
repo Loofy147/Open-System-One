@@ -6,7 +6,7 @@ This is NON-CANONICAL research infrastructure.
 
 ## Purpose
 
-Convert structured evidence into failure classes, update the unresolved hypothesis space using recorded experiment outcomes, and select the next experiment by explicit expected entropy reduction.
+Convert structured evidence into failure classes, condition the unresolved planning space only on explicitly applicable recorded outcomes, and select the next experiment by explicit expected entropy reduction.
 
 ## Rules
 
@@ -16,7 +16,7 @@ Convert structured evidence into failure classes, update the unresolved hypothes
 
 **History:** A historical outcome constrains a current experiment only when the record explicitly declares applies_to_current_design=True. Otherwise it remains related evidence and does not alter current priors.
 
-**Selection:** Deterministic order: target failure-class coverage, evidence-gap coverage, expected information gain, declared cost, stable experiment key.
+**Selection:** Eligibility requires every failure class declared by an experiment to be present in the observation. Ordering is target failure-class coverage, evidence-gap coverage, expected information gain, declared cost, stable experiment key.
 
 Priors are research bookkeeping, not empirical probabilities or truth confidence.
 
@@ -64,7 +64,7 @@ Priors are research bookkeeping, not empirical probabilities or truth confidence
 
 ## Deterministic examples
 
-- A candidate-interaction observation does not reselect interaction_probe after the recorded mixed_gain result; interaction_regime_map has expected IG 1.512888 bits.
+- A candidate-interaction observation does not reselect interaction_probe after the recorded mixed_gain result; interaction_regime_map is eligible and has expected IG 1.512888 bits.
 - A combined candidate-interaction + candidate-overload observation can select interaction_retrieval_guard, which covers two failure classes and has expected IG 2.000000 bits under its declared four-state hypothesis partition.
 
 ## Boundary
