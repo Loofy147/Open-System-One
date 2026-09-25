@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import difflib
 from pathlib import Path
 import sys
 
@@ -102,6 +103,14 @@ def main() -> int:
         actual = MD_PATH.read_text(encoding="utf-8") if MD_PATH.exists() else ""
         if actual != generated:
             print("out of date: " + str(MD_PATH))
+            diff = difflib.unified_diff(
+                actual.splitlines(),
+                generated.splitlines(),
+                fromfile=str(MD_PATH),
+                tofile="generated",
+                lineterm="",
+            )
+            print("\\n".join(diff))
             return 1
         return 0
 
