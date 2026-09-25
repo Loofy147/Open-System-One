@@ -614,6 +614,10 @@ def catalog() -> dict[str, object]:
             "in the observation. Ordering is target failure-class coverage, evidence-gap coverage, "
             "expected information gain, declared cost, stable experiment key."
         ),
+        "authority_rule": (
+            "Control-plane authority experiments are selected in a separate scope and never "
+            "merged into research/inference plans."
+        ),
         "hypotheses": [
             {
                 "key": item.key,
