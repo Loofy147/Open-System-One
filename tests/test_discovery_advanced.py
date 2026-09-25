@@ -46,6 +46,16 @@ def test_previous_mixed_result_eliminates_repeat_information_gain():
     assert expected_information_gain("interaction_probe") == 0.0
 
 
+def test_every_catalog_experiment_declares_a_nonempty_outcome_partition():
+    from open_system_one.discovery_advanced import ADAPTIVE_EXPERIMENTS
+
+    for experiment in ADAPTIVE_EXPERIMENTS:
+        assert experiment.outcome_partition
+        outcomes = [outcome for _, outcome in experiment.outcome_partition]
+        assert all(hypothesis in experiment.hypothesis_keys for hypothesis, _ in experiment.outcome_partition)
+        assert len(set(outcomes)) == len(outcomes)
+
+
 def test_regime_map_retains_more_than_one_bit_of_expected_information():
     gain = expected_information_gain("interaction_regime_map")
     assert 1.5 < gain < 1.6
