@@ -343,6 +343,7 @@ ADAPTIVE_EXPERIMENTS = (
             ("learned_shortlist_safe", "safe"),
             ("learned_shortlist_unsafe", "unsafe"),
         ),
+        status="OPEN",
     ),
     AdaptiveExperiment(
         "artifact_reuse",
