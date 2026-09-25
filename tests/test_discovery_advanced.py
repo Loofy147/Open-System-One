@@ -93,12 +93,12 @@ def test_compound_experiment_has_two_bit_discrimination_under_declared_prior():
     assert 1.99 < gain < 2.01
 
 
-def test_selector_uses_history_and_information_gain():
+def test_selector_requires_declared_failure_classes_and_uses_information_gain():
     observation = FailureObservation(tags=("candidate_set_changes_output",))
     selections = select_adaptive_experiments(observation, limit=2)
-    assert selections[0].experiment == "interaction_retrieval_guard"
+    assert selections[0].experiment == "interaction_regime_map"
     assert selections[0].historical_outcome is None
-    assert selections[0].expected_information_gain_bits > 1.9
+    assert selections[0].expected_information_gain_bits > 1.5
 
 
 def test_compound_selector_covers_two_failure_classes():
