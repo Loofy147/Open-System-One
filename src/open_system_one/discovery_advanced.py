@@ -334,6 +334,7 @@ ADAPTIVE_EXPERIMENTS = (
         "The oracle shortlist proof can transfer to a learned prefilter without losing required-candidate recall.",
         "Train or fine-tune the learned prefilter, then measure recall@K and downstream work over real or realistic embeddings.",
         "Full-candidate scorer; the earlier oracle-vector result is evidence, not a learned-data baseline.",
+        "Full-candidate scoring on the same learned embeddings, seeds, and downstream scoring budget.",
         "Whether learned pruning remains safe after distributional transfer.",
         "Reject if learned recall falls below the declared safety threshold or varies materially across seeds/domains.",
         ("real_embedding_ref", "K_grid", "multiple_seeds", "recall_at_K", "compute_measure"),
