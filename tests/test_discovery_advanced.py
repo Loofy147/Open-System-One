@@ -46,6 +46,12 @@ def test_previous_mixed_result_eliminates_repeat_information_gain():
     assert expected_information_gain("interaction_probe") == 0.0
 
 
+def test_completed_experiment_is_not_selectable():
+    observation = FailureObservation(tags=("candidate_set_changes_output",))
+    selections = select_adaptive_experiments(observation, limit=10)
+    assert all(selection.experiment != "interaction_probe" for selection in selections)
+
+
 def test_every_catalog_experiment_declares_a_nonempty_outcome_partition():
     from open_system_one.discovery_advanced import ADAPTIVE_EXPERIMENTS
 
