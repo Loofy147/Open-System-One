@@ -72,3 +72,4 @@ Priors are research bookkeeping, not empirical probabilities or truth confidence
 Control-plane authority experiments are selected in a separate scope and never merged into research/inference plans.
 
 Discovery planning is a hypothesis generator and experiment planner. It is not experimental evidence, and it does not execute external side effects.
+
