@@ -532,6 +532,9 @@ def select_adaptive_experiments(
     for experiment in ADAPTIVE_EXPERIMENTS:
         if experiment.scope != scope or experiment.key in excluded_set:
             continue
+        required_classes = set(experiment.failure_classes)
+        if not required_classes.issubset(target_classes):
+            continue
         class_coverage = len(target_classes.intersection(experiment.failure_classes))
         if class_coverage == 0:
             continue
@@ -607,7 +610,8 @@ def catalog() -> dict[str, object]:
             "explicitly declares applies_to_current_design=True. Otherwise it remains related evidence and does not alter current priors."
         ),
         "selection_rule": (
-            "Deterministic order: target failure-class coverage, evidence-gap coverage, "
+            "Eligibility requires every failure class declared by an experiment to be present "
+            "in the observation. Ordering is target failure-class coverage, evidence-gap coverage, "
             "expected information gain, declared cost, stable experiment key."
         ),
         "hypotheses": [
