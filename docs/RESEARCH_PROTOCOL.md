@@ -121,3 +121,23 @@ Rules:
 ## Interpretation rule
 
 A more complex scorer is not retained merely because its average is higher on one small sample. Keep the simplest mechanism that survives controlled intervention and replication.
+
+
+## Claim Synthesis
+
+The Layer 11 control-plane handoff is:
+
+AdaptiveFrontierState -> ClaimSpec -> cross-experiment synthesis -> conflict detection -> explicit ClaimRevision
+
+Rules:
+
+1. Claim identity, hypothesis binding, and scope are explicit.
+2. Synthesis preserves every underlying HypothesisAssessment and evidence identity.
+3. Support and contradiction across experiments produce CONFLICTED rather than an automatic winner.
+4. Many-to-one assessments remain UNRESOLVED and can limit later claim status.
+5. EXPERIMENTALLY_SUPPORTED requires the full current scoped evidence set to be exactly SUPPORTED.
+6. CONTRADICTED requires the full current scoped evidence set to be exactly CONTRADICTED.
+7. ClaimRevision is an explicit control-plane act and never mutates adaptive priors or the experiment frontier.
+8. Claim revisions are parent-linked and immutable; stale parents cannot overwrite newer state.
+9. Replaying the same revision against the same parent is idempotent.
+10. Verification, Gate, and DecisionRevision are separate stages and are not inferred by claim synthesis.
