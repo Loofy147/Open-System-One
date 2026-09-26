@@ -155,6 +155,23 @@ class AdaptiveFrontierState:
     assessments: tuple[HypothesisAssessment, ...] = ()
     revision_id: str = "frontier:genesis"
 
+    def __post_init__(self) -> None:
+        if len(set(self.completed_experiments)) != len(self.completed_experiments):
+            raise ValueError("completed_experiments must be unique")
+        if any(key not in _EXPERIMENTS for key in self.completed_experiments):
+            raise ValueError("frontier references an unknown experiment")
+        if len(set(self.evidence_ids)) != len(self.evidence_ids):
+            raise ValueError("evidence_ids must be unique")
+        if not self.revision_id:
+            raise ValueError("revision_id must be non-empty")
+        for assessment in self.assessments:
+            if assessment.experiment_key not in _EXPERIMENTS:
+                raise ValueError("assessment references an unknown experiment")
+            if assessment.hypothesis_key not in _EXPERIMENTS[assessment.experiment_key].hypothesis_keys:
+                raise ValueError("assessment hypothesis is not declared by experiment")
+            if assessment.evidence_id not in self.evidence_ids:
+                raise ValueError("assessment references evidence not present in frontier")
+
     def experiment_status(self, experiment_key: str) -> str:
         if experiment_key not in _EXPERIMENTS:
             raise KeyError(experiment_key)
