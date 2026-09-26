@@ -343,6 +343,10 @@ def derive_hypothesis_assessments(
     receipt: ExperimentReceipt,
     evidence: EvidenceRecord,
 ) -> tuple[HypothesisAssessment, ...]:
+    if evidence.receipt_digest != receipt.receipt_digest:
+        raise ValueError("evidence does not belong to receipt")
+    if evidence.experiment_key != receipt.experiment_key or evidence.outcome != receipt.outcome:
+        raise ValueError("evidence does not match receipt execution")
     experiment = _EXPERIMENTS[receipt.experiment_key]
     partition = dict(experiment.outcome_partition)
     compatible = tuple(
