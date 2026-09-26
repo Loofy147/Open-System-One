@@ -201,15 +201,11 @@ def test_experimental_support_requires_full_unconflicted_evidence_set():
             evidence_ids=synthesis.supporting_evidence_ids,
             assessment_ids=(
                 next(
-                    item_id
-                    for item_id in synthesis.assessment_ids
-                    if item_id
-                    == next(
-                        assessment.evidence_id
-                        for assessment in frontier.assessments
-                        if assessment.hypothesis_key == claim.hypothesis_key
-                        and assessment.relation == "SUPPORTED"
-                    )
+                    assessment_id(item)
+                    for item in frontier.assessments
+                    if item.hypothesis_key == claim.hypothesis_key
+                    and item.relation == "SUPPORTED"
+                    and item.evidence_id == synthesis.supporting_evidence_ids[0]
                 ),
             ),
         )
