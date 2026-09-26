@@ -77,17 +77,27 @@ Remaining debt:
 - experiment cost is a declared ordinal proxy, not measured resource cost
 - no empirical noise/likelihood model is used
 - free-form evidence-to-tag semantic classification remains open
-- automatic experiment execution and evidence-ledger revision remain open
-
+- automatic experiment execution remains open
 
 ## D12 — Closed-loop persistence and epistemic update
 
-The closed-loop layer now validates an executed result, binds it to provenance, materializes reviewed evidence, creates scoped hypothesis-assessment events, and produces an immutable frontier revision.
+The closed-loop layer validates an executed result, binds it to provenance, materializes reviewed evidence, creates scoped hypothesis-assessment events, and produces an immutable frontier revision.
 
 Remaining debt:
 - frontier persistence is represented as an immutable state artifact but has no canonical storage adapter
-- automatic external experiment execution remains outside the layer
+- automatic external experiment execution remains outside
 - assessment events are deterministic interpretations of declared outcome partitions, not posterior probabilities
 - no empirical likelihood/noise model updates the declared priors
-- cross-experiment evidence synthesis and conflict resolution remain open
 - receipt review is explicit; the system does not auto-promote unreviewed execution output to evidence
+
+## D13 — Claim verification and authority boundary
+
+Layer 11 now provides deterministic cross-experiment synthesis, conflict detection, and explicit parent-linked ClaimRevision records.
+
+Remaining debt:
+- claim verification is not yet a separate verification event with an independently defined verifier contract
+- Gate semantics are not yet frozen
+- DecisionRevision is not yet connected to a verified claim
+- conflict resolution remains an explicit future research/control-plane action rather than automatic adjudication
+- no canonical persistence adapter exists for the claim ledger
+- claim synthesis remains scoped to an explicit hypothesis-to-claim binding; open-ended semantic claim extraction is not established
