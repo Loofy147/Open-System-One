@@ -454,3 +454,26 @@ def test_claim_spec_rejects_unknown_or_scope_mismatched_hypothesis():
             hypothesis_key="authority_external",
             scope="research",
         )
+
+
+def test_claim_revision_rejects_overlapping_evidence_dispositions():
+    from open_system_one.claim_synthesis import ClaimRevision
+
+    with pytest.raises(ValueError, match="disjoint"):
+        ClaimRevision(
+            claim_key="claim:bad",
+            statement="Bad fixture.",
+            hypothesis_key="interaction_contextual",
+            scope="research",
+            status="HYPOTHESIS",
+            revision_id="claim-revision:bad",
+            parent_revision_id="claims:genesis",
+            evidence_ids=("e1",),
+            assessment_ids=("a1",),
+            supporting_evidence_ids=("e1",),
+            contradicting_evidence_ids=("e1",),
+            unresolved_evidence_ids=(),
+            rationale="fixture",
+            limitations="fixture",
+            next_discriminating_test="fixture",
+        )
