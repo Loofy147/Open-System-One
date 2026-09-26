@@ -199,10 +199,18 @@ def test_experimental_support_requires_full_unconflicted_evidence_set():
             limitations="Conflict evidence exists and is intentionally not selected.",
             next_discriminating_test="Resolve the contradiction with a controlled repeat.",
             evidence_ids=synthesis.supporting_evidence_ids,
-            assessment_ids=tuple(
-                item_id
-                for item_id in synthesis.assessment_ids
-                if item_id == synthesis.assessment_ids[0]
+            assessment_ids=(
+                next(
+                    item_id
+                    for item_id in synthesis.assessment_ids
+                    if item_id
+                    == next(
+                        assessment.evidence_id
+                        for assessment in frontier.assessments
+                        if assessment.hypothesis_key == claim.hypothesis_key
+                        and assessment.relation == "SUPPORTED"
+                    )
+                ),
             ),
         )
         with pytest.raises(ValueError, match="full current claim evidence set"):
