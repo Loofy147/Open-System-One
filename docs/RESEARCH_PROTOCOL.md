@@ -86,6 +86,27 @@ Adaptive designs additionally specify:
 12. declared prior basis
 13. historical outcome scope
 
+## Closed-Loop Experiment Evidence
+
+The closed-loop extension is:
+
+ExecutionResult -> Receipt -> Review -> Evidence -> HypothesisAssessment -> LedgerRevision -> FrontierState -> Replan
+
+Rules:
+
+1. ExecutionResult is machine-produced result data only.
+2. A receipt must carry complete provenance and a deterministic execution digest.
+3. Only a reviewed receipt with passed kill/discriminator checks becomes ledger evidence.
+4. Evidence identity is derived deterministically from the canonical receipt payload.
+5. Hypothesis updates are scoped assessment events, not global truth-status mutation.
+6. A many-to-one outcome partition must remain UNRESOLVED for compatible hypotheses.
+7. A completed experiment is closed in the frontier and cannot be selected again in that state.
+8. Replaying the same reviewed receipt is idempotent.
+9. Adaptive priors are not rewritten by the closed loop.
+10. Bayesian posterior updates require a separate reviewed likelihood/noise model.
+11. Evidence-ledger revision is immutable data; persistence is an external storage concern.
+12. Inference never acquires execution authority from an assessment or outcome.
+
 ## Kill criteria
 
 - NaN or Inf propagation
