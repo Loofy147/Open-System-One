@@ -2,7 +2,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from math import isfinite, log2
-from typing import Mapping
+from typing import TYPE_CHECKING, Mapping
+
+if TYPE_CHECKING:
+    from .experiment_loop import AdaptiveFrontierState
 
 from .discovery import FailureObservation, FAILURE_CLASSES, RECIPES, classify_failure
 
@@ -480,7 +483,10 @@ for experiment in ADAPTIVE_EXPERIMENTS:
         raise ValueError(f"scope mismatch in {experiment.key}")
 
 
-def expected_information_gain(experiment_key: str) -> float:
+def expected_information_gain(
+    experiment_key: str,
+    frontier: "AdaptiveFrontierState | None" = None,
+) -> float:
     if experiment_key not in _EXPERIMENTS:
         raise KeyError(experiment_key)
     experiment = _EXPERIMENTS[experiment_key]
@@ -491,7 +497,12 @@ def expected_information_gain(experiment_key: str) -> float:
         if _HYPOTHESES[key].status in {"OPEN", "HYPOTHESIS"}
     }
 
-    if experiment.status not in {"OPEN", "HYPOTHESIS"}:
+    experiment_status = (
+        frontier.experiment_status(experiment_key)
+        if frontier is not None
+        else experiment.status
+    )
+    if experiment_status not in {"OPEN", "HYPOTHESIS"}:
         return 0.0
     historical = _HISTORICAL.get(experiment_key)
     if historical and historical.applies_to_current_design:
@@ -530,6 +541,7 @@ def select_adaptive_experiments(
     scope: str = "research",
     excluded: tuple[str, ...] = (),
     limit: int = 3,
+    frontier: "AdaptiveFrontierState | None" = None,
 ) -> tuple[AdaptiveSelection, ...]:
     if scope not in {"research", "control_plane"}:
         raise ValueError("invalid scope")
@@ -551,7 +563,12 @@ def select_adaptive_experiments(
     for experiment in ADAPTIVE_EXPERIMENTS:
         if experiment.scope != scope or experiment.key in excluded_set:
             continue
-        if experiment.status not in {"OPEN", "HYPOTHESIS"}:
+        experiment_status = (
+            frontier.experiment_status(experiment.key)
+            if frontier is not None
+            else experiment.status
+        )
+        if experiment_status not in {"OPEN", "HYPOTHESIS"}:
             continue
         required_classes = set(experiment.failure_classes)
         if not required_classes.issubset(target_classes):
@@ -560,7 +577,7 @@ def select_adaptive_experiments(
         if class_coverage == 0:
             continue
         gap_coverage = len(gaps.intersection(experiment.evidence_required))
-        information_gain = expected_information_gain(experiment.key)
+        information_gain = expected_information_gain(experiment.key, frontier)
         historical = _HISTORICAL.get(experiment.key)
         sort_key = (
             -class_coverage,
@@ -598,12 +615,14 @@ def build_adaptive_plan(
     scope: str = "research",
     excluded: tuple[str, ...] = (),
     limit: int = 3,
+    frontier: "AdaptiveFrontierState | None" = None,
 ) -> tuple[tuple[str, ...], tuple[AdaptiveSelection, ...]]:
     selections = select_adaptive_experiments(
         observation,
         scope=scope,
         excluded=excluded,
         limit=limit,
+        frontier=frontier,
     )
     mechanisms: list[str] = []
     for selection in selections:
