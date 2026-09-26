@@ -33,10 +33,10 @@ OPEN: explicitly awaiting a test or decision.
 | Adaptive Discovery itself proves any research hypothesis | CONTRADICTED | Planner output remains ADAPTIVE_PLAN_NOT_EVIDENCE until a real experiment produces a reviewed receipt. |
 | A reviewed experiment result can deterministically produce scoped evidence, hypothesis assessments, and an immutable frontier revision | EXPERIMENTALLY_SUPPORTED structurally | Closed-loop contracts and tests validate strict execution parsing, provenance binding, deterministic evidence identity, many-to-one handling, idempotent replay, and frontier-aware reselection. |
 | The closed loop performs Bayesian posterior updating | CONTRADICTED | Priors remain declared research weights; no likelihood/noise model is implemented. |
-| Cross-experiment evidence can be synthesized deterministically without rewriting the underlying assessments | EXPERIMENTALLY_SUPPORTED structurally | Layer 11 aggregates scoped assessments by explicit hypothesis and scope, preserving every assessment and evidence identity. |
-| Contradictory evidence is represented as a conflict rather than silently resolved by experiment priority | EXPERIMENTALLY_SUPPORTED structurally | Layer 11 reports CONFLICTED when support and contradiction coexist for the same claim scope. |
-| An EXPERIMENTALLY_SUPPORTED claim revision requires the full current scoped evidence set to be unconflicted | EXPERIMENTALLY_SUPPORTED structurally | Claim revision validation rejects support-only cherry-picking when contradictory current evidence exists. |
-| Claim status changes are explicit immutable revisions rather than automatic hypothesis mutations | EXPERIMENTALLY_SUPPORTED structurally | ClaimLedgerState records parent-linked ClaimRevision objects; the AdaptiveFrontierState and priors remain unchanged. |
+| Cross-experiment evidence can be synthesized deterministically without rewriting the underlying assessments | OPEN | Layer 11 implementation and structural tests exist at the current frontier, but no post-change CI execution has been independently revalidated yet. |
+| Contradictory evidence is represented as a conflict rather than silently resolved by experiment priority | OPEN | The Layer 11 contract and tests specify CONFLICTED synthesis, but post-change execution evidence is still required. |
+| An EXPERIMENTALLY_SUPPORTED claim revision requires the full current scoped evidence set to be unconflicted | OPEN | Structural test coverage exists for rejecting support-only cherry-picking; post-change CI verification is still required. |
+| Claim status changes are explicit immutable revisions rather than automatic hypothesis mutations | OPEN | The implementation and tests encode parent-linked immutable revisions, but the current post-change execution result is not yet recorded. |
 
 ## Rules
 
