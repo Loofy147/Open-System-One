@@ -1,0 +1,23 @@
+{
+  "source_artifact": "open-system-one-v0.3-stage",
+  "local_verification": "PYTHONPATH=src pytest -q -> 31 passed in 2.24s",
+  "archive_sha256": {
+    "open-system-one-foundation-v0.3-stage.zip": "2592f80ca68f3cd181a35c15b2d9cef4a80b2308f6de726fbc6366af26eda6d4",
+    "open-system-one-foundation-v0.3-realtransfer.zip": "f5f389c2a26de28f401e5d1510062059cb367a841fe23d90e4565bb8fd8ac13d"
+  },
+  "important_files": {
+    "decision_arch_grid.json": "6b1f76dfb21bbf4ea089323792dfa82283533a4e96e05cc18c8d34d7fbd3ae20",
+    "decision_arch_grid_rerun.txt": "36a0ee7c7549d5eafeaa50b25d96167d07a0aa837a58927cbce927237c1a1c73",
+    "decision_arch_sweep.json": "a9a9981c4eac3575f6ebb6691a0723052b60cc25fee72ece34953f7ca844ad57",
+    "shortlist_sweep.json": "29e68dfc6dbc04608ee4dcc707eddc6b95db7374b54788405103ca26532f23d6",
+    "primitive_sweep.json": "72b59347b57a7c24110d3ffa4ae7b7dd408e38a0843fbbd396ec5e930f55e721",
+    "research_catalog.json": "27d98af0584b7b29488c193f7f8cded886a8d87341a798f4bf2d37bb462ed28a",
+    "experiments/decision_arch_batch.py": "53fe34ecb43f73d086e4f5d15d64c594e1779350a0a248106b89c7f0d3e57461",
+    "experiments/decision_arch_sweep_v2.py": "09e9642c7a3df94ecaeec4294c31f0fa6470466e12a73a2771b5f145092017bd",
+    "src/open_system_one/student.py": "ffb16b1bf711f4cca7788acce51c5d48128d43df60414f7e2ffdd3e26c72daab",
+    "src/open_system_one/primitives.py": "15063734a89182c609bf9b354d9e4146b7bece436ae1cc25ef8a85a38c3873d7",
+    "src/open_system_one/lab/architectures_ext.py": "b3190c5024bd8c99d4f21c53ed9b02a41f8a938546c258a1e9a8c8e579e1fa4b",
+    "src/open_system_one/lab/selective.py": "50e457f4e2b0bbc43f7b8d0875160bd68f11ee20df605391a295b128a7cbff1c",
+    "src/open_system_one/lab/shortlist.py": "8203b90a235ffee4519ddd0e4676795502b6cec7ab2d447da2c173007f2467b3"
+  }
+}

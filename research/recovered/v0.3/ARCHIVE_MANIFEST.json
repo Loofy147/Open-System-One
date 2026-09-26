@@ -1,0 +1,90 @@
+{
+  "type": "recovered_research_snapshot",
+  "project": "Open System One",
+  "source_date": "2026-09-23",
+  "review_date": "2026-09-24",
+  "canonicality": "NON_CANONICAL_EVIDENCE_ARCHIVE",
+  "source_archives": {
+    "open-system-one-foundation-v0.3-stage.zip": {
+      "sha256": "2592f80ca68f3cd181a35c15b2d9cef4a80b2308f6de726fbc6366af26eda6d4",
+      "bytes": 224717
+    },
+    "open-system-one-foundation-v0.3-realtransfer.zip": {
+      "sha256": "f5f389c2a26de28f401e5d1510062059cb367a841fe23d90e4565bb8fd8ac13d",
+      "bytes": 230291
+    },
+    "open-system-one-decision-foundation-v0.2.zip": {
+      "sha256": "98a92763e4cae5b56c9891a59613103eee9d4cb6c9147a054e6a61ff047248f4",
+      "bytes": 149294
+    },
+    "open-system-one-foundation-impl.zip": {
+      "sha256": "52a3dc36c045fcbcc1181f25cb9199625d6a62d33dd6f2c7a0a6ced036e755eb",
+      "bytes": 65742
+    },
+    "open_system_one-0.1.0_foundation_killtested.whl": {
+      "sha256": "433dad4464b0d4574cd376eab753f47a032146463ae3fcff037d1c74b667ff30",
+      "bytes": 12737
+    }
+  },
+  "important_file_lineage": {
+    "docs/RESEARCH_FRONTIER.md": {
+      "archive_sha256": "b29a1d539cbff957ca935939013b3127b2f537ed279c1aadc2b3ce7f1d6952fc",
+      "archive_git_blob_sha1": "a369c533fbab818430199febc1c075257599f321",
+      "recovered_git_blob_sha1": "a369c533fbab818430199febc1c075257599f321",
+      "status": "byte_exact"
+    },
+    "experiments/real_encoder_transfer_surrogate.py": {
+      "archive_git_blob_sha1": "37758dce46fed2099059431e1447d0ee9fa28279",
+      "recovered_git_blob_sha1": "37758dce46fed2099059431e1447d0ee9fa28279",
+      "status": "byte_exact"
+    },
+    "real_encoder_transfer_results.json": {
+      "archive_sha256": "480e82dd9d345eb2d30b17f620e99af843d94b47732a750f90548664a852c2ee",
+      "archive_git_blob_sha1": "cb4a7883d60021069a0cf33ad534a821a0be6a52",
+      "recovered_git_blob_sha1": "cb4a7883d60021069a0cf33ad534a821a0be6a52",
+      "status": "byte_exact"
+    },
+    "docs/REAL_ENCODER_TRANSFER_2026-09-23.md": {
+      "archive_sha256": "2204703a5c5665da5986f1cea6a77e518f8c1c7336cf2f9841b4ee1f0fb3ae25",
+      "archive_git_blob_sha1": "2334cf84a297c870357aac20869ed41bf0303e01",
+      "recovered_git_blob_sha1": "2eef16f051b6fa90e4dc828b40327ddbf2642428",
+      "status": "semantic_recovery_not_byte_exact"
+    },
+    "research_catalog.json": {
+      "archive_sha256": "27d98af0584b7b29488c193f7f8cded886a8d87341a798f4bf2d37bb462ed28a",
+      "archive_git_blob_sha1": "94fbd0095786d9016addaf545e60587d9cb36d52",
+      "recovered_git_blob_sha1": "94fbd0095786d9016addaf545e60587d9cb36d52",
+      "status": "byte_exact"
+    }
+  },
+  "original_archive_verification": {
+    "command": "PYTHONPATH=src pytest -q",
+    "historical_receipt": "31 passed in 2.24s",
+    "independent_rerun": "31 passed in 2.90s",
+    "environment": {
+      "python": "3.13.5",
+      "torch": "2.10.0+cpu",
+      "numpy": "2.3.5"
+    }
+  },
+  "transfer_reexecution": {
+    "computed_rows": 24,
+    "same_environment_reruns_identical": true,
+    "max_accuracy_abs_delta_vs_archived": 0.026041666666666685,
+    "max_brier_abs_delta_vs_archived": 0.00003848473230996796,
+    "fixed_output_path_defect": "/mnt/data/open-system-one-realtransfer/results.json",
+    "status": "historical_receipt_retained"
+  },
+  "raw_batch_inventory": {
+    "batch_files": 19,
+    "raw_records": 38,
+    "total_bytes": 12425,
+    "note": "Exact per-file SHA-256 values are retained in RAW_BATCH_HASHES.txt so the external archive can be checked without changing the recovered raw measurements."
+  },
+  "excluded_from_recovered_snapshot": [
+    "Python __pycache__ bytecode",
+    "pytest cache",
+    "build outputs",
+    "wheel binary"
+  ]
+}

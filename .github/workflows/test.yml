@@ -15,5 +15,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - run: python -m pip install -e . pytest
+      - run: python -m pip install --index-url https://download.pytorch.org/whl/cpu torch==2.14.0+cpu
+      - run: python -m pip install -e ".[dev]"
       - run: pytest -q
+      - run: python scripts/build_discovery_docs.py --check
+      - run: python scripts/run_discovery.py --tag candidate_set_changes_output --tag large_candidate_count --evidence-gap recall_at_K --out /tmp/discovery-plan.json
+      - run: python scripts/build_adaptive_discovery_docs.py --check
+      - run: python scripts/run_adaptive_discovery.py --candidate-set-changes-output --candidate-count 20 --candidate-budget 8 --evidence-gap recall_at_K --out /tmp/adaptive-discovery-plan.json

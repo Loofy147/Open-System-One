@@ -64,13 +64,83 @@ Tool invocation, retries, side effects, and external state mutation remain outsi
 
 ## Layer 7 — Evidence/control plane
 
-Future integration can represent:
+The control plane represents:
 Question -> Candidate -> Decision -> Run -> Evidence
 
 and separately:
 Claim -> Evidence -> Verification -> Gate -> DecisionRevision
 
-This layer is deliberately not required for the core decision contract.
+This layer remains outside the core decision contract.
+
+## Layer 8 — Discovery
+
+Discovery turns unexplained behavior into explicit candidate mechanisms:
+
+Failure -> failure class -> precomposed recipes -> coordinated mechanism set -> discriminating experiment
+
+Generated candidates remain HYPOTHESIS until the evidence ledger is updated by a reviewed receipt.
+
+## Layer 9 — Adaptive Discovery
+
+Adaptive Discovery consumes structured FailureEvidence, derives failure observations, consults the remaining hypothesis space, and selects the experiment with greatest declared expected entropy reduction after class/evidence-gap constraints.
+
+The layer is non-canonical and non-authoritative.
+
+Its information model is explicit:
+- priors are declared research weights
+- outcomes are declared partitions
+- historical outcomes constrain repeat information
+- expected information gain is computed mathematically, not guessed from model confidence
+- no free-form semantic confidence is inferred
+- no experiment is executed merely because it has high expected information gain
+
+## Layer 10 — Closed-Loop Experiment Evidence
+
+The closed loop begins only after an experiment has executed:
+
+ExperimentExecutionResult
+-> ExperimentReceipt
+-> reviewed EvidenceRecord
+-> scoped HypothesisAssessment
+-> immutable EvidenceLedgerRevision
+-> AdaptiveFrontierState
+-> next adaptive selection
+
+The layer is deliberately non-authoritative:
+
+- execution results contain measured facts, not claims
+- receipts bind results to provenance
+- only reviewed receipts become evidence
+- hypothesis assessments are scoped to the tested experiment
+- many-to-one outcome partitions remain unresolved rather than falsely selecting a hypothesis
+- frontier revisions close completed experiments and are idempotent on replay
+- adaptive priors are not rewritten because no empirical likelihood/noise model exists
+
+Persistence and external execution remain adapters outside this layer.
+
+## Layer 11 — Cross-Experiment Claim Synthesis
+
+Layer 11 reads the immutable evidence frontier and provides the explicit bridge from scoped assessments to claims:
+
+HypothesisAssessments
+-> scoped cross-experiment synthesis
+-> contradiction set
+-> explicit ClaimRevision
+-> immutable ClaimLedgerState
+
+Its contract is intentionally conservative:
+
+- claim identity and scope are explicit
+- synthesis can report support, contradiction, unresolved evidence, or conflict
+- contradictory evidence is retained rather than ranked away
+- EXPERIMENTALLY_SUPPORTED requires a fully identified, unconflicted current evidence set
+- decision-status revisions cannot cherry-pick around contradictory current evidence
+- claim revision uses an explicit parent revision and deterministic identity
+- stale revisions cannot overwrite a newer claim ledger
+- replay of the same revision against the same parent is idempotent
+- claim synthesis never changes hypothesis priors or execution authority
+
+Layer 11 is non-canonical infrastructure. Verification, Gate, and DecisionRevision remain separate control-plane stages.
 
 ## Runtime boundary
 

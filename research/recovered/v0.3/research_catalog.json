@@ -1,0 +1,96 @@
+[
+  {
+    "mechanism": "typed_decision_contract",
+    "origin": ["TypeSafe System One", "Laya"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Open Laya implementation exposes typed questions and one-forward-pass probabilistic answers; TypeSafe documents typed Choice/Score/Noul primitives.",
+    "our_use": "Core contract; implementation-independent.",
+    "next_test": "real-encoder transfer"
+  },
+  {
+    "mechanism": "dynamic_candidate_scoring",
+    "origin": ["GLiClass"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Open implementation supplies candidate labels at inference time and provides multiple scorer variants.",
+    "our_use": "Outcome-space interface and candidate scorer abstraction.",
+    "next_test": "candidate descriptions vs IDs on real encoder"
+  },
+  {
+    "mechanism": "pairwise_scoring",
+    "origin": ["cross-encoder / baseline pattern"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "31-test foundation and synthetic sweeps; context-blind by construction.",
+    "our_use": "Minimum-capability baseline."
+  },
+  {
+    "mechanism": "deepsets_context",
+    "origin": ["Deep Sets"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Permutation-equivariant implementation passes invariance/masking tests; performance can be worse than pairwise when interactions are unnecessary.",
+    "our_use": "Low-cost set-context scorer."
+  },
+  {
+    "mechanism": "set_transformer_context",
+    "origin": ["Set Transformer"],
+    "status": "OPEN",
+    "evidence": "Permutation-equivariant implementation passes structural tests; current small synthetic runs did not establish performance superiority.",
+    "our_use": "Research branch only."
+  },
+  {
+    "mechanism": "explicit_relational_attention",
+    "origin": ["set/graph attention family"],
+    "status": "OPEN",
+    "evidence": "Implementation passes structural tests; current training sweep is not sufficient to establish value.",
+    "our_use": "Research branch."
+  },
+  {
+    "mechanism": "conditional_complexity",
+    "origin": ["mixture/gating pattern"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "On the current contrastive synthetic task at K=8, conditional mixture improved mean accuracy and Brier over pairwise while retaining invariance; not universal across tasks.",
+    "our_use": "Candidate core architecture, pending real-data transfer."
+  },
+  {
+    "mechanism": "shortlist_then_rerank",
+    "origin": ["dynamic-label systems", "energy-based reranking literature"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Oracle-vector experiment at N=128 retained recall@1 >= 0.996 at K=8 for 2/3 seeds and 1.0 for the other; K=16 reached 1.0 for all 3 seeds.",
+    "our_use": "Scalability layer before expensive set-aware scoring.",
+    "next_test": "learned embedding recall under real labels"
+  },
+  {
+    "mechanism": "temperature_calibration",
+    "origin": ["Guo et al. 2017"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Implemented and tested as held-out post-hoc calibration.",
+    "our_use": "Baseline probability calibration."
+  },
+  {
+    "mechanism": "split_conformal_set_prediction",
+    "origin": ["conformal prediction/selective prediction"],
+    "status": "EXPERIMENTALLY_SUPPORTED",
+    "evidence": "Implemented with finite-sample split-conformal quantile, coverage, set-size and abstention metrics; broad coverage under shift remains untested.",
+    "our_use": "Post-model uncertainty/policy layer."
+  },
+  {
+    "mechanism": "proper_scoring",
+    "origin": ["Gneiting & Raftery"],
+    "status": "ESTABLISHED",
+    "evidence": "Strict propriety is an established property of log, spherical, Brier/quadratic and related scoring rules.",
+    "our_use": "Training/evaluation objective for probabilistic decisions."
+  },
+  {
+    "mechanism": "diffusion_read_slots",
+    "origin": ["OpenJev / DiffusionGemma"],
+    "status": "OPEN",
+    "evidence": "OpenJev demonstrates a read-only diffusion slot implementation; not yet integrated into our contract.",
+    "our_use": "Alternative backend experiment."
+  },
+  {
+    "mechanism": "probabilistic_circuit_composition",
+    "origin": ["probabilistic circuits"],
+    "status": "OPEN",
+    "evidence": "Recent work explores tractable compositional probabilistic inference; no integration experiment yet.",
+    "our_use": "Possible post-scorer logical composition layer."
+  }
+]

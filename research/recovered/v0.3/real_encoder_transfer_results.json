@@ -1,0 +1,170 @@
+[
+  {
+    "interaction": 0.0,
+    "k": 4,
+    "scorer": "pairwise",
+    "accuracy": 0.4739583333333333,
+    "brier": 0.1750128815571467
+  },
+  {
+    "interaction": 0.0,
+    "k": 4,
+    "scorer": "marker",
+    "accuracy": 0.46875,
+    "brier": 0.17450033128261566
+  },
+  {
+    "interaction": 0.0,
+    "k": 4,
+    "scorer": "set_aware",
+    "accuracy": 0.4739583333333333,
+    "brier": 0.1860751509666443
+  },
+  {
+    "interaction": 0.0,
+    "k": 4,
+    "scorer": "conditional",
+    "accuracy": 0.5104166666666666,
+    "brier": 0.1550336331129074
+  },
+  {
+    "interaction": 0.0,
+    "k": 8,
+    "scorer": "pairwise",
+    "accuracy": 0.25,
+    "brier": 0.12112036347389221
+  },
+  {
+    "interaction": 0.0,
+    "k": 8,
+    "scorer": "marker",
+    "accuracy": 0.265625,
+    "brier": 0.12032387653986613
+  },
+  {
+    "interaction": 0.0,
+    "k": 8,
+    "scorer": "set_aware",
+    "accuracy": 0.2604166666666667,
+    "brier": 0.12417285641034444
+  },
+  {
+    "interaction": 0.0,
+    "k": 8,
+    "scorer": "conditional",
+    "accuracy": 0.2708333333333333,
+    "brier": 0.11528316885232925
+  },
+  {
+    "interaction": 0.0,
+    "k": 16,
+    "scorer": "pairwise",
+    "accuracy": 0.09375,
+    "brier": 0.06670762846867244
+  },
+  {
+    "interaction": 0.0,
+    "k": 16,
+    "scorer": "marker",
+    "accuracy": 0.125,
+    "brier": 0.06636936217546463
+  },
+  {
+    "interaction": 0.0,
+    "k": 16,
+    "scorer": "set_aware",
+    "accuracy": 0.10416666666666667,
+    "brier": 0.06761965155601501
+  },
+  {
+    "interaction": 0.0,
+    "k": 16,
+    "scorer": "conditional",
+    "accuracy": 0.09375,
+    "brier": 0.06495066980520885
+  },
+  {
+    "interaction": 1.25,
+    "k": 4,
+    "scorer": "pairwise",
+    "accuracy": 0.6302083333333334,
+    "brier": 0.1051517849167188
+  },
+  {
+    "interaction": 1.25,
+    "k": 4,
+    "scorer": "marker",
+    "accuracy": 0.5677083333333334,
+    "brier": 0.13643050690491995
+  },
+  {
+    "interaction": 1.25,
+    "k": 4,
+    "scorer": "set_aware",
+    "accuracy": 0.6510416666666666,
+    "brier": 0.10763249546289444
+  },
+  {
+    "interaction": 1.25,
+    "k": 4,
+    "scorer": "conditional",
+    "accuracy": 0.6458333333333334,
+    "brier": 0.10114742815494537
+  },
+  {
+    "interaction": 1.25,
+    "k": 8,
+    "scorer": "pairwise",
+    "accuracy": 0.5520833333333334,
+    "brier": 0.05807871992389361
+  },
+  {
+    "interaction": 1.25,
+    "k": 8,
+    "scorer": "marker",
+    "accuracy": 0.5416666666666666,
+    "brier": 0.06285778433084488
+  },
+  {
+    "interaction": 1.25,
+    "k": 8,
+    "scorer": "set_aware",
+    "accuracy": 0.5833333333333334,
+    "brier": 0.05641663447022438
+  },
+  {
+    "interaction": 1.25,
+    "k": 8,
+    "scorer": "conditional",
+    "accuracy": 0.5520833333333334,
+    "brier": 0.05951437478264173
+  },
+  {
+    "interaction": 1.25,
+    "k": 16,
+    "scorer": "pairwise",
+    "accuracy": 0.3697916666666667,
+    "brier": 0.03816113745172819
+  },
+  {
+    "interaction": 1.25,
+    "k": 16,
+    "scorer": "marker",
+    "accuracy": 0.390625,
+    "brier": 0.03898266206185023
+  },
+  {
+    "interaction": 1.25,
+    "k": 16,
+    "scorer": "set_aware",
+    "accuracy": 0.3697916666666667,
+    "brier": 0.03768763070305189
+  },
+  {
+    "interaction": 1.25,
+    "k": 16,
+    "scorer": "conditional",
+    "accuracy": 0.3697916666666667,
+    "brier": 0.03887645900249481
+  }
+]
