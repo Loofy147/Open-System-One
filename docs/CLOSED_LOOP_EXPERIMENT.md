@@ -119,6 +119,18 @@ A closed-loop implementation is structurally valid only when:
 11. priors are not silently rewritten
 12. authority remains outside inference
 
+## Handoff to Layer 11
+
+The reviewed frontier is the input to the cross-experiment claim layer:
+
+AdaptiveFrontierState
+-> ClaimSpec
+-> cross-experiment evidence synthesis
+-> contradiction detection
+-> explicit ClaimRevision
+
+Layer 10 remains responsible only for execution closure and scoped assessment events. It does not create or revise claims.
+
 ## Remaining debt
 
-Automatic experiment execution, persistence adapters, empirical likelihood/noise models, and cross-experiment evidence synthesis remain OPEN.
+Automatic experiment execution, canonical persistence adapters, empirical likelihood/noise models, independent claim verification, Gate semantics, and DecisionRevision remain OPEN.
