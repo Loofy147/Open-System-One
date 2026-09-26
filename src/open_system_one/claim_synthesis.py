@@ -120,6 +120,51 @@ class ClaimRevision:
     limitations: str
     next_discriminating_test: str
 
+    def __post_init__(self) -> None:
+        valid_statuses = {
+            "OPEN",
+            "HYPOTHESIS",
+            "EXPERIMENTALLY_SUPPORTED",
+            "INFERENCE",
+            "CONTRADICTED",
+            "UNKNOWN",
+            "CONFLICTED",
+        }
+        if (
+            not self.claim_key
+            or not self.statement
+            or not self.hypothesis_key
+            or not self.scope
+            or not self.revision_id
+            or not self.parent_revision_id
+            or not self.rationale
+            or not self.limitations
+            or not self.next_discriminating_test
+        ):
+            raise ValueError("claim revision identity and review fields must be non-empty")
+        if self.status not in valid_statuses:
+            raise ValueError("invalid claim revision status")
+
+        sequences = {
+            "evidence_ids": self.evidence_ids,
+            "assessment_ids": self.assessment_ids,
+            "supporting_evidence_ids": self.supporting_evidence_ids,
+            "contradicting_evidence_ids": self.contradicting_evidence_ids,
+            "unresolved_evidence_ids": self.unresolved_evidence_ids,
+        }
+        for name, values in sequences.items():
+            if values != tuple(sorted(set(values))):
+                raise ValueError(f"{name} must be sorted and unique")
+
+        evidence = set(self.evidence_ids)
+        supporting = set(self.supporting_evidence_ids)
+        contradicting = set(self.contradicting_evidence_ids)
+        unresolved = set(self.unresolved_evidence_ids)
+        if supporting & contradicting or supporting & unresolved or contradicting & unresolved:
+            raise ValueError("claim evidence dispositions must be disjoint")
+        if supporting | contradicting | unresolved != evidence:
+            raise ValueError("claim evidence dispositions must cover the evidence set")
+
 
 @dataclass(frozen=True)
 class ClaimLedgerState:
