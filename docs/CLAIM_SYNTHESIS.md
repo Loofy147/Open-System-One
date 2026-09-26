@@ -75,7 +75,9 @@ Each revision records:
 
 The parent revision is an optimistic-concurrency boundary. A stale parent cannot overwrite a newer claim ledger revision.
 
-Replaying the exact same revision request against the same parent is idempotent.
+`INFERENCE` is reserved for partial scoped support/contradiction (`SUPPORTED_WITH_UNRESOLVED` or `CONTRADICTED_WITH_UNRESOLVED`); unresolved-only evidence does not justify that status.
+
+Replaying the exact same revision request against an already-updated ledger is idempotent.
 
 ## Epistemic boundary
 
