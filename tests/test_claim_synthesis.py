@@ -368,6 +368,72 @@ def test_assessment_identity_is_stable():
             for item in frontier.assessments
             if item.hypothesis_key == claim.hypothesis_key
         )
-        assert assessment_id(assessment) == assessment_id(assessment)
+        identical = next(
+            item
+            for item in frontier.assessments
+            if item.hypothesis_key == claim.hypothesis_key
+        )
+        assert assessment_id(assessment) == assessment_id(identical)
+    finally:
+        del _EXPERIMENTS[experiment.key]
+
+
+def test_claim_ledger_rejects_broken_parent_chain():
+    experiment = _install_experiment(
+        "claim_parent_validation_fixture",
+        (
+            ("interaction_contextual", "support"),
+            ("interaction_unstable", "other"),
+        ),
+    )
+    claim = ClaimSpec(
+        key="claim:interaction-contextual",
+        statement="Interaction benefit is contextual in the tested research scope.",
+        hypothesis_key="interaction_contextual",
+    )
+    try:
+        frontier = apply_reviewed_receipt(
+            genesis_frontier(),
+            _receipt(experiment.key, "support"),
+        ).state_after
+        synthesis = synthesize_claim_evidence(frontier, claim)
+        state = genesis_claim_ledger()
+        request = ClaimRevisionRequest(
+            claim.key,
+            state.revision_id,
+            "EXPERIMENTALLY_SUPPORTED",
+            "Unique reviewed support.",
+            "Fixture scope only.",
+            "Repeat independently.",
+            synthesis.evidence_ids,
+            synthesis.assessment_ids,
+        )
+        revision = apply_claim_revision(state, frontier, claim, request).claim_revision
+        assert revision is not None
+
+        from open_system_one.claim_synthesis import ClaimLedgerState
+
+        broken = type(revision)(
+            claim_key=revision.claim_key,
+            statement=revision.statement,
+            hypothesis_key=revision.hypothesis_key,
+            scope=revision.scope,
+            status=revision.status,
+            revision_id=revision.revision_id,
+            parent_revision_id="claims:wrong-parent",
+            evidence_ids=revision.evidence_ids,
+            assessment_ids=revision.assessment_ids,
+            supporting_evidence_ids=revision.supporting_evidence_ids,
+            contradicting_evidence_ids=revision.contradicting_evidence_ids,
+            unresolved_evidence_ids=revision.unresolved_evidence_ids,
+            rationale=revision.rationale,
+            limitations=revision.limitations,
+            next_discriminating_test=revision.next_discriminating_test,
+        )
+        with pytest.raises(ValueError, match="parent chain"):
+            ClaimLedgerState(
+                revisions=(broken,),
+                revision_id=broken.revision_id,
+            )
     finally:
         del _EXPERIMENTS[experiment.key]
