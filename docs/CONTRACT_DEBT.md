@@ -78,3 +78,16 @@ Remaining debt:
 - no empirical noise/likelihood model is used
 - free-form evidence-to-tag semantic classification remains open
 - automatic experiment execution and evidence-ledger revision remain open
+
+
+## D12 — Closed-loop persistence and epistemic update
+
+The closed-loop layer now validates an executed result, binds it to provenance, materializes reviewed evidence, creates scoped hypothesis-assessment events, and produces an immutable frontier revision.
+
+Remaining debt:
+- frontier persistence is represented as an immutable state artifact but has no canonical storage adapter
+- automatic external experiment execution remains outside the layer
+- assessment events are deterministic interpretations of declared outcome partitions, not posterior probabilities
+- no empirical likelihood/noise model updates the declared priors
+- cross-experiment evidence synthesis and conflict resolution remain open
+- receipt review is explicit; the system does not auto-promote unreviewed execution output to evidence
