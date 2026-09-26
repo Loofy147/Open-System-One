@@ -94,6 +94,30 @@ Its information model is explicit:
 - no free-form semantic confidence is inferred
 - no experiment is executed merely because it has high expected information gain
 
+## Layer 10 — Closed-Loop Experiment Evidence
+
+The closed loop begins only after an experiment has executed:
+
+ExperimentExecutionResult
+-> ExperimentReceipt
+-> reviewed EvidenceRecord
+-> scoped HypothesisAssessment
+-> immutable EvidenceLedgerRevision
+-> AdaptiveFrontierState
+-> next adaptive selection
+
+The layer is deliberately non-authoritative:
+
+- execution results contain measured facts, not claims
+- receipts bind results to provenance
+- only reviewed receipts become evidence
+- hypothesis assessments are scoped to the tested experiment
+- many-to-one outcome partitions remain unresolved rather than falsely selecting a hypothesis
+- frontier revisions close completed experiments and are idempotent on replay
+- adaptive priors are not rewritten because no empirical likelihood/noise model exists
+
+Persistence and external execution remain adapters outside this layer.
+
 ## Runtime boundary
 
 The same semantics should be portable across:
