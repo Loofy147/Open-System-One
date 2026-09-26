@@ -181,16 +181,19 @@ def test_frontier_state_changes_repeat_information_gain_and_selection():
         frontier=revision.state_after,
         limit=10,
     )
-    assert selections
-    assert all(item.experiment != "interaction_regime_map" for item in selections)
+    assert selections == ()
 
+    combined_observation = FailureObservation(
+        tags=("candidate_set_changes_output", "large_candidate_count")
+    )
     mechanisms, replanned = build_adaptive_plan(
-        observation,
+        combined_observation,
         frontier=revision.state_after,
         limit=10,
     )
     assert "condition" in mechanisms
     assert replanned
+    assert replanned[0].experiment == "interaction_retrieval_guard"
     assert all(item.experiment != "interaction_regime_map" for item in replanned)
 
 
