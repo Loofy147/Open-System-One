@@ -135,8 +135,8 @@ def test_cross_experiment_support_and_contradiction_are_conflicted_not_resolved(
     contradict = _install_experiment(
         "claim_contradict_fixture",
         (
-            ("interaction_contextual", "contradict"),
-            ("interaction_unstable", "other"),
+            ("interaction_contextual", "other"),
+            ("interaction_unstable", "contradict"),
         ),
     )
     claim = ClaimSpec(
@@ -172,8 +172,8 @@ def test_experimental_support_requires_full_unconflicted_evidence_set():
     contradict = _install_experiment(
         "claim_contradict_fixture_2",
         (
-            ("interaction_contextual", "contradict"),
-            ("interaction_unstable", "other"),
+            ("interaction_contextual", "other"),
+            ("interaction_unstable", "contradict"),
         ),
     )
     claim = ClaimSpec(
