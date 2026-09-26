@@ -24,6 +24,7 @@ The contract is independent of encoder, scorer, runtime, provider, and action sy
 - deterministic failure classification, experiment selection, and generated discovery catalog/frontier documentation
 - evidence-derived adaptive discovery with declared hypothesis spaces and expected entropy reduction
 - discovery run receipts generated from structured observations
+- reviewed experiment closure: execution result -> provenance-complete receipt -> evidence -> scoped hypothesis assessments -> immutable frontier revision -> frontier-aware replanning
 
 The base discovery layer remains separate from the adaptive layer. Adaptive Discovery is research infrastructure, not canonical contract semantics.
 
@@ -50,6 +51,7 @@ Read:
 - docs/RESEARCH_PROTOCOL.md
 - docs/DISCOVERY_FRONTIER.md
 - docs/ADAPTIVE_DISCOVERY.md
+- docs/CLOSED_LOOP_EXPERIMENT.md
 - docs/EVIDENCE_LEDGER.md
 - docs/RECOVERY_STATUS.md
 - docs/CONTRACT_DEBT.md
