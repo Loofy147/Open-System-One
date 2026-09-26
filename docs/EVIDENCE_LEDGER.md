@@ -33,6 +33,10 @@ OPEN: explicitly awaiting a test or decision.
 | Adaptive Discovery itself proves any research hypothesis | CONTRADICTED | Planner output remains ADAPTIVE_PLAN_NOT_EVIDENCE until a real experiment produces a reviewed receipt. |
 | A reviewed experiment result can deterministically produce scoped evidence, hypothesis assessments, and an immutable frontier revision | EXPERIMENTALLY_SUPPORTED structurally | Closed-loop contracts and tests validate strict execution parsing, provenance binding, deterministic evidence identity, many-to-one handling, idempotent replay, and frontier-aware reselection. |
 | The closed loop performs Bayesian posterior updating | CONTRADICTED | Priors remain declared research weights; no likelihood/noise model is implemented. |
+| Cross-experiment evidence can be synthesized deterministically without rewriting the underlying assessments | EXPERIMENTALLY_SUPPORTED structurally | Layer 11 aggregates scoped assessments by explicit hypothesis and scope, preserving every assessment and evidence identity. |
+| Contradictory evidence is represented as a conflict rather than silently resolved by experiment priority | EXPERIMENTALLY_SUPPORTED structurally | Layer 11 reports CONFLICTED when support and contradiction coexist for the same claim scope. |
+| An EXPERIMENTALLY_SUPPORTED claim revision requires the full current scoped evidence set to be unconflicted | EXPERIMENTALLY_SUPPORTED structurally | Claim revision validation rejects support-only cherry-picking when contradictory current evidence exists. |
+| Claim status changes are explicit immutable revisions rather than automatic hypothesis mutations | EXPERIMENTALLY_SUPPORTED structurally | ClaimLedgerState records parent-linked ClaimRevision objects; the AdaptiveFrontierState and priors remain unchanged. |
 
 ## Rules
 
@@ -48,3 +52,7 @@ OPEN: explicitly awaiting a test or decision.
 10. Hypothesis assessments are scoped evidence-derived interpretations; they do not rewrite priors.
 11. A many-to-one outcome partition cannot uniquely support a hypothesis.
 12. Replaying the same reviewed receipt must not duplicate evidence or frontier state.
+13. Cross-experiment synthesis must preserve the original assessment and evidence identities.
+14. Conflict is an observable state; synthesis does not select a winning source by recency, experiment key, or declared cost.
+15. An experimental claim revision must account for the full current scoped evidence set and may not cherry-pick around contradictory evidence.
+16. Claim revisions are control-plane records and do not grant execution authority.
