@@ -6,6 +6,7 @@ from typing import Literal, Mapping
 import json
 
 from .experiment_loop import AdaptiveFrontierState, HypothesisAssessment
+from .discovery_advanced import HYPOTHESES
 
 
 ClaimSynthesisDisposition = Literal[
@@ -22,6 +23,7 @@ ClaimRevisionStatus = Literal[
     "OPEN",
     "HYPOTHESIS",
     "EXPERIMENTALLY_SUPPORTED",
+    "INFERENCE",
     "CONTRADICTED",
     "UNKNOWN",
     "CONFLICTED",
@@ -68,6 +70,11 @@ class ClaimSpec:
     def __post_init__(self) -> None:
         if not self.key or not self.statement or not self.hypothesis_key or not self.scope:
             raise ValueError("claim spec fields must be non-empty")
+        if self.hypothesis_key not in {item.key for item in HYPOTHESES}:
+            raise ValueError("claim spec references an unknown hypothesis")
+        hypothesis_scope = next(item.scope for item in HYPOTHESES if item.key == self.hypothesis_key)
+        if self.scope != hypothesis_scope:
+            raise ValueError("claim scope does not match hypothesis scope")
 
 
 @dataclass(frozen=True)
@@ -131,7 +138,7 @@ class ClaimLedgerState:
             expected_parent = "claims:genesis" if index == 0 else ids[index - 1]
             if revision.parent_revision_id != expected_parent:
                 raise ValueError("claim revision parent chain is inconsistent")
-            if revision.status not in {"OPEN", "HYPOTHESIS", "EXPERIMENTALLY_SUPPORTED", "CONTRADICTED", "UNKNOWN", "CONFLICTED"}:
+            if revision.status not in {"OPEN", "HYPOTHESIS", "EXPERIMENTALLY_SUPPORTED", "INFERENCE", "CONTRADICTED", "UNKNOWN", "CONFLICTED"}:
                 raise ValueError("invalid claim revision status")
         if not self.revisions and self.revision_id != "claims:genesis":
             raise ValueError("empty claim state must use the genesis revision id")
@@ -237,7 +244,7 @@ def _validate_request_refs(
         raise ValueError("claim revision request targets a different claim")
     if not request.parent_revision_id:
         raise ValueError("parent_revision_id must be non-empty")
-    if request.status not in {"OPEN", "HYPOTHESIS", "EXPERIMENTALLY_SUPPORTED", "CONTRADICTED", "UNKNOWN", "CONFLICTED"}:
+    if request.status not in {"OPEN", "HYPOTHESIS", "EXPERIMENTALLY_SUPPORTED", "INFERENCE", "CONTRADICTED", "UNKNOWN", "CONFLICTED"}:
         raise ValueError("invalid claim revision status")
     if not request.rationale or not request.limitations or not request.next_discriminating_test:
         raise ValueError("claim revision requires rationale, limitations, and next test")
@@ -286,6 +293,15 @@ def _validate_status_against_synthesis(
             raise ValueError(
                 "EXPERIMENTALLY_SUPPORTED requires unconflicted, fully identified support"
             )
+    elif status == "INFERENCE":
+        if synthesis.disposition not in {
+            "SUPPORTED_WITH_UNRESOLVED",
+            "CONTRADICTED_WITH_UNRESOLVED",
+            "UNRESOLVED",
+        }:
+            raise ValueError(
+                "INFERENCE requires partial or unresolved scoped evidence"
+            )
     elif status == "CONTRADICTED":
         if synthesis.disposition != "CONTRADICTED":
             raise ValueError(
@@ -309,9 +325,6 @@ def apply_claim_revision(
 ) -> ClaimLedgerRevision:
     synthesis = synthesize_claim_evidence(frontier, claim)
     _validate_request_refs(frontier, claim, request, synthesis)
-
-    if request.parent_revision_id != state.revision_id:
-        raise ValueError("claim revision parent does not match current claim ledger revision")
 
     _validate_status_against_synthesis(request.status, synthesis)
 
@@ -340,11 +353,22 @@ def apply_claim_revision(
     if existing is not None:
         return ClaimLedgerRevision(
             status="IDEMPOTENT_REPLAY",
-            parent_revision_id=state.revision_id,
+            parent_revision_id=existing.parent_revision_id,
             revision_id=revision_id,
             claim_revision=None,
             state_after=state,
         )
+
+    if request.parent_revision_id != state.revision_id:
+        raise ValueError("claim revision parent does not match current claim ledger revision")
+
+    latest = state.latest(claim.key)
+    if latest is not None and (
+        latest.statement != claim.statement
+        or latest.hypothesis_key != claim.hypothesis_key
+        or latest.scope != claim.scope
+    ):
+        raise ValueError("claim identity is immutable across revisions")
 
     revision = ClaimRevision(
         claim_key=claim.key,
