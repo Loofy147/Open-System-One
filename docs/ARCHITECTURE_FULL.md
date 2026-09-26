@@ -118,6 +118,30 @@ The layer is deliberately non-authoritative:
 
 Persistence and external execution remain adapters outside this layer.
 
+## Layer 11 — Cross-Experiment Claim Synthesis
+
+Layer 11 reads the immutable evidence frontier and provides the explicit bridge from scoped assessments to claims:
+
+HypothesisAssessments
+-> scoped cross-experiment synthesis
+-> contradiction set
+-> explicit ClaimRevision
+-> immutable ClaimLedgerState
+
+Its contract is intentionally conservative:
+
+- claim identity and scope are explicit
+- synthesis can report support, contradiction, unresolved evidence, or conflict
+- contradictory evidence is retained rather than ranked away
+- EXPERIMENTALLY_SUPPORTED requires a fully identified, unconflicted current evidence set
+- decision-status revisions cannot cherry-pick around contradictory current evidence
+- claim revision uses an explicit parent revision and deterministic identity
+- stale revisions cannot overwrite a newer claim ledger
+- replay of the same revision against the same parent is idempotent
+- claim synthesis never changes hypothesis priors or execution authority
+
+Layer 11 is non-canonical infrastructure. Verification, Gate, and DecisionRevision remain separate control-plane stages.
+
 ## Runtime boundary
 
 The same semantics should be portable across:
