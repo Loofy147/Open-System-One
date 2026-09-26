@@ -25,8 +25,9 @@ The contract is independent of encoder, scorer, runtime, provider, and action sy
 - evidence-derived adaptive discovery with declared hypothesis spaces and expected entropy reduction
 - discovery run receipts generated from structured observations
 - reviewed experiment closure: execution result -> provenance-complete receipt -> evidence -> scoped hypothesis assessments -> immutable frontier revision -> frontier-aware replanning
+- cross-experiment claim synthesis: scoped assessment set -> contradiction detection -> explicit immutable ClaimRevision
 
-The base discovery layer remains separate from the adaptive layer. Adaptive Discovery is research infrastructure, not canonical contract semantics.
+The base discovery layer remains separate from the adaptive layer. Adaptive Discovery and Claim Synthesis are research/control-plane infrastructure, not canonical contract semantics.
 
 ## Evidence status
 
@@ -52,6 +53,7 @@ Read:
 - docs/DISCOVERY_FRONTIER.md
 - docs/ADAPTIVE_DISCOVERY.md
 - docs/CLOSED_LOOP_EXPERIMENT.md
+- docs/CLAIM_SYNTHESIS.md
 - docs/EVIDENCE_LEDGER.md
 - docs/RECOVERY_STATUS.md
 - docs/CONTRACT_DEBT.md
