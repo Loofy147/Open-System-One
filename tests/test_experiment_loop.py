@@ -1,7 +1,7 @@
 import pytest
 
 from open_system_one.discovery import FailureObservation
-from open_system_one.discovery_advanced import AdaptiveExperiment, _EXPERIMENTS, expected_information_gain, select_adaptive_experiments
+from open_system_one.discovery_advanced import AdaptiveExperiment, _EXPERIMENTS, build_adaptive_plan, expected_information_gain, select_adaptive_experiments
 from open_system_one.experiment_loop import (
     ExperimentExecutionResult,
     ReceiptProvenance,
@@ -183,6 +183,15 @@ def test_frontier_state_changes_repeat_information_gain_and_selection():
     )
     assert selections
     assert all(item.experiment != "interaction_regime_map" for item in selections)
+
+    mechanisms, replanned = build_adaptive_plan(
+        observation,
+        frontier=revision.state_after,
+        limit=10,
+    )
+    assert "condition" in mechanisms
+    assert replanned
+    assert all(item.experiment != "interaction_regime_map" for item in replanned)
 
 
 def test_replaying_the_same_reviewed_receipt_is_idempotent():
