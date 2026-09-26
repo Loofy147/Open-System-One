@@ -127,6 +127,12 @@ class ClaimLedgerState:
             raise ValueError("claim revision ids must be unique")
         if self.revisions and ids[-1] != self.revision_id:
             raise ValueError("state revision_id must equal the latest claim revision")
+        for index, revision in enumerate(self.revisions):
+            expected_parent = "claims:genesis" if index == 0 else ids[index - 1]
+            if revision.parent_revision_id != expected_parent:
+                raise ValueError("claim revision parent chain is inconsistent")
+            if revision.status not in {"OPEN", "HYPOTHESIS", "EXPERIMENTALLY_SUPPORTED", "CONTRADICTED", "UNKNOWN", "CONFLICTED"}:
+                raise ValueError("invalid claim revision status")
         if not self.revisions and self.revision_id != "claims:genesis":
             raise ValueError("empty claim state must use the genesis revision id")
 
@@ -229,8 +235,12 @@ def _validate_request_refs(
 ) -> None:
     if request.claim_key != claim.key:
         raise ValueError("claim revision request targets a different claim")
-    if request.parent_revision_id == "":
+    if not request.parent_revision_id:
         raise ValueError("parent_revision_id must be non-empty")
+    if request.status not in {"OPEN", "HYPOTHESIS", "EXPERIMENTALLY_SUPPORTED", "CONTRADICTED", "UNKNOWN", "CONFLICTED"}:
+        raise ValueError("invalid claim revision status")
+    if not request.rationale or not request.limitations or not request.next_discriminating_test:
+        raise ValueError("claim revision requires rationale, limitations, and next test")
 
     evidence_ids = tuple(sorted(set(request.evidence_ids)))
     assessment_ids = tuple(sorted(set(request.assessment_ids)))
@@ -335,9 +345,6 @@ def apply_claim_revision(
             claim_revision=None,
             state_after=state,
         )
-
-    if not request.rationale or not request.limitations or not request.next_discriminating_test:
-        raise ValueError("claim revision requires rationale, limitations, and next test")
 
     revision = ClaimRevision(
         claim_key=claim.key,
