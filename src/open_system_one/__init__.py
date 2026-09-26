@@ -2,6 +2,24 @@ from .schema import ChoiceQuestion, NoulQuestion, ScoreQuestion, DecisionRequest
 from .engine import DecisionEngine, LegacyAdapter
 from .primitives import PRIMITIVES
 from .discovery import propose, coordinate, coordinate_failures
+from .experiment_loop import (
+    ExperimentExecutionResult,
+    ReceiptProvenance,
+    ExperimentReceipt,
+    EvidenceRecord,
+    HypothesisAssessment,
+    AdaptiveFrontierState,
+    EvidenceLedgerRevision,
+    parse_execution_result,
+    materialize_receipt,
+    validate_experiment_receipt,
+    review_receipt,
+    materialize_evidence,
+    derive_hypothesis_assessments,
+    apply_reviewed_receipt,
+    frontier_catalog_state,
+    genesis_frontier,
+)
 from .discovery_advanced import (
     FailureEvidence,
     HypothesisState,
@@ -35,4 +53,20 @@ __all__ = [
     "expected_information_gain",
     "select_adaptive_experiments",
     "build_adaptive_plan",
+    "ExperimentExecutionResult",
+    "ReceiptProvenance",
+    "ExperimentReceipt",
+    "EvidenceRecord",
+    "HypothesisAssessment",
+    "AdaptiveFrontierState",
+    "EvidenceLedgerRevision",
+    "parse_execution_result",
+    "materialize_receipt",
+    "validate_experiment_receipt",
+    "review_receipt",
+    "materialize_evidence",
+    "derive_hypothesis_assessments",
+    "apply_reviewed_receipt",
+    "frontier_catalog_state",
+    "genesis_frontier",
 ]
