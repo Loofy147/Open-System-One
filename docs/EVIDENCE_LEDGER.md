@@ -31,6 +31,8 @@ OPEN: explicitly awaiting a test or decision.
 | A recorded historical outcome can make a repeat experiment have zero expected information gain | EXPERIMENTALLY_SUPPORTED structurally | interaction_probe is recorded as mixed_gain, leaving one compatible hypothesis under its declared partition. |
 | A compound experiment can explicitly distinguish more joint hypotheses than a single mechanism probe | EXPERIMENTALLY_SUPPORTED structurally | interaction_retrieval_guard declares four joint states and a 2-bit maximum under a uniform prior. This is a planning property, not empirical evidence. |
 | Adaptive Discovery itself proves any research hypothesis | CONTRADICTED | Planner output remains ADAPTIVE_PLAN_NOT_EVIDENCE until a real experiment produces a reviewed receipt. |
+| A reviewed experiment result can deterministically produce scoped evidence, hypothesis assessments, and an immutable frontier revision | EXPERIMENTALLY_SUPPORTED structurally | Closed-loop contracts and tests validate strict execution parsing, provenance binding, deterministic evidence identity, many-to-one handling, idempotent replay, and frontier-aware reselection. |
+| The closed loop performs Bayesian posterior updating | CONTRADICTED | Priors remain declared research weights; no likelihood/noise model is implemented. |
 
 ## Rules
 
@@ -42,3 +44,7 @@ OPEN: explicitly awaiting a test or decision.
 6. Discovery output is a hypothesis generator, not evidence by itself.
 7. Adaptive information gain is a planning quantity, not a model-performance result.
 8. Any claim used to justify execution authority needs a separate policy and authority proof.
+9. A reviewed experiment receipt is required before execution output becomes ledger evidence.
+10. Hypothesis assessments are scoped evidence-derived interpretations; they do not rewrite priors.
+11. A many-to-one outcome partition cannot uniquely support a hypothesis.
+12. Replaying the same reviewed receipt must not duplicate evidence or frontier state.
