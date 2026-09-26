@@ -288,11 +288,11 @@ def test_replaying_identical_claim_revision_is_idempotent():
             synthesis.assessment_ids,
         )
         first = apply_claim_revision(state, frontier, claim, request)
-        second = apply_claim_revision(state, frontier, claim, request)
+        second = apply_claim_revision(first.state_after, frontier, claim, request)
 
         assert second.status == "IDEMPOTENT_REPLAY"
         assert second.revision_id == first.revision_id
-        assert second.state_after == state
+        assert second.state_after == first.state_after
     finally:
         del _EXPERIMENTS[experiment.key]
 
@@ -437,3 +437,20 @@ def test_claim_ledger_rejects_broken_parent_chain():
             )
     finally:
         del _EXPERIMENTS[experiment.key]
+
+
+def test_claim_spec_rejects_unknown_or_scope_mismatched_hypothesis():
+    with pytest.raises(ValueError, match="unknown hypothesis"):
+        ClaimSpec(
+            key="claim:unknown",
+            statement="Unknown hypothesis binding.",
+            hypothesis_key="does_not_exist",
+        )
+
+    with pytest.raises(ValueError, match="scope"):
+        ClaimSpec(
+            key="claim:authority-wrong-scope",
+            statement="Scope mismatch.",
+            hypothesis_key="authority_external",
+            scope="research",
+        )
