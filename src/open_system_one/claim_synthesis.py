@@ -297,7 +297,6 @@ def _validate_status_against_synthesis(
         if synthesis.disposition not in {
             "SUPPORTED_WITH_UNRESOLVED",
             "CONTRADICTED_WITH_UNRESOLVED",
-            "UNRESOLVED",
         }:
             raise ValueError(
                 "INFERENCE requires partial or unresolved scoped evidence"
