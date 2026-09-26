@@ -20,6 +20,20 @@ from .experiment_loop import (
     frontier_catalog_state,
     genesis_frontier,
 )
+from .claim_synthesis import (
+    ClaimSpec,
+    ClaimEvidenceSynthesis,
+    ClaimRevisionRequest,
+    ClaimRevision,
+    ClaimLedgerState,
+    ClaimLedgerRevision,
+    assessment_id,
+    synthesize_claim_evidence,
+    detect_claim_conflict,
+    apply_claim_revision,
+    claim_ledger_catalog_state,
+    genesis_claim_ledger,
+)
 from .discovery_advanced import (
     FailureEvidence,
     HypothesisState,
@@ -69,4 +83,16 @@ __all__ = [
     "apply_reviewed_receipt",
     "frontier_catalog_state",
     "genesis_frontier",
+    "ClaimSpec",
+    "ClaimEvidenceSynthesis",
+    "ClaimRevisionRequest",
+    "ClaimRevision",
+    "ClaimLedgerState",
+    "ClaimLedgerRevision",
+    "assessment_id",
+    "synthesize_claim_evidence",
+    "detect_claim_conflict",
+    "apply_claim_revision",
+    "claim_ledger_catalog_state",
+    "genesis_claim_ledger",
 ]
