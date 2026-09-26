@@ -219,3 +219,14 @@ def test_revision_digest_depends_on_parent_and_evidence():
         ),
     )
     assert first.revision_id != different.revision_id
+
+
+def test_assessment_rejects_evidence_from_another_receipt():
+    receipt = _reviewed_receipt()
+    matching = materialize_evidence(receipt)
+    other = _reviewed_receipt(outcome="regime_mixed")
+    other_evidence = materialize_evidence(other)
+
+    assert matching.receipt_digest == receipt.receipt_digest
+    with pytest.raises(ValueError):
+        derive_hypothesis_assessments(receipt, other_evidence)
