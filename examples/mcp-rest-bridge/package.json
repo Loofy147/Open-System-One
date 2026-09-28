@@ -1,0 +1,19 @@
+{
+  "name": "mcp-rest-bridge-demo",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Focused MCP-to-REST bridge demonstration for an auditable integration workflow.",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check src/server.js && node --check src/stdio.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/client": "2.1.0",
+    "@modelcontextprotocol/server": "2.1.0",
+    "zod": "4.6.5"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
