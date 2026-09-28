@@ -1,35 +1,38 @@
 # Proposal — MCP REST Bridge
 
-Target: Upwork MCP Server Build — Third-Party API Integration for Claude AI
-Budget context: $500-$1,000 Phase 1
+Target: Upwork "MCP Server Build — Third-Party API Integration for Claude AI"
+Budget shown on the listing: $500-$1,000 Phase 1.
 
-Preferred language: Node.js
+## Client-facing proposal
 
-REST API explanation:
-A REST API exposes resources over HTTP using methods such as GET/POST and structured request/response bodies. Key-based authentication usually sends a secret in an Authorization header or the provider's documented header, and the server validates it before returning protected data.
+Hi — this is a good fit for a narrow Node.js implementation.
 
-Proposal:
+**Closest comparable proof:** I built a focused MCP→REST integration artifact that exposes a typed MCP tool, validates input, calls a REST endpoint with optional Bearer authentication, returns structured JSON, and preserves REST failures as explicit tool errors. The proof includes an in-process MCP client integration test covering tool discovery, request construction, auth-header placement, structured results, and a 404 path.
 
-I can build this as a small, testable MCP-to-REST bridge rather than overcomplicate it.
-
-I have built a focused MCP REST bridge proof in Node.js using the current MCP TypeScript SDK v2.1.0. It exposes a typed MCP tool, validates its input, calls a configured REST endpoint with an optional Bearer credential, returns structured JSON to the MCP client, and preserves REST failures as explicit tool errors. The repository also contains an in-process MCP client integration test covering discovery, the REST request, authentication header placement, structured result propagation, and a 404 failure path.
-
-Proof:
+**Proof:**  
 https://github.com/Loofy147/Open-System-One/tree/research/self-conversion-primitive-v0/examples/mcp-rest-bridge
 
-Implementation for your Phase 1 would be:
+I would implement your Phase 1 as:
 
-1. Define the exact REST endpoints and response schemas from your brief.
-2. Implement the MCP tool surface with strict input validation.
-3. Add key-based authentication without exposing the credential in tool inputs.
-4. Map REST responses into clean structured MCP results.
-5. Handle HTTP errors and malformed responses explicitly.
-6. Add end-to-end tests against deterministic fixtures.
-7. Add deployment/startup configuration for your chosen Node.js host.
-8. Deliver the source, configuration instructions, test evidence and a short walkthrough.
+- Node.js + current MCP TypeScript SDK v2
+- only the REST endpoints in your brief
+- key authentication kept at the server boundary
+- typed/validated MCP tool inputs
+- clean structured JSON responses for Claude
+- explicit HTTP and malformed-response errors
+- deterministic tests for success and failure cases
+- lightweight deployment configuration for Railway, Render, or your chosen host
+- source + setup notes + test evidence at handoff
 
-For the first phase, I would keep the server stateless and narrow, then add only the endpoints required by the brief.
+I would keep the first version stateless and deliberately small. No frontend, database, or unrelated framework work.
 
-I can start with the technical brief and produce the first tested implementation as the initial milestone.
+**REST API / key-auth screening answer:**  
+A REST API exposes resources through standard HTTP requests such as GET and POST and commonly returns structured representations such as JSON. With key-based authentication, the client sends the provider-issued secret in the provider's documented request header (often an Authorization header), and the API validates that key before serving the protected request.
 
-Suggested Phase 1 quote: $750 fixed price.
+**Language:** Node.js.
+
+**Availability:** Ready to start within the requested 3-business-day window, subject to the client's NDA/brief handoff.
+
+**Phase 1:** $750 fixed price.
+
+One note on evidence: the linked MCP→REST project is a portfolio proof, not a disguised customer deployment. I prefer to show the exact implementation that exists rather than claim a prior client engagement that I cannot substantiate.
