@@ -1,0 +1,28 @@
+name: mcp-rest-bridge
+
+on:
+  push:
+    paths:
+      - "examples/mcp-rest-bridge/**"
+      - ".github/workflows/mcp-rest-bridge.yml"
+  pull_request:
+    paths:
+      - "examples/mcp-rest-bridge/**"
+      - ".github/workflows/mcp-rest-bridge.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/mcp-rest-bridge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: examples/mcp-rest-bridge/package-lock.json
+      - run: npm install --ignore-scripts
+      - run: npm run check
+      - run: npm test
