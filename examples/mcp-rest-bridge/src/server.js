@@ -38,7 +38,7 @@ export function buildServer({
       },
     },
     async ({ id }) => {
-      const baseUrl = base.endsWith("/") ? base : new URL(base.href + "/");
+      const baseUrl = new URL(base.href.endsWith("/") ? base.href : base.href + "/");
       const url = new URL("resources/" + encodeURIComponent(id), baseUrl);
 
       const headers = { accept: "application/json" };
