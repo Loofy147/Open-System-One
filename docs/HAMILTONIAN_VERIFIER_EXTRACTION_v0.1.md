@@ -1,4 +1,4 @@
-# Hamiltonian Verifier Extraction v0.1
+# Hamiltonian Verifier Extraction v0.1 — corrected contract
 
 ## Evidence identity
 
@@ -6,70 +6,60 @@
 - Source ref: `090698ba721bbe8428dc7ccfa003978532d6e446`
 - Source path: `symlib/kernel/verify.py`
 - Source blob: `58bf9d361c48a2b9398238d47c07d8c33afa54a1`
-- Destination: `Loofy147/Open-System-One`
 - Extraction branch: `extract/hamiltonian-verifier-v0.1`
 
-## Extracted contract
+## Critical finding
 
-For positive integers `m,k`, let
+The legacy module is documented as checking Hamiltonian cycles, and its
+function is named `verify_sigma`, but the executed predicate is weaker.
 
-`V = Z_m^k`.
+For each colour, the legacy code:
+1. builds a total function on the `m^k` vertices;
+2. counts functional components by walking from every not-yet-visited vertex;
+3. accepts exactly when there is one such component.
 
-The input `sigma` is a map `V -> S_k`, represented as a mapping from
-k-tuples to k-tuples. For each vertex `v` and colour `c`, the permutation
-entry `sigma[v][c]` selects the coordinate axis incremented modulo `m`.
-The induced map for colour `c` must be one directed Hamiltonian cycle over
-all `m^k` vertices.
+For a finite functional graph, this counts directed cycles, not indegree
+constraints. Therefore one component does **not** imply that every vertex lies
+on the cycle.
 
-The standalone implementation additionally treats malformed input as
-`valid=False` rather than relying on exceptions. It explicitly validates:
+The canonical Symlib `m=3,k=3` table is direct evidence: the legacy verifier
+accepts it, while some colour maps have vertices with indegree 0 or 2. Thus the
+legacy predicate is not equivalent to a genuine Hamiltonian-cycle verifier.
 
-1. exact domain cardinality and in-range tuple coordinates;
-2. every value is a permutation of `0..k-1`;
-3. every colour induces exactly one component and indegree 1 at every vertex.
+This distinction is now preserved explicitly.
 
-The core implementation has no Symlib, NumPy, or Numba dependency.
+## Implementation
 
-## Delta from legacy implementation
+`verify_sigma` and `verify_and_diagnose` preserve the executed legacy
+single-cycle predicate for well-formed `sigma : Z_m^k -> S_k` inputs.
 
-This is an independent reimplementation, not a copy of the legacy module.
-The positive semantic target is preserved, while malformed-input handling is
-made total and typed. The implementation also emits structured per-colour
-diagnostics.
+`verify_strict_hamiltonian` is provided separately for the stronger criterion:
+one cycle + indegree one in every colour.
 
-Legacy source documentation described the verifier as deterministic and exact.
-That description is treated as the source contract, not as independent proof.
+The implementation remains standalone and has no Symlib/NumPy/Numba dependency.
 
-## Verification performed locally
+## Verification
 
-Environment: CPython with pytest; no external runtime dependency for the
-verifier.
-
-Result: **8/8 tests passed**.
-
-The suite includes:
-- a discovered positive instance at `m=2,k=2`;
-- incomplete-domain rejection;
-- non-permutation rejection;
-- out-of-domain rejection;
-- a shape-preserving mutation that breaks the cycle property;
-- invalid-parameter rejection;
-- exhaustive comparison over all `2^4 = 16` labelled maps for `m=2,k=2`
-  against a separately written reference checker;
-- positive regression for the extracted API.
+Local checks for the corrected implementation:
+- canonical Symlib `m=3,k=3` fixture: accepted by legacy-compatible verifier;
+- same fixture: rejected by strict Hamiltonian verifier;
+- exhaustive `m=2,k=2` comparison across all 16 labelled assignments
+  against an independently written legacy reference checker;
+- one-entry mutation of the `m=3,k=3` fixture is rejected;
+- malformed-domain and malformed-permutation cases are rejected deterministically.
 
 ## Status
 
-- Primitive: **EXPERIMENTALLY_SUPPORTED**
-- Mathematical generality beyond the tested finite instance: **ESTABLISHED by
-  the explicit definition of the contract; implementation correctness outside
-  the tested instance remains OPEN pending broader property/regression tests.**
-- Legacy implementation as a dependency: **REJECTED**
-- Direct reuse of legacy NumPy/Numba code: **REJECTED**
+- Legacy-compatible predicate extraction: **EXPERIMENTALLY_SUPPORTED**
+- Genuine Hamiltonian semantics in the legacy code: **CONTRADICTED**
+- Strict Hamiltonian verifier implementation: **EXPERIMENTALLY_SUPPORTED**
+  on the tested fixtures; broader property testing remains OPEN.
+- Symlib runtime dependency: **REJECTED**
+- Prior indegree-strengthened extraction as a semantic-preserving claim:
+  **REJECTED**
 
-## Next discriminating test
+## Next discriminating action
 
-Generate or import a canonical verified `m=3,k=3` solution only as a test
-fixture, then compare this standalone verifier against an independently
-implemented graph checker on that fixture and on controlled single-edge
-mutations. Do not import Symlib as a runtime dependency.
+Do not merge the original extraction. Extend the corrected verifier with
+property tests over additional small `(m,k)`, and only then consider whether
+the strict Hamiltonian variant belongs in the reusable core.

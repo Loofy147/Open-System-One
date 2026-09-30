@@ -1,8 +1,11 @@
-"""Exact verification of finite permutation-labelled torus graphs.
+"""Exact verification of the legacy Symlib finite functional-cycle predicate.
 
-This module is a standalone extraction of the small, deterministic verifier
-from Symlib. It deliberately does not depend on Symlib, NumPy, Numba, or any
-other runtime package.
+The legacy implementation names its predicate "Hamiltonian", but its executed
+criterion is weaker: for each colour, the induced total function has exactly
+one directed cycle. It does NOT require indegree one at every vertex.
+
+This module preserves that executed predicate. A separate strict verifier is
+provided when true Hamiltonian-cycle semantics are required.
 """
 
 from __future__ import annotations
@@ -21,7 +24,8 @@ class ColourResult:
     n_arcs: int
     n_vertices_reached: int
     n_components: int
-    is_hamiltonian: bool
+    indegree_one: bool
+    is_single_cycle: bool
 
 
 @dataclass(frozen=True)
@@ -90,16 +94,56 @@ def _validate_sigma_shape(sigma: Sigma, m: int, k: int) -> Tuple[bool, bool, lis
     return domain_valid, permutation_valid, errors
 
 
+def _analyse_colours(sigma: Sigma, m: int, k: int) -> tuple[ColourResult, ...]:
+    n = m ** k
+    vertices = tuple(sigma.keys())
+    colours: list[ColourResult] = []
+
+    for colour in range(k):
+        func: dict[Vertex, Vertex] = {}
+        indegree: dict[Vertex, int] = {v: 0 for v in vertices}
+
+        for vertex, permutation in sigma.items():
+            axis = permutation[colour]
+            neighbor = list(vertex)
+            neighbor[axis] = (neighbor[axis] + 1) % m
+            target = tuple(neighbor)
+            func[vertex] = target
+            indegree[target] += 1
+
+        indegree_one = all(value == 1 for value in indegree.values())
+
+        visited: set[Vertex] = set()
+        components = 0
+        for start in vertices:
+            if start in visited:
+                continue
+            components += 1
+            current = start
+            while current not in visited:
+                visited.add(current)
+                current = func[current]
+
+        colours.append(
+            ColourResult(
+                colour=colour,
+                n_arcs=len(func),
+                n_vertices_reached=len(visited),
+                n_components=components,
+                indegree_one=indegree_one,
+                is_single_cycle=(len(func) == n and components == 1),
+            )
+        )
+
+    return tuple(colours)
+
+
 def verify_and_diagnose(sigma: Sigma, m: int, k: int = 3) -> VerificationResult:
-    """Return a complete deterministic verification result.
+    """Verify the predicate actually executed by the legacy Symlib verifier.
 
-    The contract is exact: every vertex of Z_m^k must occur exactly once, every
-    value must be a permutation of the k coordinate directions, and for every
-    colour the induced directed map must be one cycle containing all m^k
-    vertices.
-
-    Malformed input produces valid=False rather than raising for expected
-    shape/value errors.
+    For each colour, the induced total function must have exactly one
+    functional component/cycle. This is intentionally NOT the stronger
+    Hamiltonian/permutation criterion.
     """
     parameter_errors = _validate_parameters(m, k)
     if parameter_errors:
@@ -128,68 +172,34 @@ def verify_and_diagnose(sigma: Sigma, m: int, k: int = 3) -> VerificationResult:
             errors=tuple(errors),
         )
 
-    vertices = tuple(sigma.keys())
-    colours: list[ColourResult] = []
-    all_hamiltonian = True
-
-    for colour in range(k):
-        func: dict[Vertex, Vertex] = {}
-        indegree: dict[Vertex, int] = {v: 0 for v in vertices}
-        for vertex, permutation in sigma.items():
-            axis = permutation[colour]
-            neighbor = list(vertex)
-            neighbor[axis] = (neighbor[axis] + 1) % m
-            target = tuple(neighbor)
-            func[vertex] = target
-            indegree[target] += 1
-
-        indegree_ok = all(value == 1 for value in indegree.values())
-
-        visited: set[Vertex] = set()
-        components = 0
-        for start in vertices:
-            if start in visited:
-                continue
-            components += 1
-            current = start
-            while current not in visited:
-                visited.add(current)
-                current = func[current]
-
-        is_hamiltonian = (
-            len(func) == n
-            and len(visited) == n
-            and components == 1
-            and indegree_ok
-        )
-        colours.append(
-            ColourResult(
-                colour=colour,
-                n_arcs=len(func),
-                n_vertices_reached=len(visited),
-                n_components=components,
-                is_hamiltonian=is_hamiltonian,
+    colours = _analyse_colours(sigma, m, k)
+    for item in colours:
+        if not item.is_single_cycle:
+            errors.append(
+                f"colour {item.colour}: induced function has {item.n_components} components"
             )
-        )
-        if not is_hamiltonian:
-            all_hamiltonian = False
-            if not indegree_ok:
-                errors.append(f"colour {colour}: some vertices have indegree != 1")
-            if components != 1:
-                errors.append(f"colour {colour}: induced graph has {components} components")
 
     return VerificationResult(
-        valid=all_hamiltonian,
+        valid=all(item.is_single_cycle for item in colours),
         m=m,
         k=k,
         n_vertices=n,
         domain_valid=True,
         permutation_valid=True,
-        colours=tuple(colours),
+        colours=colours,
         errors=tuple(errors),
     )
 
 
 def verify_sigma(sigma: Sigma, m: int, k: int = 3) -> bool:
-    """Return True exactly when sigma satisfies the verifier contract."""
+    """Return True exactly when the legacy single-cycle predicate accepts sigma."""
     return verify_and_diagnose(sigma, m, k).valid
+
+
+def verify_strict_hamiltonian(sigma: Sigma, m: int, k: int = 3) -> bool:
+    """Return True only for genuine Hamiltonian cycles in every colour."""
+    result = verify_and_diagnose(sigma, m, k)
+    return result.valid and all(
+        colour.indegree_one and colour.n_vertices_reached == m ** k
+        for colour in result.colours
+    )

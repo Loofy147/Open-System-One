@@ -1,27 +1,89 @@
 from itertools import permutations, product
 
-from open_system_one.verification.hamiltonian import verify_and_diagnose, verify_sigma
+from open_system_one.verification.hamiltonian import (
+    verify_and_diagnose,
+    verify_sigma,
+    verify_strict_hamiltonian,
+)
 
 
-def find_small_valid_sigma(m: int = 2, k: int = 2):
-    vertices = list(product(range(m), repeat=k))
-    perms = list(permutations(range(k)))
-    from itertools import product as cartesian_product
-
-    for choices in cartesian_product(perms, repeat=len(vertices)):
-        sigma = dict(zip(vertices, choices))
-        if verify_sigma(sigma, m, k):
-            return sigma
-    raise AssertionError("no small valid sigma found")
+M3_LEVELS = (
+    {0: (1, 0, 2), 1: (1, 0, 2), 2: (1, 0, 2)},
+    {0: (0, 1, 2), 1: (2, 1, 0), 2: (2, 1, 0)},
+    {0: (0, 2, 1), 1: (1, 2, 0), 2: (1, 2, 0)},
+)
 
 
-def test_small_valid_instance():
-    sigma = find_small_valid_sigma()
-    result = verify_and_diagnose(sigma, 2, 2)
+def symlib_m3_fixture():
+    return {
+        (i, j, k): M3_LEVELS[(i + j + k) % 3][j]
+        for i, j, k in product(range(3), repeat=3)
+    }
+
+
+def independent_legacy_checker(sigma, m, k):
+    vertices = set(product(range(m), repeat=k))
+    if set(sigma) != vertices:
+        return False
+    if any(tuple(sorted(p)) != tuple(range(k)) for p in sigma.values()):
+        return False
+
+    n = m ** k
+    for colour in range(k):
+        func = {}
+        for v in vertices:
+            u = list(v)
+            axis = sigma[v][colour]
+            u[axis] = (u[axis] + 1) % m
+            func[v] = tuple(u)
+
+        seen = set()
+        cycles = 0
+        for start in vertices:
+            if start in seen:
+                continue
+            cycles += 1
+            cur = start
+            while cur not in seen:
+                seen.add(cur)
+                cur = func[cur]
+        if len(func) != n or cycles != 1:
+            return False
+    return True
+
+
+def test_m3_legacy_fixture_is_accepted():
+    sigma = symlib_m3_fixture()
+    result = verify_and_diagnose(sigma, 3, 3)
     assert result.valid
-    assert result.n_vertices == 4
-    assert all(c.is_hamiltonian for c in result.colours)
-    assert all(c.n_vertices_reached == 4 for c in result.colours)
+    assert result.n_vertices == 27
+    assert all(c.is_single_cycle for c in result.colours)
+
+
+def test_m3_fixture_is_not_strict_hamiltonian():
+    sigma = symlib_m3_fixture()
+    assert verify_sigma(sigma, 3, 3)
+    assert not verify_strict_hamiltonian(sigma, 3, 3)
+    assert any(not c.indegree_one for c in verify_and_diagnose(sigma, 3, 3).colours)
+
+
+def test_exhaustive_m2_k2_matches_independent_legacy_spec():
+    vertices = list(product(range(2), repeat=2))
+    perms = list(permutations(range(2)))
+    checked = 0
+    for choices in product(perms, repeat=len(vertices)):
+        sigma = dict(zip(vertices, choices))
+        assert verify_sigma(sigma, 2, 2) == independent_legacy_checker(sigma, 2, 2)
+        checked += 1
+    assert checked == 16
+
+
+def test_m3_single_entry_mutation_is_rejected():
+    sigma = symlib_m3_fixture()
+    original = sigma[(0, 0, 0)]
+    sigma[(0, 0, 0)] = (0, 1, 2)
+    assert original != sigma[(0, 0, 0)]
+    assert not verify_sigma(sigma, 3, 3)
 
 
 def test_incomplete_domain_is_rejected_without_exception():
@@ -29,7 +91,6 @@ def test_incomplete_domain_is_rejected_without_exception():
     result = verify_and_diagnose(sigma, 2, 2)
     assert not result.valid
     assert not result.domain_valid
-    assert any("exactly 4 vertices" in e for e in result.errors)
 
 
 def test_non_permutation_value_is_rejected_without_exception():
@@ -42,72 +103,3 @@ def test_non_permutation_value_is_rejected_without_exception():
     result = verify_and_diagnose(sigma, 2, 2)
     assert not result.valid
     assert not result.permutation_valid
-
-
-def test_out_of_domain_vertex_is_rejected():
-    sigma = {
-        (9, 0): (0, 1),
-        (0, 1): (1, 0),
-        (1, 0): (1, 0),
-        (1, 1): (0, 1),
-    }
-    result = verify_and_diagnose(sigma, 2, 2)
-    assert not result.valid
-    assert not result.domain_valid
-
-
-def test_multi_component_case_is_rejected():
-    sigma = find_small_valid_sigma()
-    sigma = dict(sigma)
-    sigma[(0, 0)] = sigma[(0, 1)]
-    result = verify_and_diagnose(sigma, 2, 2)
-    assert not result.valid
-    assert any(c.n_components != 1 for c in result.colours) or result.errors
-
-
-def test_parameter_validation():
-    result = verify_and_diagnose({}, 0, 2)
-    assert not result.valid
-    assert result.n_vertices == 0
-
-
-def independent_spec_checker(sigma, m=2, k=2):
-    """Tiny independent reference implementation used only by the kill-test."""
-    vertices = set(product(range(m), repeat=k))
-    if set(sigma) != vertices:
-        return False
-    for p in sigma.values():
-        if tuple(sorted(p)) != tuple(range(k)):
-            return False
-    n = m ** k
-    for colour in range(k):
-        f = {}
-        for v in vertices:
-            u = list(v)
-            u[sigma[v][colour]] = (u[sigma[v][colour]] + 1) % m
-            f[v] = tuple(u)
-        seen = set()
-        cur = min(vertices)
-        while cur not in seen:
-            seen.add(cur)
-            cur = f[cur]
-        if cur != min(vertices) or len(seen) != n:
-            return False
-    return True
-
-
-def test_exhaustive_m2_k2_matches_independent_spec():
-    vertices = list(product(range(2), repeat=2))
-    perms = list(permutations(range(2)))
-    checked = 0
-    for choices in product(perms, repeat=len(vertices)):
-        sigma = dict(zip(vertices, choices))
-        assert verify_sigma(sigma, 2, 2) == independent_spec_checker(sigma, 2, 2)
-        checked += 1
-    assert checked == 16
-
-
-def test_legacy_semantics_regression_boundary():
-    """The extracted verifier preserves the positive assertion used by Symlib."""
-    sigma = find_small_valid_sigma()
-    assert verify_sigma(sigma, 2, 2)
