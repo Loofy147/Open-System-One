@@ -273,8 +273,14 @@ Evaluation/security:
 - https://github.com/promptfoo/promptfoo
 - https://github.com/Giskard-AI/giskard-oss
 - https://github.com/NVIDIA/garak
-- https://github.com/Azure/PyRIT
+- https://github.com/microsoft/PyRIT
 - https://github.com/swe-bench/SWE-bench
+
+## Current-status corrections
+
+- Stagehand: the active official repository is browserbase/stagehand. The older useplato/stagehand repository is archived.
+- PyRIT: Azure/PyRIT is archived and points to microsoft/PyRIT. Use the Microsoft repository for current work.
+- Continue: the main repository currently describes itself as no longer actively maintained; use only as reference unless a maintained implementation is independently verified.
 
 ## Verification warning
 
