@@ -1,11 +1,11 @@
-"""Exact verification of the legacy Symlib finite functional-cycle predicate.
+"""Standalone verification of the finite functional-cycle predicate.
 
-The legacy implementation names its predicate "Hamiltonian", but its executed
-criterion is weaker: for each colour, the induced total function has exactly
-one directed cycle. It does NOT require indegree one at every vertex.
+This module reimplements the executed predicate in Symlib's
+symlib/kernel/verify.py. For each colour c, the source assigns the edge along
+axis a to colour sigma[v][a], so a fixed colour selects the unique axis whose
+permutation entry equals that colour.
 
-This module preserves that executed predicate. A separate strict verifier is
-provided when true Hamiltonian-cycle semantics are required.
+No Symlib, NumPy, or Numba dependency is required here.
 """
 
 from __future__ import annotations
@@ -104,12 +104,14 @@ def _analyse_colours(sigma: Sigma, m: int, k: int) -> tuple[ColourResult, ...]:
         indegree: dict[Vertex, int] = {v: 0 for v in vertices}
 
         for vertex, permutation in sigma.items():
-            axis = permutation[colour]
-            neighbor = list(vertex)
-            neighbor[axis] = (neighbor[axis] + 1) % m
-            target = tuple(neighbor)
-            func[vertex] = target
-            indegree[target] += 1
+            for axis in range(k):
+                if permutation[axis] == colour:
+                    neighbor = list(vertex)
+                    neighbor[axis] = (neighbor[axis] + 1) % m
+                    target = tuple(neighbor)
+                    func[vertex] = target
+                    indegree[target] += 1
+                    break
 
         indegree_one = all(value == 1 for value in indegree.values())
 
@@ -139,12 +141,7 @@ def _analyse_colours(sigma: Sigma, m: int, k: int) -> tuple[ColourResult, ...]:
 
 
 def verify_and_diagnose(sigma: Sigma, m: int, k: int = 3) -> VerificationResult:
-    """Verify the predicate actually executed by the legacy Symlib verifier.
-
-    For each colour, the induced total function must have exactly one
-    functional component/cycle. This is intentionally NOT the stronger
-    Hamiltonian/permutation criterion.
-    """
+    """Verify the exact single-cycle predicate executed by the legacy source."""
     parameter_errors = _validate_parameters(m, k)
     if parameter_errors:
         return VerificationResult(
@@ -192,12 +189,12 @@ def verify_and_diagnose(sigma: Sigma, m: int, k: int = 3) -> VerificationResult:
 
 
 def verify_sigma(sigma: Sigma, m: int, k: int = 3) -> bool:
-    """Return True exactly when the legacy single-cycle predicate accepts sigma."""
+    """Return True exactly when the legacy predicate accepts sigma."""
     return verify_and_diagnose(sigma, m, k).valid
 
 
 def verify_strict_hamiltonian(sigma: Sigma, m: int, k: int = 3) -> bool:
-    """Return True only for genuine Hamiltonian cycles in every colour."""
+    """Require the legacy predicate plus indegree one for every colour."""
     result = verify_and_diagnose(sigma, m, k)
     return result.valid and all(
         colour.indegree_one and colour.n_vertices_reached == m ** k

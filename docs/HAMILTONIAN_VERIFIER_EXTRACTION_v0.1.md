@@ -1,65 +1,57 @@
-# Hamiltonian Verifier Extraction v0.1 — corrected contract
+# Hamiltonian Verifier Extraction v0.1 — corrected extraction
 
 ## Evidence identity
 
-- Source repository: `Loofy147/Symlib`
-- Source ref: `090698ba721bbe8428dc7ccfa003978532d6e446`
-- Source path: `symlib/kernel/verify.py`
-- Source blob: `58bf9d361c48a2b9398238d47c07d8c33afa54a1`
-- Extraction branch: `extract/hamiltonian-verifier-v0.1`
+- Source repository: Loofy147/Symlib
+- Source ref: 090698ba721bbe8428dc7ccfa003978532d6e446
+- Source path: symlib/kernel/verify.py
+- Source blob: 58bf9d361c48a2b9398238d47c07d8c33afa54a1
+- Destination branch: extract/hamiltonian-verifier-v0.1
 
-## Critical finding
+## Critical semantic audit
 
-The legacy module is documented as checking Hamiltonian cycles, and its
-function is named `verify_sigma`, but the executed predicate is weaker.
+The first extraction attempt was subjected to a canonical m=3,k=3 kill-test.
+It exposed an axis/colour inversion in the reimplementation.
 
-For each colour, the legacy code:
-1. builds a total function on the `m^k` vertices;
-2. counts functional components by walking from every not-yet-visited vertex;
-3. accepts exactly when there is one such component.
+The legacy source assigns the edge along axis a to colour sigma[v][a].
+Therefore, for a fixed colour c, the extracted implementation must find the
+unique axis whose permutation entry equals c. The corrected implementation
+now preserves that relation.
 
-For a finite functional graph, this counts directed cycles, not indegree
-constraints. Therefore one component does **not** imply that every vertex lies
-on the cycle.
+The source counts one functional component/cycle for each colour. We retain
+that executed predicate in verify_sigma. We also expose a separate strict
+Hamiltonian check that adds indegree-one validation, without silently changing
+the legacy predicate.
 
-The canonical Symlib `m=3,k=3` table is direct evidence: the legacy verifier
-accepts it, while some colour maps have vertices with indegree 0 or 2. Thus the
-legacy predicate is not equivalent to a genuine Hamiltonian-cycle verifier.
+## Canonical fixture
 
-This distinction is now preserved explicitly.
+The m=3,k=3 fixture is derived from the source _TABLE_M3 and _table_to_sigma
+definitions at the pinned source ref. It contains 27 labelled vertices and is
+used only as a test fixture; Symlib is not imported.
 
-## Implementation
-
-`verify_sigma` and `verify_and_diagnose` preserve the executed legacy
-single-cycle predicate for well-formed `sigma : Z_m^k -> S_k` inputs.
-
-`verify_strict_hamiltonian` is provided separately for the stronger criterion:
-one cycle + indegree one in every colour.
-
-The implementation remains standalone and has no Symlib/NumPy/Numba dependency.
+All three colours of this canonical fixture satisfy the legacy predicate and
+also have indegree one, so the strict Hamiltonian check accepts it.
 
 ## Verification
 
-Local checks for the corrected implementation:
-- canonical Symlib `m=3,k=3` fixture: accepted by legacy-compatible verifier;
-- same fixture: rejected by strict Hamiltonian verifier;
-- exhaustive `m=2,k=2` comparison across all 16 labelled assignments
-  against an independently written legacy reference checker;
-- one-entry mutation of the `m=3,k=3` fixture is rejected;
-- malformed-domain and malformed-permutation cases are rejected deterministically.
+The corrected logic is checked against an independently written legacy
+reference checker on the canonical m=3,k=3 fixture and exhaustively on all 16
+labelled m=2,k=2 assignments.
+
+Additional tests reject a controlled one-entry mutation and malformed inputs.
+
+The previous extraction commit
+00c62a2a5c6033e35b0f2f5cc83601dd39984441 is superseded and must not be merged.
 
 ## Status
 
-- Legacy-compatible predicate extraction: **EXPERIMENTALLY_SUPPORTED**
-- Genuine Hamiltonian semantics in the legacy code: **CONTRADICTED**
-- Strict Hamiltonian verifier implementation: **EXPERIMENTALLY_SUPPORTED**
-  on the tested fixtures; broader property testing remains OPEN.
-- Symlib runtime dependency: **REJECTED**
-- Prior indegree-strengthened extraction as a semantic-preserving claim:
-  **REJECTED**
+- Correct legacy predicate extraction: EXPERIMENTALLY_SUPPORTED
+- First extraction axis/colour inversion: CONTRADICTED / KILLED
+- Strict Hamiltonian check on canonical fixture: EXPERIMENTALLY_SUPPORTED
+- Symlib runtime dependency: REJECTED
+- Generalized correctness beyond tested fixtures: OPEN
 
 ## Next discriminating action
 
-Do not merge the original extraction. Extend the corrected verifier with
-property tests over additional small `(m,k)`, and only then consider whether
-the strict Hamiltonian variant belongs in the reusable core.
+Compare the corrected implementation against source-generated m=5,k=3 and
+m=4,k=3 fixtures using an independent reference checker before merge.

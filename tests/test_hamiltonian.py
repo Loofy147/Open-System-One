@@ -31,11 +31,13 @@ def independent_legacy_checker(sigma, m, k):
     n = m ** k
     for colour in range(k):
         func = {}
-        for v in vertices:
-            u = list(v)
-            axis = sigma[v][colour]
-            u[axis] = (u[axis] + 1) % m
-            func[v] = tuple(u)
+        for v, permutation in sigma.items():
+            for axis in range(k):
+                if permutation[axis] == colour:
+                    u = list(v)
+                    u[axis] = (u[axis] + 1) % m
+                    func[v] = tuple(u)
+                    break
 
         seen = set()
         cycles = 0
@@ -52,19 +54,19 @@ def independent_legacy_checker(sigma, m, k):
     return True
 
 
-def test_m3_legacy_fixture_is_accepted():
+def test_m3_fixture_matches_independent_legacy_checker():
     sigma = symlib_m3_fixture()
-    result = verify_and_diagnose(sigma, 3, 3)
+    assert verify_sigma(sigma, 3, 3)
+    assert verify_sigma(sigma, 3, 3) == independent_legacy_checker(sigma, 3, 3)
+
+
+def test_m3_fixture_has_strict_hamiltonian_structure():
+    result = verify_and_diagnose(symlib_m3_fixture(), 3, 3)
     assert result.valid
     assert result.n_vertices == 27
     assert all(c.is_single_cycle for c in result.colours)
-
-
-def test_m3_fixture_is_not_strict_hamiltonian():
-    sigma = symlib_m3_fixture()
-    assert verify_sigma(sigma, 3, 3)
-    assert not verify_strict_hamiltonian(sigma, 3, 3)
-    assert any(not c.indegree_one for c in verify_and_diagnose(sigma, 3, 3).colours)
+    assert all(c.indegree_one for c in result.colours)
+    assert verify_strict_hamiltonian(symlib_m3_fixture(), 3, 3)
 
 
 def test_exhaustive_m2_k2_matches_independent_legacy_spec():
@@ -80,9 +82,7 @@ def test_exhaustive_m2_k2_matches_independent_legacy_spec():
 
 def test_m3_single_entry_mutation_is_rejected():
     sigma = symlib_m3_fixture()
-    original = sigma[(0, 0, 0)]
     sigma[(0, 0, 0)] = (0, 1, 2)
-    assert original != sigma[(0, 0, 0)]
     assert not verify_sigma(sigma, 3, 3)
 
 
