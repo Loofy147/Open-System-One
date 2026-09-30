@@ -43,3 +43,6 @@ The branch research/dots-readiness-v0.1 contains a product-boundary-independent 
 - research/dots/dots_first_run_manifest_v0.1.json — first-access test manifest
 
 Dots are treated as a replaceable execution surface. Open-System-One remains the durable authority for claims, evidence, decisions, verification, and provenance.
+## Agent surfaces
+
+The branch research/dots-readiness-v0.1 also contains a vendor-neutral registry and common characterization protocol for external agent surfaces. See docs/agent-surfaces/AGENT_SURFACE_REGISTRY_v0.1.md, docs/agent-surfaces/AGENT_SURFACE_COMMON_TEST_PROTOCOL_v0.1.md, and docs/agent-surfaces/AGENT_SURFACE_EXPERIMENT_PLAN_v0.1.md.
