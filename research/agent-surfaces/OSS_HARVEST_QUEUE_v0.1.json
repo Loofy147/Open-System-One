@@ -14,7 +14,7 @@
     "Arize-ai/openinference",
     "UKGovernmentBEIS/inspect_ai",
     "ServiceNow/BrowserGym",
-    "AgentDojo/AgentDojo",
+    "ethz-spylab/agentdojo",
     "a2aproject/A2A"
   ],
   "p1": [
@@ -37,7 +37,7 @@
   "p2": [
     "web-arena-x/webarena",
     "ServiceNow/BrowserGym",
-    "OSWorld",
+    "xlang-ai/OSWorld",
     "reacher-z/ClawBench",
     "swe-bench/SWE-bench",
     "promptfoo/promptfoo",
