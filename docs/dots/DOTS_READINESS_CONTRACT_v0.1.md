@@ -32,9 +32,9 @@ A dot is therefore an execution capability, not a canonical epistemic store.
 
 OpenAI currently describes dots as always-on agents powered by GPT-6 Astra. A dot has its own cloud computer and can continue work between conversations. Dots can use connected apps, use Codex, perform recurring work, and communicate through ChatGPT; Slack and Microsoft Teams integrations are supported where available.
 
-Creation currently starts on desktop web or the desktop app. Mobile can be used after the dot has been created. Mobile web cannot currently create a dot.
+Current OpenAI documentation says Dots are rolling out on web, mobile, and desktop. The product rollout and exact creation UX are account-dependent; record the actual client and entry point observed during our first run rather than assuming a fixed creation surface.
 
-Current launch access is rolling out to Pro, Business Premium, and Enterprise users in eligible markets. Enterprise access is initially disabled by default and requires workspace administration. The rollout is gradual.
+Current OpenAI documentation says Dots are rolling out to Pro users in markets excluding the European Economic Area, Switzerland, and the UK; Business Premium users across supported ChatGPT regions; and Enterprise users when an administrator enables the beta, initially off by default. The rollout is gradual.
 
 OpenAI's supported-country list includes Algeria. This establishes regional ChatGPT support, not automatic Dots eligibility.
 
