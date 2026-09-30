@@ -46,3 +46,4 @@ Dots are treated as a replaceable execution surface. Open-System-One remains the
 ## Agent surfaces
 
 The branch research/dots-readiness-v0.1 also contains a vendor-neutral registry and common characterization protocol for external agent surfaces. See docs/agent-surfaces/AGENT_SURFACE_REGISTRY_v0.1.md, docs/agent-surfaces/AGENT_SURFACE_COMMON_TEST_PROTOCOL_v0.1.md, and docs/agent-surfaces/AGENT_SURFACE_EXPERIMENT_PLAN_v0.1.md.
+The same branch also contains docs/agent-surfaces/AGENT_GAP_MAP_v0.1.md for direct/infrastructure/indirect coverage and docs/agent-surfaces/MICRO_ACTIVATION_PROOF_CARD_v0.1.md for evidence-backed narrow integrations.
