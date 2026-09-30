@@ -38,10 +38,16 @@ The corrected logic is checked against an independently written legacy
 reference checker on the canonical m=3,k=3 fixture and exhaustively on all 16
 labelled m=2,k=2 assignments.
 
-Additional tests reject a controlled one-entry mutation and malformed inputs.
+Source-derived fixtures from the pinned construction ref were then checked
+independently for m=4, m=5, and m=7:
+- m=4: 64 vertices, legacy predicate passes, strict Hamiltonian check passes.
+- m=5: 125 vertices, legacy predicate passes, strict Hamiltonian check passes.
+- m=7: 343 vertices, legacy predicate passes, strict Hamiltonian check passes.
+- A controlled one-entry mutation of the m=4 fixture is rejected.
 
-The previous extraction commit
-00c62a2a5c6033e35b0f2f5cc83601dd39984441 is superseded and must not be merged.
+The first extraction commits
+00c62a2a5c6033e35b0f2f5cc83601dd39984441 and
+a9312b431fbc188f017b50d6f3b45c9861fb1442 are superseded and must not be merged.
 
 ## Status
 
