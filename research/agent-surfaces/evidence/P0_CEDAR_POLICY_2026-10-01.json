@@ -1,0 +1,55 @@
+{
+  "schema_version": "oss-p0-cedar-proof-v0.1",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "test": "P0.05-Cedar",
+  "source_ref": {
+    "repository": "cedar-policy/cedar",
+    "inspected_commit": "2cfa86bab4776d587e96e8da43a37fc44622411a",
+    "runtime_release": "cedar-policy-cli-v4.13.0",
+    "note": "runtime release is used for execution; inspected source HEAD and runtime release are recorded separately"
+  },
+  "execution": {
+    "github_actions_run_id": 36919985797,
+    "run_number": 3,
+    "job_id": 110563325327,
+    "head_sha": "98f0b59ccfd91e8b6601907f13334413dfde8848",
+    "conclusion": "success",
+    "artifact_id": 11190683879,
+    "artifact_zip_sha256": "3518a7a9172a97800529d2da3de7c8b7077e81f5aade65b8cbe018d0438fa046"
+  },
+  "runtime": {
+    "cedar_version": "cedar-policy-cli 4.13.0",
+    "binary_sha256": "3d9a22bea20e5d9961699ec37a4944a4c19be3bc70769fe20b3221dfdfb67ead"
+  },
+  "policy": {
+    "source_kind": "inline-test-fixture",
+    "sha256": "ba0426c49c8df2df4fb940b971791d7ab816e1df00dfc9ab5591ea5567030a90"
+  },
+  "entities": {
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
+  },
+  "cases": [
+    {
+      "name": "allow",
+      "input_sha256": "cc972e0cb2a51df88ccc76fd7a6b6b185778c76b650dfe505e955399c2fa6a74",
+      "decision": "ALLOW",
+      "exit_code": 0
+    },
+    {
+      "name": "deny",
+      "input_sha256": "a12626256a00c72401f71047389dbec9d4ea243c907eb40a0ae8757334c83774",
+      "decision": "DENY",
+      "exit_code": 2
+    }
+  ],
+  "kill_test": {
+    "mutation": "read_repository -> write_repository",
+    "observed": "denied"
+  },
+  "limitations": [
+    "No Open-System-One runtime integration was exercised.",
+    "No distributed Cedar deployment or HA behavior was exercised.",
+    "The current corpus is semantically matched to the OPA proof but is not yet a single shared fixture; cross-engine byte-identical corpus is a follow-up hardening step.",
+    "Top-level Cedar repository license was observed as Apache-2.0; transitive dependency licensing was not exhaustively cleared."
+  ]
+}
