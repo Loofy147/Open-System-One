@@ -1,0 +1,127 @@
+{
+  "schema_version": "opportunity-coverage-matrix-v0.1",
+  "date": "2026-10-01",
+  "status": "NO_CONFIRMED_PRODUCT_OPPORTUNITY",
+  "domains": [
+    {
+      "domain": "developer tooling",
+      "explored": [
+        "review routing / notification",
+        "environment reproducibility",
+        "duplicate issue triage",
+        "MCP discovery/schema/conformance",
+        "local change/impact confidence"
+      ],
+      "current_state": "mostly killed; no high-quality independent opportunity established",
+      "key_gap": "under-indexed local developer workflows need direct observation before claims"
+    },
+    {
+      "domain": "small business operations",
+      "explored": [
+        "receipt capture",
+        "export reconciliation",
+        "inventory/reorder",
+        "WhatsApp/COD order management",
+        "quoting / vendor comparison"
+      ],
+      "current_state": "generic variants killed by mature products, spreadsheets, or local Algeria solutions",
+      "key_gap": "specific vertical workflow may survive only with direct operational evidence"
+    },
+    {
+      "domain": "files/documents",
+      "explored": [
+        "duplicate cleanup",
+        "version confusion",
+        "pre-import CSV/Excel repair"
+      ],
+      "current_state": "killed at desk",
+      "key_gap": "none established yet"
+    },
+    {
+      "domain": "data handling",
+      "explored": [
+        "schema validation",
+        "generic diff",
+        "semantic file-handoff breakage preflight"
+      ],
+      "current_state": "generic variants killed; semantic downstream decision remains open",
+      "key_gap": "unregistered file-to-process dependency"
+    },
+    {
+      "domain": "local/offline",
+      "explored": [
+        "offline collection",
+        "offline conflict causal reconciliation",
+        "field-service offline workflow"
+      ],
+      "current_state": "collection killed; conflict explanation remains open pending incumbent-only experiment; field-service generic layer crowded",
+      "key_gap": "causal human-resolution evidence"
+    },
+    {
+      "domain": "consumer utilities",
+      "explored": [
+        "warranty/receipt organizer",
+        "recurring reminder"
+      ],
+      "current_state": "killed at desk",
+      "key_gap": "no current candidate"
+    },
+    {
+      "domain": "field/service operations",
+      "explored": [
+        "paper/manual service reporting",
+        "offline field workflows"
+      ],
+      "current_state": "pain signals exist, but incumbent field-service platforms are substantial; evidence from available sources is not sufficiently independent for a product candidate",
+      "key_gap": "direct operator evidence required"
+    },
+    {
+      "domain": "education/administration",
+      "explored": [
+        "duplicate administrative entry",
+        "approval/ownership handoffs"
+      ],
+      "current_state": "pain signals exist; existing workflow/product space not fully audited; remain coverage reserve, not candidate",
+      "key_gap": "independent incident/workflow evidence"
+    },
+    {
+      "domain": "privacy/local computing",
+      "explored": [
+        "local document processing",
+        "local privacy/redaction"
+      ],
+      "current_state": "existing local AI and privacy tooling is active; no specific residual workflow established",
+      "key_gap": "specific high-stakes workflow and action delta"
+    },
+    {
+      "domain": "small-team coordination",
+      "explored": [
+        "manual handoffs / shadow spreadsheets"
+      ],
+      "current_state": "pain is plausible but generic coordination tools/templates are abundant",
+      "key_gap": "specific recurring handoff with measurable loss"
+    }
+  ],
+  "finalists": [
+    "offline-conflict-causal-reconciliation",
+    "semantic-file-handoff-breakage-preflight"
+  ],
+  "internal_only": [
+    "CapabilityKernel",
+    "Direct Impact Guard",
+    "Android UNKNOWN effect reconciliation",
+    "M0 durable run",
+    "Machine research",
+    "Wedgettok product hypothesis",
+    "la-rouine product hypothesis"
+  ],
+  "methodological_blind_spots": [
+    "web-index bias toward visible software complaints",
+    "insufficient frequency/stakes gate",
+    "adoption cost considered too late",
+    "action delta can be hypothetical rather than observed",
+    "incumbent search may underweight procedural/no-build workarounds",
+    "prior-art freshness in rapidly moving agent/MCP categories"
+  ],
+  "rule": "Coverage expansion continues, but no candidate is promoted without evidence and a falsifiable action-changing gap."
+}
