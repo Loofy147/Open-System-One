@@ -1,0 +1,49 @@
+{
+  "schema_version": "experimental-opportunity-state-v0.2",
+  "status": "NEEDS_DECISIVE_EXPERIMENT",
+  "no_mvp_authorized": true,
+  "governed_by": "docs/research/EXPERIMENTAL_OPPORTUNITY_PROTOCOL_v0.2.md",
+  "cycle_date": "2026-10-01",
+  "candidates": [
+    {
+      "candidate_id": "offline-conflict-causal-reconciliation",
+      "problem_statement": "Offline branches can produce conflicts whose causal history is not directly reconstructible from the incumbent evidence surface.",
+      "affected_user_context": "operator resolving multi-branch offline synchronization conflicts",
+      "status": "PREBUILD_KILL_TEST",
+      "reality": "ESTABLISHED",
+      "residual_pain": "EXPERIMENTALLY_SUPPORTED",
+      "gap_statement": "INFERENCE",
+      "action_delta": "HYPOTHESIS",
+      "incumbent": "ODK Central conflict evidence/history",
+      "kill_test": "F1",
+      "oracle": "5-case expected causal/property/version resolution key",
+      "current_decision": "NEEDS_DECISIVE_EXPERIMENT",
+      "next_discriminating_action": "Run F1 using only incumbent evidence; kill at >=4/5 fully resolvable cases."
+    },
+    {
+      "candidate_id": "independent-agent-effect-verification",
+      "problem_statement": "After agent execution, an independent layer may still lack a cross-surface proof of authoritative pre/post state, exact impact, authority-at-execution, and rollback/replay behavior.",
+      "affected_user_context": "system owner verifying actions performed through heterogeneous agent runtimes",
+      "status": "PREBUILD_KILL_TEST",
+      "reality": "ESTABLISHED",
+      "residual_pain": "EXPERIMENTALLY_SUPPORTED",
+      "gap_statement": "INFERENCE",
+      "action_delta": "HYPOTHESIS",
+      "incumbent": "MAP plus strongest accessible agent audit/provenance stack",
+      "kill_test": "F2",
+      "oracle": "8-field independent reconstruction checklist",
+      "current_decision": "NEEDS_DECISIVE_EXPERIMENT",
+      "next_discriminating_action": "Run F2 with harmless mutation, undeclared side effect, partial failure and revoke/replay fixture."
+    }
+  ],
+  "inherited_research_questions": [
+    "historical applicability vs current authority",
+    "safe idempotency under revoke and state drift",
+    "bounded impact independent of model intent",
+    "independent evidence vs agent telemetry",
+    "rollback/compensation proof",
+    "cross-surface adapter neutrality",
+    "run reconstruction after interruption/partial failure"
+  ],
+  "method_status": "OPEN / EXPERIMENTAL"
+}
