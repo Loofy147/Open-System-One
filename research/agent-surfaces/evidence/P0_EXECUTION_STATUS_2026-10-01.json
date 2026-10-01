@@ -7,7 +7,7 @@
     "P0.01-OpenShell": "BLOCKED_ENVIRONMENT",
     "P0.02-OpenSandbox": "BLOCKED_ENVIRONMENT",
     "P0.03-OPA": "EXPERIMENTALLY_SUPPORTED",
-    "P0.04-OpenFGA": "BLOCKED_ENVIRONMENT",
+    "P0.04-OpenFGA": "EXPERIMENTALLY_SUPPORTED",
     "P0.05-Cedar": "EXPERIMENTALLY_SUPPORTED",
     "P0.06-SPIFFE-SPIRE": "BLOCKED_ENVIRONMENT",
     "P0.07-browser-substrate": "EXPERIMENTALLY_SUPPORTED",
@@ -43,6 +43,13 @@
       "head_sha": "98f0b59ccfd91e8b6601907f13334413dfde8848",
       "conclusion": "success",
       "evidence_file": "research/agent-surfaces/evidence/P0_CEDAR_POLICY_2026-10-01.json"
+    },
+    "openfga": {
+      "run_id": 36920909469,
+      "run_number": 4,
+      "head_sha": "b7a7237cc64d829bfb261c99d89742c704975911",
+      "conclusion": "success",
+      "evidence_file": "research/agent-surfaces/evidence/P0_OPENFGA_RELATION_2026-10-01.json"
     }
   },
   "historical_failures_recorded": {
@@ -60,6 +67,11 @@
       "run_id": 36919893851,
       "cause": "harness treated Cedar DENY exit code 2 as an execution error",
       "repaired_in_commit": "98f0b59ccfd91e8b6601907f13334413dfde8848"
+    },
+    "openfga_harness": {
+      "run_id": 36920861340,
+      "cause": "Bash filename interpolation used an undefined OPENFGA_VERSION_linux_amd64 variable; after correction, the same workflow then failed only because the CLI uses the version subcommand rather than --version.",
+      "repaired_commit": "b7a7237cc64d829bfb261c99d89742c704975911"
     }
   },
   "environment": {
