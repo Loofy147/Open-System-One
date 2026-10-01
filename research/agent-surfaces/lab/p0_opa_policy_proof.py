@@ -12,30 +12,41 @@ from pathlib import Path
 
 POLICY = """package agent.authz
 
-decision := {"allow": true, "reason": "allowed"} if {
+valid if {
     input.subject == "agent-1"
     input.capability == "read_repository"
     input.resource == "repo-a"
 }
 
-decision := {"allow": false, "reason": "denied"} if not {
-    input.subject == "agent-1"
-    input.capability == "read_repository"
-    input.resource == "repo-a"
-}
+decision := {"allow": true, "reason": "allowed"} if valid
+
+decision := {"allow": false, "reason": "denied"} if not valid
 """
+
 
 def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
+
 def run_eval(opa: str, policy: Path, input_path: Path) -> dict:
     proc = subprocess.run(
-        [opa, "eval", "--format=json", "--data", str(policy),
-         "--input", str(input_path), "data.agent.authz.decision"],
-        check=True, capture_output=True, text=True,
+        [
+            opa,
+            "eval",
+            "--format=json",
+            "--data",
+            str(policy),
+            "--input",
+            str(input_path),
+            "data.agent.authz.decision",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
     )
     payload = json.loads(proc.stdout)
     return payload["result"][0]["expressions"][0]["value"]
+
 
 def main() -> int:
     opa = os.environ.get("OPA_BIN", "opa")
@@ -43,8 +54,16 @@ def main() -> int:
         [opa, "version"], check=True, capture_output=True, text=True
     ).stdout.strip()
 
-    allow_input = {"subject": "agent-1", "capability": "read_repository", "resource": "repo-a"}
-    deny_input = {"subject": "agent-1", "capability": "write_repository", "resource": "repo-a"}
+    allow_input = {
+        "subject": "agent-1",
+        "capability": "read_repository",
+        "resource": "repo-a",
+    }
+    deny_input = {
+        "subject": "agent-1",
+        "capability": "write_repository",
+        "resource": "repo-a",
+    }
 
     with tempfile.TemporaryDirectory(prefix="p0-opa-") as td:
         root = Path(td)
@@ -52,8 +71,12 @@ def main() -> int:
         allow_path = root / "allow.json"
         deny_path = root / "deny.json"
         policy.write_text(POLICY, encoding="utf-8")
-        allow_path.write_text(json.dumps(allow_input, sort_keys=True), encoding="utf-8")
-        deny_path.write_text(json.dumps(deny_input, sort_keys=True), encoding="utf-8")
+        allow_path.write_text(
+            json.dumps(allow_input, sort_keys=True), encoding="utf-8"
+        )
+        deny_path.write_text(
+            json.dumps(deny_input, sort_keys=True), encoding="utf-8"
+        )
 
         allow = run_eval(opa, policy, allow_path)
         deny = run_eval(opa, policy, deny_path)
@@ -74,10 +97,25 @@ def main() -> int:
                 "sha256": sha256_bytes(POLICY.encode("utf-8")),
             },
             "cases": [
-                {"name": "allow", "input_sha256": sha256_bytes(json.dumps(allow_input, sort_keys=True).encode("utf-8")), "decision": allow},
-                {"name": "deny", "input_sha256": sha256_bytes(json.dumps(deny_input, sort_keys=True).encode("utf-8")), "decision": deny},
+                {
+                    "name": "allow",
+                    "input_sha256": sha256_bytes(
+                        json.dumps(allow_input, sort_keys=True).encode("utf-8")
+                    ),
+                    "decision": allow,
+                },
+                {
+                    "name": "deny",
+                    "input_sha256": sha256_bytes(
+                        json.dumps(deny_input, sort_keys=True).encode("utf-8")
+                    ),
+                    "decision": deny,
+                },
             ],
-            "negative_test": {"mutation": "read_repository -> write_repository", "observed": "denied"},
+            "negative_test": {
+                "mutation": "read_repository -> write_repository",
+                "observed": "denied",
+            },
             "scope": [
                 "proves deterministic external policy evaluation for the fixed corpus",
                 "does not prove Open-System-One integration",
@@ -86,6 +124,7 @@ def main() -> int:
         }
         print(json.dumps(receipt, indent=2, sort_keys=True))
         return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())
