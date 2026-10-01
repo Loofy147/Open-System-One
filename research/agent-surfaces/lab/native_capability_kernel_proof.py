@@ -56,7 +56,18 @@ def main() -> int:
         pending, pending_reason = kernel.decide(side_effect_request)
         assert pending is Decision.APPROVAL_REQUIRED
         assert pending_reason == "explicit_approval_required"
-        kernel.approve(side_effect_request.run_id)
+        other_side_effect = CapabilityRequest(
+            run_id=side_effect_request.run_id,
+            subject=side_effect_request.subject,
+            capability=side_effect_request.capability,
+            target=side_effect_request.target,
+            purpose="second side effect",
+            idempotency_key="native-p0-side-effect-other",
+            side_effect=True,
+        )
+        other_pending, _ = kernel.decide(other_side_effect)
+        assert other_pending is Decision.APPROVAL_REQUIRED
+        kernel.approve(side_effect_request.idempotency_key)
         approved, _ = kernel.decide(side_effect_request)
         assert approved is Decision.ALLOW
 
@@ -88,6 +99,7 @@ def main() -> int:
                 "policy_and_relation_intersection": allow.value,
                 "same_authority_idempotency": replay == first,
                 "approval_boundary": pending.value,
+                "approval_scope": other_pending.value,
                 "revocation": revoked.value,
                 "revoked_replay": replay_after_revoke,
                 "historical_receipt_authorization": receipt["authorization_at_execution"],
