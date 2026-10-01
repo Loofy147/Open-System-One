@@ -544,23 +544,39 @@
       "status": "MERGED",
       "resolution_condition": "Every new experiment links to prior target/claim identities before execution.",
       "next_discriminating_action": "Make lineage_ref mandatory in new verification records."
+    },
+    {
+      "burden_id": "bt-gapengine-risk-margin-structure",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py plan() margin-based selection",
+        "GAP_ENGINE_AUDIT_v0.1"
+      ],
+      "scope": "Gap Engine planner",
+      "statement": "The deterministic residual objective is monotone/submodular under additive nonnegative rates, but the actual planner selects subsets using risk-adjusted margins containing mechanism-effect uncertainty; those margins need not preserve the same monotonicity or submodularity properties.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "The planner has an explicitly validated combinatorial property, or its greedy branch is treated as heuristic without inherited deterministic guarantees.",
+      "consequence": "Deterministic R3/R7 reasoning could be incorrectly applied to the stochastic planner objective.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Known-truth tests establish the relevant property/approximation behavior for the risk-adjusted objective, or the contract explicitly drops the deterministic guarantee.",
+      "next_discriminating_action": "Construct small exact instances and adversarial uncertainty cases; compare greedy risk-margin selection to exact risk-margin optimum."
     }
   ],
   "force_summary": {
-    "discovered": 33,
-    "classified": 33,
+    "discovered": 34,
+    "classified": 34,
     "unclassified": 0,
     "ownerless_actionless": 0,
     "silent_defer": 0,
     "current_status_counts": {
-      "PROVING": 21,
+      "PROVING": 22,
       "BOUNDED": 6,
       "ABSORBED": 2,
       "DEFERRED": 1,
       "REBASED": 1,
       "AUTOMATION_TESTED": 1,
-      "MERGED": 1,
-      "unresolved_coverage_note": 1
+      "MERGED": 1
     },
     "no_mvp_authorized": true,
     "product_opportunity_state": "NO_CONFIRMED_PRODUCT_OPPORTUNITY"
