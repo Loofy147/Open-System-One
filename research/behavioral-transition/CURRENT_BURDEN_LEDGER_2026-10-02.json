@@ -1,0 +1,568 @@
+{
+  "schema_version": "current-burden-ledger-v0.4",
+  "date": "2026-10-02",
+  "scope_status": "HIGH_SALIENCE_CURRENT_CORPUS; NOT_EXHAUSTIVE_REPOSITORY_SCAN",
+  "note": "This ledger intentionally treats coverage gaps as burdens. Private repositories whose README could not be fetched through the connected GitHub file surface are not silently considered clean.",
+  "force_rule": "Every known burden must receive KILL, MERGE, ABSORB, AUTOMATE, BOUND, PROVE, DEFER, or REBASE. No bare OPEN state is allowed.",
+  "burdens": [
+    {
+      "burden_id": "bt-gapengine-weight-semantics",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "user-supplied gap_engine.py 2026-10-02",
+        "GAP_ENGINE_TRANSITION_INTEGRATION_v0.1"
+      ],
+      "scope": "Gap Engine",
+      "statement": "The current closure equation algebraically cancels weight w_i, although the model describes w_i as weighted demand.",
+      "burden_class": "ARCHITECTURE_DEBT",
+      "observed_state": "weight changes do not affect closure under the current equations",
+      "target_transition": "w_i has one explicit semantic role that is observable and tested",
+      "consequence": "A declared priority signal can be semantically inert and mislead planning.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Choose and implement one weight contract; add regression tests showing weight changes alter only the intended quantity.",
+      "next_discriminating_action": "Freeze weighted-residual vs priority-only semantics and rerun model/planner properties."
+    },
+    {
+      "burden_id": "bt-gapengine-confidence-semantics",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "GAP_ENGINE_AUDIT_v0.1",
+        "user-reported 1500-world selftest"
+      ],
+      "scope": "Gap Engine",
+      "statement": "The confidence parameter is used in a Bonferroni construction but the complete plan includes multiple estimated uncertainty sources.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Declared plan-coverage semantics match an independently validated joint procedure.",
+      "consequence": "A nominal confidence label could be interpreted as a stronger guarantee than the model supports.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Independent known-truth coverage test validates the exact planning procedure or the contract is renamed as empirical risk calibration.",
+      "next_discriminating_action": "Run exact reproduction plus independent generator and report empirical joint coverage."
+    },
+    {
+      "burden_id": "bt-gapengine-feedback-identification",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py reconcile/apply_update",
+        "GAP_ENGINE_AUDIT_v0.1"
+      ],
+      "scope": "Gap Engine",
+      "statement": "Feedback measures selected-set aggregate lift and proportionally rescales selected mechanisms; individual mechanism effects are not identified.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Feedback distinguishes individual effects and interactions when the experiment design permits identification.",
+      "consequence": "A group-level calibration could be mistaken for causal attribution.",
+      "disposition": "BOUND",
+      "status": "BOUNDED",
+      "resolution_condition": "Current claims restricted to aggregate selected-set calibration until identifiable pilot design exists.",
+      "next_discriminating_action": "Design isolated and joint pilots before promoting individual mechanism estimates."
+    },
+    {
+      "burden_id": "bt-gapengine-missing-rate",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py plan()",
+        "GAP_ENGINE_AUDIT_v0.1"
+      ],
+      "scope": "Gap Engine",
+      "statement": "missing_rate is a deterministic equivalent-rate lower bound under uncertainty-free new lift, not a general minimum for an uncertain mechanism.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Output names and semantics distinguish deterministic lower bound from uncertain mechanism requirement.",
+      "consequence": "Users may overinterpret the quantity as an exact requirement.",
+      "disposition": "ABSORB",
+      "status": "ABSORBED",
+      "resolution_condition": "Keep the narrower field name and semantics in the integration contract.",
+      "next_discriminating_action": "Use missing_rate_deterministic_lower_bound in all downstream records."
+    },
+    {
+      "burden_id": "bt-gapengine-zero-residual",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py fit_dim"
+      ],
+      "scope": "Gap Engine",
+      "statement": "Exact target hits are dropped because log(0) is undefined.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Zero-distance observations are handled explicitly without silent censoring bias.",
+      "consequence": "Observed target hits can alter rate estimation if omitted non-randomly.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Adopt and validate a floor, censoring model, or explicit non-informative exclusion contract.",
+      "next_discriminating_action": "Run zero-residual corpus and compare estimators."
+    },
+    {
+      "burden_id": "bt-gapengine-overshoot",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py absolute residual"
+      ],
+      "scope": "Gap Engine",
+      "statement": "Absolute distance assumes the process remains a meaningful monotone approach to target; crossing can break the constant-rate model.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Direction/crossing semantics are explicit and verified.",
+      "consequence": "A fitted decay rate can become physically misleading after target crossing.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Support direction-aware targets or explicitly reject crossing data.",
+      "next_discriminating_action": "Run synthetic crossing/overshoot stress cases."
+    },
+    {
+      "burden_id": "bt-gapengine-nonstationary",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py constant k"
+      ],
+      "scope": "Gap Engine",
+      "statement": "The estimator and forecast assume a constant natural rate over the observation and horizon.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Rate drift/change-point cases are detected or excluded with an explicit oracle.",
+      "consequence": "Forecast error can grow substantially under regime change.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Stress test supports a bounded drift detector or a documented stationarity requirement.",
+      "next_discriminating_action": "Compare constant-rate fit with change-point generator."
+    },
+    {
+      "burden_id": "bt-gapengine-correlated-effects",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py Var(L)"
+      ],
+      "scope": "Gap Engine",
+      "statement": "Mechanism-effect variance is added as if component estimates are independent unless covariance is explicitly modeled.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Uncertainty propagation supports correlated pilot estimates when present.",
+      "consequence": "Plan margins can be miscalibrated with shared pilot sources.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Joint covariance representation exists or independence is enforced by schema.",
+      "next_discriminating_action": "Run correlated pilot covariance simulation."
+    },
+    {
+      "burden_id": "bt-gapengine-interactions",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py interactions",
+        "user-reported selftest"
+      ],
+      "scope": "Gap Engine",
+      "statement": "Interaction terms are optional and the current feedback path does not identify their contribution robustly.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Interaction-aware plans remain valid under correctly specified and misspecified interaction structure.",
+      "consequence": "Independent additive effects can overstate or understate achievable lift.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Joint pilot designs and an independent oracle separate additive and interaction effects.",
+      "next_discriminating_action": "Run isolated-singleton, pair, and higher-order design with known truth."
+    },
+    {
+      "burden_id": "bt-gapengine-large-m",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "gap_engine.py M>16 branch",
+        "GAP_ENGINE_AUDIT_v0.1"
+      ],
+      "scope": "Gap Engine",
+      "statement": "M>16 switches to greedy+prune while the reported selftest uses M=8.",
+      "burden_class": "VERIFICATION_DEBT",
+      "target_transition": "Large-M planner is quantitatively characterized against an exact oracle on reduced instances.",
+      "consequence": "Scalability path can silently trade feasibility or cost quality for runtime.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Adversarial M in 17,24,32,64 tested against exact reduced-instance oracle.",
+      "next_discriminating_action": "Build a large-M planner benchmark corpus."
+    },
+    {
+      "burden_id": "bt-gapengine-replay",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "GAP_ENGINE_TRANSITION_INTEGRATION_v0.1"
+      ],
+      "scope": "Gap Engine",
+      "statement": "The 1500-world selftest is currently user-reported, not independently reproduced from a pinned repo artifact.",
+      "burden_class": "VERIFICATION_DEBT",
+      "target_transition": "Exact selftest is reproducible from immutable source/spec/oracle revisions.",
+      "consequence": "Current simulation evidence cannot yet be independently replayed.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Pinned code+spec+seed reproduces all primary metrics within declared numerical tolerance.",
+      "next_discriminating_action": "Commit engine and fixtures, then execute CI reproduction."
+    },
+    {
+      "burden_id": "oso-banking77-receipt",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Open-System-One@main:README.md"
+      ],
+      "scope": "Open-System-One decision research",
+      "statement": "The real-data BANKING77 pilot is implemented in the browser lab but its receipt is pending.",
+      "burden_class": "VERIFICATION_DEBT",
+      "target_transition": "Pilot result is linked to reproducible receipt and evidence artifact.",
+      "consequence": "Real-data execution cannot yet be reconstructed from the evidence chain.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Receipt captures exact source revision, dataset/split, execution, result, and artifact digest.",
+      "next_discriminating_action": "Generate the pending receipt or kill the pilot claim."
+    },
+    {
+      "burden_id": "oso-set-aware-open",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Open-System-One@main:README.md"
+      ],
+      "scope": "Open-System-One decision research",
+      "statement": "Set-aware advantage on real decision data remains open.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "A bounded known-truth/real-data comparison resolves whether the set-aware representation adds verified benefit.",
+      "consequence": "The repository carries an unresolved claim that can attract unnecessary implementation work.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Pre-registered benchmark either supports or kills the claim.",
+      "next_discriminating_action": "Define oracle, dataset/version, split, baseline, and kill threshold."
+    },
+    {
+      "burden_id": "oso-conditional-mixture-open",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Open-System-One@main:README.md"
+      ],
+      "scope": "Open-System-One decision research",
+      "statement": "Conditional mixture advantage is open and currently unsupported by the small transfer benchmark.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Claim is resolved against a stronger benchmark or explicitly retired.",
+      "consequence": "Unresolved research branch can consume attention without evidence.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "A decisive benchmark either establishes a bounded effect or closes the question.",
+      "next_discriminating_action": "Design a kill-first benchmark."
+    },
+    {
+      "burden_id": "ck-relation-state-durability",
+      "source_kind": "REPO",
+      "source_refs": [
+        "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json"
+      ],
+      "scope": "Capability Kernel",
+      "statement": "Relation state is in-memory in the recorded proof.",
+      "burden_class": "INTEGRATION_FRICTION",
+      "target_transition": "Authority state needed by a real deployment survives the intended restart boundary.",
+      "consequence": "A restart can lose relationship state even though proof receipts remain.",
+      "disposition": "BOUND",
+      "status": "BOUNDED",
+      "resolution_condition": "Treat durability as out of v0.1 scope until a real lifecycle requires it.",
+      "next_discriminating_action": "Only promote to PROVE when an execution scenario requires durable relations."
+    },
+    {
+      "burden_id": "ck-executor-sandbox-boundary",
+      "source_kind": "REPO",
+      "source_refs": [
+        "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json"
+      ],
+      "scope": "Capability Kernel",
+      "statement": "The local subprocess executor is not an OS sandbox.",
+      "burden_class": "SAFETY_BOUNDARY",
+      "target_transition": "High-power execution cannot cross the core boundary without an explicit containment mechanism.",
+      "consequence": "Confusing capability authorization with isolation would overstate security.",
+      "disposition": "BOUND",
+      "status": "BOUNDED",
+      "resolution_condition": "Core claims remain limited to authorization/coordination; isolation is separate.",
+      "next_discriminating_action": "No new sandbox code unless a concrete capability requires it."
+    },
+    {
+      "burden_id": "ck-policy-exact-match",
+      "source_kind": "REPO",
+      "source_refs": [
+        "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json"
+      ],
+      "scope": "Capability Kernel",
+      "statement": "Policy rules are exact-match only; wildcard/hierarchy semantics are not implemented.",
+      "burden_class": "ARCHITECTURE_DEBT",
+      "target_transition": "Policy language is sufficient for an actual required authority case.",
+      "consequence": "Adding general policy semantics prematurely expands the kernel.",
+      "disposition": "BOUND",
+      "status": "BOUNDED",
+      "resolution_condition": "Keep exact-match until a real authorization requirement falsifies sufficiency.",
+      "next_discriminating_action": "Use need-driven escalation rather than speculative policy features."
+    },
+    {
+      "burden_id": "android-recovery-frontier",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Llms-mcp-android@main:README.md"
+      ],
+      "scope": "Android runtime",
+      "statement": "Caller-side durable UNKNOWN outcome, concurrency recovery, and stale-result ordering remain open.",
+      "burden_class": "OBSERVABILITY_DEBT",
+      "target_transition": "An external effect has a durable, reconciled state after caller/provider failure.",
+      "consequence": "Duplicate or lost external effects remain difficult to resolve safely.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Case-level tests cover UNKNOWN -> COMPLETED or CONFIRMED_NOT_EXECUTED.",
+      "next_discriminating_action": "Run bounded provider/caller failure matrix."
+    },
+    {
+      "burden_id": "android-egress-minimization",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Llms-mcp-android@main:README.md"
+      ],
+      "scope": "Android runtime",
+      "statement": "Egress policy is an admission/classification boundary, not a complete minimization/redaction system.",
+      "burden_class": "SAFETY_BOUNDARY",
+      "target_transition": "Protected remote calls expose only allowed data classes with reconstructable policy evidence.",
+      "consequence": "Allowed transport can still carry unnecessarily broad data.",
+      "disposition": "BOUND",
+      "status": "BOUNDED",
+      "resolution_condition": "Do not claim full minimization; add only against a concrete data-flow case.",
+      "next_discriminating_action": "Create one real sensitive-data egress case before expanding."
+    },
+    {
+      "burden_id": "android-credential-use-isolation",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Llms-mcp-android@main:README.md"
+      ],
+      "scope": "Android runtime",
+      "statement": "Credential storage is protected, but credential-use isolation beyond protected storage remains open.",
+      "burden_class": "SAFETY_BOUNDARY",
+      "target_transition": "Credentials remain references until the final authorized transport boundary.",
+      "consequence": "A protected secret can still leak through intermediate capabilities.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Case-level test shows credential reference cannot become plaintext outside the intended boundary.",
+      "next_discriminating_action": "Design credential-use trace test."
+    },
+    {
+      "burden_id": "android-device-evidence",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/Llms-mcp-android@main:README.md"
+      ],
+      "scope": "Android runtime",
+      "statement": "Current CI confirms JVM tests/debug APK, not real-device correctness.",
+      "burden_class": "VERIFICATION_DEBT",
+      "target_transition": "At least one real-device execution path is tied to a reproducible evidence receipt.",
+      "consequence": "Device-specific lifecycle/performance failures can remain hidden.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Real-device smoke/regression evidence exists for the targeted capabilities.",
+      "next_discriminating_action": "Select the smallest device-level capability case and instrument it."
+    },
+    {
+      "burden_id": "m0-run-id-ownership",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/m0-durable-run@main:README.md"
+      ],
+      "scope": "M0 Durable Run",
+      "statement": "route() accepts run_id but does not generate or own the stable logical request identity.",
+      "burden_class": "INTEGRATION_FRICTION",
+      "target_transition": "Caller contract makes stable logical transition identity explicit and prevents retry from minting a new identity.",
+      "consequence": "A caller can silently defeat idempotency by using a fresh run_id.",
+      "disposition": "ABSORB",
+      "status": "ABSORBED",
+      "resolution_condition": "Keep ownership in the caller contract; add validation only when a second live caller exists.",
+      "next_discriminating_action": "Document stable run-id contract at the integration boundary."
+    },
+    {
+      "burden_id": "m0-real-agent-provider",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Loofy147/m0-durable-run@main:README.md"
+      ],
+      "scope": "M0 Durable Run",
+      "statement": "agent_executor.py is a stub and the real model call is not run in the recorded build.",
+      "burden_class": "VERIFICATION_DEBT",
+      "target_transition": "A real provider call traverses the proven durable envelope with receipt fields.",
+      "consequence": "The generic durable path is not yet validated against a real provider effect.",
+      "disposition": "DEFER",
+      "status": "DEFERRED",
+      "wake_condition": "Real provider credentials/network and a specific integration requirement become available.",
+      "next_discriminating_action": "Reopen only when a concrete provider scenario is selected."
+    },
+    {
+      "burden_id": "opportunity-c1",
+      "source_kind": "REPO",
+      "source_refs": [
+        "CURRENT_OPPORTUNITY_STATE_2026-10-01.json",
+        "OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md"
+      ],
+      "scope": "Opportunity research",
+      "statement": "Offline conflict causal reconciliation remains unresolved after generic conflict tooling was ruled out.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "A fixed incumbent-only corpus establishes whether causal reconstruction still requires manual work.",
+      "consequence": "Open candidate consumes research attention without a decisive disposition.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "F1 reaches kill or survival threshold on frozen 5-case corpus.",
+      "next_discriminating_action": "Execute incumbent-only F1 with frozen oracle."
+    },
+    {
+      "burden_id": "opportunity-c2",
+      "source_kind": "REPO",
+      "source_refs": [
+        "CURRENT_OPPORTUNITY_STATE_2026-10-01.json",
+        "OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md"
+      ],
+      "scope": "Opportunity research",
+      "statement": "Semantic file-handoff breakage remains a hypothesis at the unregistered file-to-process boundary.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "A frozen 10-case corpus establishes whether incumbent workflows already produce the same accept/reject/correct decision.",
+      "consequence": "Building before this test risks reproducing existing file validators/lineage products.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "F2 reaches kill/survival threshold.",
+      "next_discriminating_action": "Execute incumbent-only F2."
+    },
+    {
+      "burden_id": "opportunity-no-confirmed-product",
+      "source_kind": "REPO",
+      "source_refs": [
+        "OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md"
+      ],
+      "scope": "Opportunity decision",
+      "statement": "No confirmed external product opportunity exists in the current audited set.",
+      "burden_class": "CONTEXT_DEBT",
+      "target_transition": "All current candidates either resolve or retain explicit evidence-backed status.",
+      "consequence": "Pressure to manufacture a winner can create artificial product work.",
+      "disposition": "BOUND",
+      "status": "BOUNDED",
+      "resolution_condition": "Do not build solely to remove the empty opportunity state.",
+      "next_discriminating_action": "Let decisive experiments change the state; otherwise keep NO_MVP."
+    },
+    {
+      "burden_id": "conversation-gapengine-unpinned",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "user-supplied gap_engine.py",
+        "1500-world report 2026-10-02"
+      ],
+      "scope": "Conversation-only quantitative work",
+      "statement": "The engine and its 1500-world results are not yet pinned to a repository revision and execution receipt.",
+      "burden_class": "VERIFICATION_DEBT",
+      "target_transition": "Code, seed, generator, oracle, and result become replayable artifacts.",
+      "consequence": "The work risks becoming narrative context instead of durable evidence.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "A pinned artifact and independent run exist.",
+      "next_discriminating_action": "Commit the engine and fixtures; run exact replay."
+    },
+    {
+      "burden_id": "conversation-matching-proof-lineage",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "matching-pattern research thread"
+      ],
+      "scope": "Mathematical research",
+      "statement": "Some matching-pattern claims, computational results, and literature distinctions remain conversation-level unless linked to pinned proof/computation artifacts.",
+      "burden_class": "EPISTEMIC_DEBT",
+      "target_transition": "Each material claim has a source/proof/experiment artifact or remains explicitly UNKNOWN.",
+      "consequence": "Past reasoning can be accidentally treated as established repository evidence.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Claim/evidence/experiment lineage is pinned or claim remains unpromoted.",
+      "next_discriminating_action": "Create a claim ledger with source and exact computational artifacts."
+    },
+    {
+      "burden_id": "portfolio-private-repo-coverage",
+      "source_kind": "GENERATED",
+      "source_refs": [
+        "GitHub connected surface inspection 2026-10-02"
+      ],
+      "scope": "Portfolio sweep",
+      "statement": "Root README fetch returned 404 for Wedgettok and la-rouine-platform through the connected file surface, so those repos cannot be declared exhaustively audited from that route.",
+      "burden_class": "COVERAGE_DEBT",
+      "target_transition": "Current private-repo state is captured through a verifiable source path.",
+      "consequence": "A forced 'everything everywhere' sweep could falsely report completeness.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "Repo-specific audit artifacts are obtained or the repos are explicitly marked coverage-unknown.",
+      "next_discriminating_action": "Use available repo-native/current artifacts or local mounted copies for direct audit."
+    },
+    {
+      "burden_id": "machine-coverage-reconstruction",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "Machine research state"
+      ],
+      "scope": "Machine",
+      "statement": "The current README is only an identity-level surface, while multiple research branches/frontiers exist outside that README.",
+      "burden_class": "COVERAGE_DEBT",
+      "target_transition": "Active research frontiers are represented by current source refs, evidence status, and next discriminating tests.",
+      "consequence": "Branch proliferation can become invisible context debt.",
+      "disposition": "PROVE",
+      "status": "PROVING",
+      "resolution_condition": "A current frontier index is generated from the repository itself.",
+      "next_discriminating_action": "Build a repository-native current frontier index."
+    },
+    {
+      "burden_id": "legacy-research-copies",
+      "source_kind": "REPO",
+      "source_refs": [
+        "Open-System-One LEGACY_SALVAGE_AUDIT_v0.1.md"
+      ],
+      "scope": "Legacy salvage",
+      "statement": "Legacy repositories contain multiple historical copies, benchmark claims, TODOs, and over-complex runtime ideas.",
+      "burden_class": "REDUNDANCY",
+      "target_transition": "Only retained primitives with explicit source/evidence lineage enter the active system.",
+      "consequence": "Historical copies can re-enter as false current authority.",
+      "disposition": "REBASE",
+      "status": "REBASED",
+      "resolution_condition": "Use the salvage audit as disposition boundary; do not revive stale claims without new evidence.",
+      "next_discriminating_action": "Attach provenance record whenever a legacy primitive is imported."
+    },
+    {
+      "burden_id": "conversation-context-reconstruction",
+      "source_kind": "CONVERSATION",
+      "source_refs": [
+        "current multi-project research corpus"
+      ],
+      "scope": "Cross-project coordination",
+      "statement": "A large portion of work can require repeated reconstruction of why a decision, experiment, or limitation exists.",
+      "burden_class": "CONTEXT_DEBT",
+      "target_transition": "Continuation starts from machine-readable frontier records rather than conversational memory.",
+      "consequence": "Repeated context recovery consumes attention and risks status drift.",
+      "disposition": "AUTOMATE",
+      "status": "AUTOMATION_TESTED",
+      "resolution_condition": "Canonical transition/burden indexes become the continuation surface.",
+      "next_discriminating_action": "Complete deterministic regeneration and use the indexes as the default continuation input."
+    },
+    {
+      "burden_id": "duplicate-verification-work",
+      "source_kind": "GENERATED",
+      "source_refs": [
+        "transition system integration matrix",
+        "legacy salvage audit",
+        "opportunity audit"
+      ],
+      "scope": "Cross-project verification",
+      "statement": "The same conceptual question can be retested under different names or repositories without shared identity.",
+      "burden_class": "REDUNDANCY",
+      "target_transition": "Equivalent verification targets share a stable transition/claim identity and can reuse prior negative evidence.",
+      "consequence": "Research cycles waste effort rediscovering killed paths.",
+      "disposition": "MERGE",
+      "status": "MERGED",
+      "resolution_condition": "Every new experiment links to prior target/claim identities before execution.",
+      "next_discriminating_action": "Make lineage_ref mandatory in new verification records."
+    }
+  ],
+  "force_summary": {
+    "discovered": 32,
+    "classified": 32,
+    "unclassified": 0,
+    "ownerless_actionless": 0,
+    "silent_defer": 0,
+    "current_status_counts": {
+      "PROVING": 17,
+      "BOUNDED": 4,
+      "ABSORBED": 2,
+      "DEFERRED": 1,
+      "REBASED": 1,
+      "AUTOMATION_TESTED": 1,
+      "MERGED": 1,
+      "unresolved_coverage_note": 1
+    },
+    "no_mvp_authorized": true,
+    "product_opportunity_state": "NO_CONFIRMED_PRODUCT_OPPORTUNITY"
+  }
+}
