@@ -1,6 +1,6 @@
 # Behavioral Transition Re-Representation Audit — 2026-10-02
 
-Status: REGENERATED / VALIDATION PENDING
+Status: REGENERATED / STRUCTURAL VALIDATION PASS
 Source methodology: Experimental Opportunity Protocol v0.2
 Target representation: Behavioral Transition Protocol v0.3
 
@@ -171,7 +171,7 @@ This limitation must remain visible until a new direct observation or source art
 
 ## 9. Validation contract
 
-The representation passes only if:
+The current connector-side structural validation passes the accounting/invariant checks listed below. Full deterministic replay remains an explicitly open verification step.\n\nThe representation passes only if:
 
 [
 	ext{mapped source coverage}=100%
