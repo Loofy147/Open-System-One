@@ -8,7 +8,7 @@
     "P0.02-OpenSandbox": "BLOCKED_ENVIRONMENT",
     "P0.03-OPA": "EXPERIMENTALLY_SUPPORTED",
     "P0.04-OpenFGA": "BLOCKED_ENVIRONMENT",
-    "P0.05-Cedar": "BLOCKED_ENVIRONMENT",
+    "P0.05-Cedar": "EXPERIMENTALLY_SUPPORTED",
     "P0.06-SPIFFE-SPIRE": "BLOCKED_ENVIRONMENT",
     "P0.07-browser-substrate": "EXPERIMENTALLY_SUPPORTED",
     "P0.07-Playwright-MCP": "BLOCKED_PACKAGE_OR_SERVER",
@@ -36,6 +36,13 @@
       "head_sha": "248af9e55fd7049e66e599d94c0fab76ac3fb936",
       "conclusion": "success",
       "evidence_file": "research/agent-surfaces/evidence/P0_OPA_POLICY_2026-10-01.json"
+    },
+    "cedar": {
+      "run_id": 36919985797,
+      "run_number": 3,
+      "head_sha": "98f0b59ccfd91e8b6601907f13334413dfde8848",
+      "conclusion": "success",
+      "evidence_file": "research/agent-surfaces/evidence/P0_CEDAR_POLICY_2026-10-01.json"
     }
   },
   "historical_failures_recorded": {
@@ -48,6 +55,11 @@
       "run_id": 36919671101,
       "cause": "invalid Rego fixture for OPA v1 runtime",
       "repaired_in_commit": "248af9e55fd7049e66e599d94c0fab76ac3fb936"
+    },
+    "cedar_harness_failure": {
+      "run_id": 36919893851,
+      "cause": "harness treated Cedar DENY exit code 2 as an execution error",
+      "repaired_in_commit": "98f0b59ccfd91e8b6601907f13334413dfde8848"
     }
   },
   "environment": {
@@ -68,5 +80,5 @@
     "Playwright MCP, OpenInference, Inspect AI, AgentDojo and A2A TCK remain uninstalled in the local environment.",
     "The browser proof is still a generic Playwright substrate proof, not a Playwright MCP proof."
   ],
-  "next_environment": "Continue P0 through GitHub Actions: sandbox/container proofs first, then policy/identity, browser MCP, tracing/evaluation, and protocol compatibility. Promote only after positive+negative+receipt+independent verification+removal."
+  "next_environment": "Continue P0 through GitHub Actions. Next target: OpenSandbox/OpenShell lifecycle and policy-enforced isolation, then OpenFGA and SPIFFE/SPIRE. Keep external source trees unimported until their narrow proof passes."
 }
