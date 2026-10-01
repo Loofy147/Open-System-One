@@ -27,11 +27,16 @@ jobs:
           git checkout --detach b1a29cf93a823a95913f7943010febb3f29de05c
           test "$(git rev-parse HEAD)" = "b1a29cf93a823a95913f7943010febb3f29de05c"
 
-      - name: Install pinned OpenSandbox SDK and server
+      - name: Install pinned OpenSandbox dependencies
         run: |
           set -euo pipefail
           python -m pip install --upgrade pip
-          python -m pip install /tmp/OpenSandbox/sdks/sandbox/python /tmp/OpenSandbox/server
+          python -m pip install --no-cache-dir /tmp/OpenSandbox/sdks/sandbox/python /tmp/OpenSandbox/server
+          PYTHONPATH="/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src" python -c "import opensandbox_server, opensandbox; print(opensandbox_server.__file__); print(opensandbox.__file__)"
+
+      - name: Export pinned OpenSandbox source paths
+        run: |
+          echo "PYTHONPATH=/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src" >> "$GITHUB_ENV"
 
       - name: Prepare isolated server configuration
         run: |
