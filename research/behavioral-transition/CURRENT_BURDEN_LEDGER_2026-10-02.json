@@ -547,14 +547,14 @@
     }
   ],
   "force_summary": {
-    "discovered": 32,
-    "classified": 32,
+    "discovered": 33,
+    "classified": 33,
     "unclassified": 0,
     "ownerless_actionless": 0,
     "silent_defer": 0,
     "current_status_counts": {
-      "PROVING": 17,
-      "BOUNDED": 4,
+      "PROVING": 21,
+      "BOUNDED": 6,
       "ABSORBED": 2,
       "DEFERRED": 1,
       "REBASED": 1,
