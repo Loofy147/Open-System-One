@@ -1,6 +1,7 @@
 # Problem Kill Campaign v0.1
 
 Status: RESEARCH_ONLY — NO_MVP_AUTHORIZED
+Governed by: docs/research/EXPERIMENTAL_OPPORTUNITY_PROTOCOL_v0.2.md
 Date: 2026-10-01
 
 ## Core rule
@@ -148,3 +149,7 @@ No MVP authorization, pricing work, launch work, branding work or feature expans
 The only next state is:
 
 PRE-BUILD FALSIFICATION -> one candidate survives -> EXPERIMENTAL WINNER -> evidence -> revalidation -> only then consider whether an MVP is warranted.
+
+## v0.2 enforcement
+
+This campaign is now subordinate to Experimental Opportunity Protocol v0.2. The current finalists must pass Action Delta and Pre-build Kill Test gates before any BUILD_ALLOWED state. A surviving candidate is not an MVP opportunity until the falsification experiment fails to kill the intervention.
