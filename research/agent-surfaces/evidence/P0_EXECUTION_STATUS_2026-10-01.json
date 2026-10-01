@@ -70,6 +70,16 @@
         "post-destroy negative test",
         "independent Docker cleanup"
       ]
+    },
+    "native_capability_kernel": {
+      "run_id": 36926926846,
+      "run_number": 6,
+      "head_sha": "cf4d6ffa122a5a0a0ea613bd0276349f42bb6d11",
+      "conclusion": "success",
+      "unit_tests": "8/8",
+      "proof_lab": "success",
+      "receipt_validation": "RECEIPT_OK",
+      "evidence_file": "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json"
     }
   },
   "historical_failures_recorded": {
@@ -124,5 +134,5 @@
     "Playwright MCP, OpenInference, Inspect AI, AgentDojo and A2A TCK remain uninstalled in the local environment.",
     "The browser proof is still a generic Playwright substrate proof, not a Playwright MCP proof."
   ],
-  "next_environment": "Wait for the current OpenSandbox run to produce a runtime result; do not promote P0.02 until the full lifecycle and cleanup checks succeed."
+  "next_environment": "Native Capability Kernel is EXPERIMENTALLY_SUPPORTED as a control-plane primitive. Continue by adding durable relation/policy stores and replaceable hardened execution adapters; do not promote the local subprocess executor to a sandbox."
 }
