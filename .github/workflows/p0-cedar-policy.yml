@@ -1,0 +1,46 @@
+name: P0 Cedar policy proof
+
+on:
+  push:
+    branches:
+      - research/dots-readiness-v0.1
+  workflow_dispatch:
+
+jobs:
+  cedar-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pinned branch
+        uses: actions/checkout@v4
+
+      - name: Install pinned Cedar CLI
+        env:
+          CEDAR_VERSION: "cedar-policy-cli-v4.13.0"
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/cedar
+          curl -fsSL "https://github.com/cedar-policy/cedar/releases/download/$CEDAR_VERSION/cedar-policy-cli-x86_64-unknown-linux-gnu.tar.xz" -o /tmp/cedar/cedar.tar.xz
+          curl -fsSL "https://github.com/cedar-policy/cedar/releases/download/$CEDAR_VERSION/cedar-policy-cli-x86_64-unknown-linux-gnu.tar.xz.sha256" -o /tmp/cedar/cedar.sha256
+          expected="$(awk '{print $1}' /tmp/cedar/cedar.sha256)"
+          actual="$(sha256sum /tmp/cedar/cedar.tar.xz | awk '{print $1}')"
+          test "$expected" = "$actual"
+          mkdir -p /tmp/cedar/extract
+          tar -xJf /tmp/cedar/cedar.tar.xz -C /tmp/cedar/extract
+          cedar_bin="$(find /tmp/cedar/extract -type f -name cedar -print -quit)"
+          test -n "$cedar_bin"
+          chmod +x "$cedar_bin"
+          echo "CEDAR_BIN=$cedar_bin" >> "$GITHUB_ENV"
+          "$cedar_bin" --version
+
+      - name: Run P0.05 proof
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p0-cedar
+          python research/agent-surfaces/lab/p0_cedar_policy_proof.py | tee /tmp/p0-cedar/receipt.json
+
+      - name: Upload durable CI receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-cedar-receipt
+          path: /tmp/p0-cedar/receipt.json
+          if-no-files-found: error
