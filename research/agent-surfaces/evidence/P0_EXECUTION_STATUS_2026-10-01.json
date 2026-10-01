@@ -5,7 +5,7 @@
   "current_state": "PARTIAL_PROGRESS",
   "results": {
     "P0.01-OpenShell": "BLOCKED_ENVIRONMENT",
-    "P0.02-OpenSandbox": "BLOCKED_ENVIRONMENT",
+    "P0.02-OpenSandbox": "OPEN",
     "P0.03-OPA": "EXPERIMENTALLY_SUPPORTED",
     "P0.04-OpenFGA": "EXPERIMENTALLY_SUPPORTED",
     "P0.05-Cedar": "EXPERIMENTALLY_SUPPORTED",
@@ -50,6 +50,26 @@
       "head_sha": "b7a7237cc64d829bfb261c99d89742c704975911",
       "conclusion": "success",
       "evidence_file": "research/agent-surfaces/evidence/P0_OPENFGA_RELATION_2026-10-01.json"
+    },
+    "opensandbox_current": {
+      "run_id": 36921516623,
+      "run_number": 13,
+      "head_sha": "7e94b522a9311fdb9b4c1a0c37b76c3f625fde01",
+      "status": "in_progress",
+      "completed_steps": [
+        "Docker runtime verification",
+        "release checkout at b1a29cf93a823a95913f7943010febb3f29de05c",
+        "SDK/server installation",
+        "source path validation",
+        "config file generation",
+        "config validation"
+      ],
+      "pending_steps": [
+        "server startup",
+        "create/inspect/execute/read-artifact/destroy proof",
+        "post-destroy negative test",
+        "independent Docker cleanup"
+      ]
     }
   },
   "historical_failures_recorded": {
@@ -72,7 +92,19 @@
       "run_id": 36920861340,
       "cause": "Bash filename interpolation used an undefined OPENFGA_VERSION_linux_amd64 variable; after correction, the same workflow then failed only because the CLI uses the version subcommand rather than --version.",
       "repaired_commit": "b7a7237cc64d829bfb261c99d89742c704975911"
-    }
+    },
+    "opensandbox_startup": [
+      {
+        "run_id": 36920399095,
+        "cause": "installed entrypoint failed to import opensandbox_server after package installation",
+        "repaired_by": "source-tree PYTHONPATH execution"
+      },
+      {
+        "run_id": 36921197544,
+        "cause": "config validation read ~/.sandbox.toml instead of the generated runner-temp config",
+        "repaired_in_commit": "b082c858e7c4d875be88f8cf7808b75d29c67496"
+      }
+    ]
   },
   "environment": {
     "local_python": "3.13.5",
@@ -92,5 +124,5 @@
     "Playwright MCP, OpenInference, Inspect AI, AgentDojo and A2A TCK remain uninstalled in the local environment.",
     "The browser proof is still a generic Playwright substrate proof, not a Playwright MCP proof."
   ],
-  "next_environment": "Continue P0 through GitHub Actions. Next target: OpenSandbox/OpenShell lifecycle and policy-enforced isolation, then OpenFGA and SPIFFE/SPIRE. Keep external source trees unimported until their narrow proof passes."
+  "next_environment": "Wait for the current OpenSandbox run to produce a runtime result; do not promote P0.02 until the full lifecycle and cleanup checks succeed."
 }
