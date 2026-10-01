@@ -18,7 +18,8 @@
       "approval_boundary": "blocked before mutation",
       "authorized_commit": "COMMITTED",
       "post_revoke_replay": "blocked by current authority decision"
-    }
+    },
+    "proof_lab": "not executed separately; proof script committed for CI."
   },
   "hardening_found_during_verification": [
     "receipt construction duplicate-field bug fixed before evidence capture",
@@ -30,17 +31,17 @@
     {
       "claim": "Direct state deltas are bounded by declared scope and change budget.",
       "status": "EXPERIMENTALLY_SUPPORTED",
-      "evidence": "10/10 local unit tests plus direct proof lab semantics."
+      "evidence": "10/10 local unit tests."
     },
     {
       "claim": "Rejected or partially failed mutations can be rolled back when the backend supports restore().",
       "status": "EXPERIMENTALLY_SUPPORTED",
-      "evidence": "unexpected-scope, budget, delete, postcondition, and executor-failure rollback tests."
+      "evidence": "10/10 local unit tests covering unexpected scope, budget, delete, postcondition, and executor-failure rollback."
     },
     {
       "claim": "Capability authority can be composed upstream so approval and revoke are not bypassed by idempotent replay.",
       "status": "EXPERIMENTALLY_SUPPORTED",
-      "evidence": "coordinator integration smoke."
+      "evidence": "coordinator integration smoke: blocked before approval, committed after ALLOW, blocked again after authority denial."
     }
   ],
   "limitations": [
@@ -49,5 +50,6 @@
     "Rollback is backend-dependent.",
     "Non-transactional distributed side effects require compensating actions.",
     "TOCTOU between authority check and external commit remains an adapter-level concern."
-  ]
+  ],
+  "evidence_commit": "eb33d1c4fb254a3ecaa5137be5953a5f0cf7c4d9"
 }
