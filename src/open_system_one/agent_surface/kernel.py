@@ -5,7 +5,6 @@ from enum import Enum
 import hashlib
 import json
 from pathlib import Path
-import shlex
 import subprocess
 import tempfile
 from typing import Iterable
@@ -38,6 +37,8 @@ class ExecutionObservation:
     artifact_sha256: str | None
     artifact_path: str | None
     target: str
+    decision: Decision
+    decision_reason: str
 
 
 @dataclass(frozen=True)
@@ -65,17 +66,21 @@ class RelationStore:
 
 
 class CapabilityKernel:
-    """Native request -> policy -> approval -> bounded execution -> observation."""
+    """Native request -> policy -> approval -> execution -> observation."""
 
     def __init__(self, root: str | Path | None = None) -> None:
-        self.root = Path(root or tempfile.mkdtemp(prefix="open-system-one-kernel-")).resolve()
+        self.root = Path(
+            root or tempfile.mkdtemp(prefix="open-system-one-kernel-")
+        ).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
         self.relations = RelationStore()
         self._rules: set[PolicyRule] = set()
         self._approved_runs: set[str] = set()
         self._executed_keys: dict[str, ExecutionObservation] = {}
 
-    def add_rule(self, *, subject: str, capability: str, target: str, allow: bool = True) -> None:
+    def add_rule(
+        self, *, subject: str, capability: str, target: str, allow: bool = True
+    ) -> None:
         self._rules.add(PolicyRule(subject, capability, target, allow))
 
     def grant(self, *, subject: str, capability: str, target: str) -> None:
@@ -108,19 +113,22 @@ class CapabilityKernel:
         *,
         artifact_relative_path: str | None = None,
     ) -> ExecutionObservation:
-        cached = self._executed_keys.get(request.idempotency_key)
-        if cached is not None:
-            return cached
-
+        # Revalidate authority before replay. A cached observation must never
+        # resurrect authority that was later revoked.
         decision, reason = self.decide(request)
         if decision is not Decision.ALLOW:
             raise PermissionError(f"{decision.value}: {reason}")
+
+        cached = self._executed_keys.get(request.idempotency_key)
+        if cached is not None:
+            return cached
 
         argv = list(command)
         if not argv:
             raise ValueError("command must not be empty")
 
-        # The executor is intentionally narrow: subprocess cwd is fixed to root.
+        # This executor fixes the process working root. It is not an OS sandbox;
+        # hardened isolation remains an external capability behind this boundary.
         proc = subprocess.run(
             argv,
             cwd=self.root,
@@ -147,12 +155,15 @@ class CapabilityKernel:
             artifact_sha256=artifact_sha256,
             artifact_path=artifact_path,
             target=request.target,
+            decision=decision,
+            decision_reason=reason,
         )
         self._executed_keys[request.idempotency_key] = observation
         return observation
 
-    def receipt(self, request: CapabilityRequest, observation: ExecutionObservation) -> dict:
-        decision, reason = self.decide(request)
+    def receipt(
+        self, request: CapabilityRequest, observation: ExecutionObservation
+    ) -> dict:
         payload = {
             "schema_version": "agent-surface-receipt-v0.1",
             "run_id": request.run_id,
@@ -161,19 +172,27 @@ class CapabilityKernel:
             "target": request.target,
             "purpose": request.purpose,
             "idempotency_key": request.idempotency_key,
-            "policy_decision": decision.value,
-            "policy_reason": reason,
+            "authorization_at_execution": {
+                "decision": observation.decision.value,
+                "reason": observation.decision_reason,
+            },
             "observation": {
                 "outcome": observation.outcome,
                 "exit_code": observation.exit_code,
-                "stdout_sha256": hashlib.sha256(observation.stdout.encode()).hexdigest(),
-                "stderr_sha256": hashlib.sha256(observation.stderr.encode()).hexdigest(),
+                "stdout_sha256": hashlib.sha256(
+                    observation.stdout.encode()
+                ).hexdigest(),
+                "stderr_sha256": hashlib.sha256(
+                    observation.stderr.encode()
+                ).hexdigest(),
                 "artifact_sha256": observation.artifact_sha256,
                 "artifact_path": observation.artifact_path,
             },
             "replay": {
                 "idempotency_key": request.idempotency_key,
-                "same_observation_on_retry": self._executed_keys.get(request.idempotency_key) == observation,
+                "same_observation_on_retry": (
+                    self._executed_keys.get(request.idempotency_key) == observation
+                ),
             },
         }
         payload["receipt_sha256"] = hashlib.sha256(
