@@ -49,8 +49,8 @@ Do not broaden the runtime architecture merely to remove a documented limitation
 
 ## Wave 4 — Opportunity candidates
 
-19. C1 incumbent-only offline conflict falsification.
-20. C2 incumbent-only semantic file-handoff falsification.
+20. C1 incumbent-only offline conflict falsification.
+21. C2 incumbent-only semantic file-handoff falsification.
 
 For both:
 - freeze corpus;
