@@ -82,10 +82,12 @@ jobs:
         env:
           OPENSANDBOX_INSECURE_SERVER: "YES"
           HOME: ${{ runner.temp }}/p0-home
+          SANDBOX_CONFIG_PATH: ${{ runner.temp }}/p0-home/.sandbox.toml
           PYTHONPATH: "/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src"
         run: |
           set -euo pipefail
-          opensandbox-server --config "$HOME/.sandbox.toml" > "$RUNNER_TEMP/opensandbox-server.log" 2>&1 &
+          cd /tmp/OpenSandbox/server
+          python -m opensandbox_server.main > "$RUNNER_TEMP/opensandbox-server.log" 2>&1 &
           echo $! > "$RUNNER_TEMP/opensandbox-server.pid"
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:8080/health >/tmp/opensandbox-health.json; then
