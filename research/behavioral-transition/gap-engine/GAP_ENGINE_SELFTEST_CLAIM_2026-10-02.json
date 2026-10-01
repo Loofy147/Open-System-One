@@ -1,0 +1,52 @@
+{
+  "schema_version": "gap-engine-selftest-claim-v0.1",
+  "date": "2026-10-02",
+  "status": "USER_REPORTED / SIMULATION_SUPPORTED",
+  "source": "user-supplied gap_engine.py and reported 1500-world run",
+  "independent_execution_in_repo": "UNKNOWN",
+  "worlds": 1500,
+  "reported_results": {
+    "rate_recovery_95ci": 0.952,
+    "gap_detection_confidence": 0.9,
+    "truly_gapped_flagged_gap": 0.956,
+    "truly_gapped_wrong_no_gap": 0.001,
+    "truly_closing_wrong_gap": 0.064,
+    "truly_closing_uncertain": 0.332,
+    "nominal_z0_success": 0.687,
+    "z02_success": 0.935,
+    "z04_success": 0.965,
+    "z09_success": "~1.000",
+    "z0_cost_ratio": 1,
+    "z02_cost_ratio": 1.27,
+    "z04_cost_ratio": 1.39,
+    "z09_cost_ratio": 2.1,
+    "feedback_abs_error_before": 0.0145,
+    "feedback_abs_error_after": 0.0102,
+    "feedback_improved_fraction": 0.642
+  },
+  "interpretation": {
+    "model_correctness": "not independently reproduced here",
+    "statistical_calibration": "supported only for the stated synthetic generator",
+    "real_world_validity": "UNKNOWN",
+    "opportunity_validity": "NOT TESTED"
+  },
+  "limitations": [
+    "Synthetic Gaussian log-noise and stationary-rate assumptions.",
+    "Planner confidence is not a proven joint forecast coverage guarantee.",
+    "Weights cancel algebraically in the current closure condition.",
+    "Feedback calibrates aggregate selected-set lift rather than identifying individual mechanism effects.",
+    "M > 16 planner branch is not covered by the 1500-world default.",
+    "Zero residuals are dropped; target crossing/overshoot is not modeled.",
+    "Cause attribution is a modeling assumption, not identifiable from rate data alone."
+  ],
+  "required_revalidation": [
+    "Exact reproduction from pinned source.",
+    "Independent generator family.",
+    "Weighted semantics after contract correction.",
+    "Zero-residual and overshoot cases.",
+    "Correlated mechanism uncertainty.",
+    "Interaction identification.",
+    "M > 16 exact-small-instance oracle comparison.",
+    "Real transition replay against strongest no-build baseline."
+  ]
+}
