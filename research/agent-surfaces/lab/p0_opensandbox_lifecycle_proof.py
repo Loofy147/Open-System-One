@@ -85,7 +85,8 @@ def run() -> dict:
         "source_ref": {
             "repository": "opensandbox-group/OpenSandbox",
             "release": "release-1.1.0",
-            "release_tag_commit": "836b182e208e66c046026fa0f633e089321f1efb",
+            "release_tag_object": "836b182e208e66c046026fa0f633e089321f1efb",
+            "release_commit": "b1a29cf93a823a95913f7943010febb3f29de05c",
             "inspected_current_commit": "c7dc78a4090e5de2b9119e9bd93952cae24f87bd",
         },
         "runtime": {
