@@ -75,7 +75,7 @@ class CapabilityKernel:
         self.root.mkdir(parents=True, exist_ok=True)
         self.relations = RelationStore()
         self._rules: set[PolicyRule] = set()
-        self._approved_runs: set[str] = set()
+        self._approved_keys: set[str] = set()
         self._executed_keys: dict[str, ExecutionObservation] = {}
 
     def add_rule(
@@ -89,19 +89,26 @@ class CapabilityKernel:
     def revoke(self, *, subject: str, capability: str, target: str) -> None:
         self.relations.revoke(subject, capability, target)
 
-    def approve(self, run_id: str) -> None:
-        self._approved_runs.add(run_id)
+    def approve(self, idempotency_key: str) -> None:
+        self._approved_keys.add(idempotency_key)
 
     def decide(self, request: CapabilityRequest) -> tuple[Decision, str]:
-        rule = PolicyRule(request.subject, request.capability, request.target, True)
-        explicitly_allowed = rule in self._rules
+        deny_rule = PolicyRule(
+            request.subject, request.capability, request.target, False
+        )
+        allow_rule = PolicyRule(
+            request.subject, request.capability, request.target, True
+        )
+        if deny_rule in self._rules:
+            return Decision.DENY, "explicit_policy_deny"
+
         relation_allowed = self.relations.permits(
             request.subject, request.capability, request.target
         )
-        if not (explicitly_allowed and relation_allowed):
+        if allow_rule not in self._rules or not relation_allowed:
             return Decision.DENY, "policy_or_relation_denied"
 
-        if request.side_effect and request.run_id not in self._approved_runs:
+        if request.side_effect and request.idempotency_key not in self._approved_keys:
             return Decision.APPROVAL_REQUIRED, "explicit_approval_required"
 
         return Decision.ALLOW, "policy_and_relation_allowed"
