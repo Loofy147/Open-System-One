@@ -1,0 +1,58 @@
+{
+  "schema_version": "oss-p0-opa-proof-v0.1",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "test": "P0.03-OPA",
+  "source_ref": {
+    "repository": "open-policy-agent/opa",
+    "inspected_commit": "d566972d31c899e4826cbeb78013b027417721b9",
+    "runtime_release": "v1.21.1",
+    "note": "runtime release is used for execution; source HEAD and release are recorded separately"
+  },
+  "execution": {
+    "github_actions_run_id": 36919727979,
+    "run_number": 2,
+    "job_id": 110562469941,
+    "conclusion": "success",
+    "artifact_id": 11191043258,
+    "artifact_zip_sha256": "fc7f27a0dd476f99220677bca5cb4f3d26aaad96c0a45674a884c6ef744f0a33"
+  },
+  "runtime": {
+    "opa_version": "1.21.1",
+    "build_commit": "2a109e54103370d2ef288782ef3cb4c8a37902b2-dirty",
+    "build_timestamp": "2026-09-29T19:10:43Z",
+    "platform": "linux/amd64",
+    "rego_version": "v1",
+    "binary_sha256": "668506eb17a2eaa1fce6cc0d1f42ef85125d4ac5bda5fc74d1152d0c77145031"
+  },
+  "policy": {
+    "source_kind": "inline-test-fixture",
+    "sha256": "a13da0d639535b19799509c727443dbf14a2a276a2a7aae94785b6e0a0f72e41"
+  },
+  "cases": [
+    {
+      "name": "allow",
+      "input_sha256": "828f846848b4e64f27859164b83df5d5596a48044cb7c604fd55fbfd3e17241e",
+      "decision": {
+        "allow": true,
+        "reason": "allowed"
+      }
+    },
+    {
+      "name": "deny",
+      "input_sha256": "ef7ee22e87f21bf5c20fb65d6022581198bc8017462056df7601e46879bbed6a",
+      "decision": {
+        "allow": false,
+        "reason": "denied"
+      }
+    }
+  ],
+  "kill_test": {
+    "mutation": "read_repository -> write_repository",
+    "observed": "denied"
+  },
+  "limitations": [
+    "No Open-System-One runtime integration was exercised.",
+    "No distributed OPA/HA or failure-mode behavior was exercised.",
+    "Top-level OPA repository license was previously observed as Apache-2.0; transitive dependency licensing was not exhaustively cleared."
+  ]
+}
