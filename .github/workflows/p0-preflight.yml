@@ -9,6 +9,8 @@ on:
 jobs:
   preflight:
     runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}/src
     steps:
       - name: Checkout pinned branch
         uses: actions/checkout@v4
