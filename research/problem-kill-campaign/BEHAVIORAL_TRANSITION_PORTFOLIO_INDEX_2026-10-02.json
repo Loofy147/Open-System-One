@@ -1,0 +1,54 @@
+{
+  "schema_version": "behavioral-transition-portfolio-index-v0.1",
+  "date": "2026-10-02",
+  "repository": "Loofy147/Open-System-One",
+  "branch": "research/behavioral-transition-v0.3",
+  "purpose": "Single navigational projection over opportunity transitions, current project transitions, and conversation-only frontiers.",
+  "source_boundaries": {
+    "opportunity_projection": "research/problem-kill-campaign/BEHAVIORAL_TRANSITION_FRONTIER_2026-10-02.json",
+    "project_index": "research/problem-kill-campaign/BEHAVIORAL_TRANSITION_PROJECT_INDEX_2026-10-02.json",
+    "conversation_index": "research/problem-kill-campaign/BEHAVIORAL_TRANSITION_CONVERSATION_INDEX_2026-10-02.json"
+  },
+  "authority_rule": "This index is a projection. Canonical evidence remains in source records and executed verification artifacts.",
+  "active_external_opportunity_state": "NO_CONFIRMED_PRODUCT_OPPORTUNITY",
+  "active_external_opportunity_transitions": [
+    "bt-offline-conflict-causal-reconciliation",
+    "bt-semantic-file-handoff-breakage-preflight"
+  ],
+  "internal_research_transitions": [
+    "bt-capability-kernel-authorized-effect",
+    "bt-direct-impact-bounded-mutation",
+    "bt-durable-run-transition-identity",
+    "bt-android-unknown-effect-reconciliation",
+    "bt-machine-research-state-verification",
+    "bt-wedgettok-product-hypothesis",
+    "bt-la-rouine-local-digitization",
+    "bt-hamiltonian-verifier-extraction",
+    "bt-osone-v03-frontier-recovery",
+    "bt-osone-mcp-rest-proof-artifact"
+  ],
+  "conversation_only_transitions": [
+    "bt-conversation-to-durable-frontier",
+    "bt-matching-pattern-perfect-matching",
+    "bt-gap-closure-rate-model",
+    "bt-z3-cyclic-observation-period",
+    "bt-ternary-loop-model-benchmark"
+  ],
+  "mandatory_lineage": [
+    "source snapshot",
+    "representation mapping version/digest",
+    "transition_id",
+    "mechanism_id where applicable",
+    "execution/run reference where applicable",
+    "observation",
+    "verification/oracle",
+    "evidence reference",
+    "decision",
+    "decision revision"
+  ],
+  "next_actions": [
+    "execute the committed re-encoder and record CI evidence",
+    "run incumbent-only F1 and F2 under v0.3 representation",
+    "promote conversation-only items only after repository evidence is created"
+  ]
+}

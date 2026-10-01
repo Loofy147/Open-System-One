@@ -1,0 +1,36 @@
+{
+  "mapping_version": "bt-v0.3-reencode-v0.1",
+  "source_schema": "experimental-opportunity-state-v0.2",
+  "target_schema": "behavioral-transition-v0.3",
+  "mapping_digest": "c439760c84a2eb01fe0aa8ef2cef80e42f6cbb08e2e03d11181ae3aa9222deac",
+  "rules": {
+    "candidate_id": "transition_id is stable transform: bt- + legacy candidate id; legacy id preserved as source_record_id",
+    "problem_statement": "copied to legacy_problem_statement; does not populate observed_context or target_transition as DIRECT evidence",
+    "affected_user_context": "copied to observed_context with provenance COPIED",
+    "reality": "maps to evidence_state.reality; never upgrades transition fields",
+    "residual_pain": "maps to evidence_state.residual_pain; never upgraded",
+    "gap": "maps to automation_gap with same epistemic status unless source text mechanically determines a narrower relation",
+    "action_delta": "maps to legacy_action_delta; target desired_delta remains INFERRED unless explicitly represented",
+    "strongest_incumbent_set": "copied unchanged",
+    "kill_test": "copied unchanged",
+    "oracle": "copied to oracle_legacy unless an independent target oracle is explicit",
+    "next_discriminating_action": "copied unchanged",
+    "status": "copied unchanged",
+    "decision": "copied unchanged"
+  },
+  "provenance_classes": [
+    "COPIED",
+    "DERIVED",
+    "INFERRED",
+    "MISSING",
+    "CONFLICTED"
+  ],
+  "hard_rules": [
+    "No epistemic promotion during re-encoding",
+    "No source record overwrite",
+    "No silent merge of multiple legacy records",
+    "No automatic verification from representation",
+    "Killed scope and incumbent set remain intact",
+    "Same source snapshot plus mapping version must regenerate same canonical representation"
+  ]
+}
