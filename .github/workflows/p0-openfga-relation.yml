@@ -19,9 +19,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p /tmp/openfga
-          curl -fsSL "https://github.com/openfga/openfga/releases/download/v$OPENFGA_VERSION/openfga_$OPENFGA_VERSION_linux_amd64.tar.gz" -o /tmp/openfga/openfga.tar.gz
+          curl -fsSL "https://github.com/openfga/openfga/releases/download/v$OPENFGA_VERSION/openfga_${OPENFGA_VERSION}_linux_amd64.tar.gz" -o /tmp/openfga/openfga.tar.gz
           curl -fsSL "https://github.com/openfga/openfga/releases/download/v$OPENFGA_VERSION/checksums.txt" -o /tmp/openfga/checksums.txt
-          expected="$(grep " openfga_$OPENFGA_VERSION_linux_amd64.tar.gz$" /tmp/openfga/checksums.txt | awk '{print $1}')"
+          expected="$(grep " openfga_${OPENFGA_VERSION}_linux_amd64.tar.gz$" /tmp/openfga/checksums.txt | awk '{print $1}')"
           actual="$(sha256sum /tmp/openfga/openfga.tar.gz | awk '{print $1}')"
           test -n "$expected"
           test "$expected" = "$actual"
