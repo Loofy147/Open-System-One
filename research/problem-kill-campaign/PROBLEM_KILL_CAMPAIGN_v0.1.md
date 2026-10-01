@@ -72,19 +72,27 @@ Survival threshold: if at least 2 cases cannot be explained correctly from exist
 
 No code for the candidate is permitted during F1.
 
-## Falsification experiment F2 — independent agent-effect verification
+## Falsification experiment F2 — semantic file-handoff breakage preflight
 
-Fixture: one harmless state-changing action plus one undeclared side effect, one partial failure, and one authority revoke/replay case.
+Fixture:
+10 deterministic file-handoff cases containing header removal/rename, type change, unit change, category-value change and structural-only changes.
 
-Strongest existing comparison: MAP or an equivalent agent audit/rollback system.
+Incumbent set:
+Excel/Sheets import behavior, current browser-local CSV/Excel validators and repair tools, and a schema/lineage system where setup is feasible.
 
-Procedure: for each run ask whether the existing system alone can independently reconstruct: actor/agent identity; authority and approval at execution; authoritative pre-state; authoritative post-state; exact delta and blast radius; rollback/compensation result; replay/revocation behavior; a receipt verifiable outside the acting agent.
+Questions:
+1. What structurally changed?
+2. Which expected fields/rules are affected?
+3. Does the change alter a downstream decision?
+4. Accept, reject, or request correction?
 
-Kill threshold: if the existing stack can satisfy all eight for the full fixture without trusting the acting agent's narrative and without adding our control-plane semantics, kill the candidate.
+Kill threshold:
+If the incumbent workflow produces the same operational decision on >=8/10 cases without material configuration burden, kill the candidate.
 
-Survival threshold: if one or more required facts remain unavailable or are only inferred from agent-reported traces, continue.
+Survival threshold:
+If at least 2 cases produce a repeatable decision-changing gap that is not merely a presentation difference, continue.
 
-No product UI or MVP is to be built for F2. Only an adapter fixture is permitted.
+No candidate implementation is permitted during F2.
 
 ## Experimental-winner rule
 
@@ -153,3 +161,14 @@ PRE-BUILD FALSIFICATION -> one candidate survives -> EXPERIMENTAL WINNER -> evid
 ## v0.2 enforcement
 
 This campaign is now subordinate to Experimental Opportunity Protocol v0.2. The current finalists must pass Action Delta and Pre-build Kill Test gates before any BUILD_ALLOWED state. A surviving candidate is not an MVP opportunity until the falsification experiment fails to kill the intervention.
+
+
+## 2026-10-01 audit correction
+
+The previous independent-agent-effect-verification finalist is killed as a standalone opportunity by refreshed prior-art review, including NOA Receipt, AERF, CAVA and AgentProvenance. Direct Impact Guard remains an internal research primitive.
+
+The previous SMB export-reconciliation finalist is killed by current file-first reconciliation products.
+
+The previous generic CSV/XLSX change-explainer formulation is narrowed to semantic downstream breakage, because generic validation/diff/repair is already well served.
+
+Therefore the campaign currently has no confirmed product opportunity.
