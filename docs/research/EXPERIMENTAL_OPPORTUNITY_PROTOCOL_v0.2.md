@@ -742,3 +742,216 @@ proof of execution
 - evidence / contradiction / decision lineage
 
 والمرجع المعرفي النهائي يبقى في السجلات القابلة لإعادة التحقق، لا في المحادثة وحدها.
+
+
+---
+
+## 28. مراجعة منهجية — 2026-10-01
+
+هذه المراجعة لا تغيّر القسم الأصلي بأثر رجعي. إنها تضيف قيودًا تشغيلية ظهرت عند تطبيق البروتوكول على مجالات مستقلة وعلى المشاريع/الأبحاث السابقة.
+
+### 28.1 Coverage Bias
+
+البحث على الويب يميل إلى اكتشاف المشاكل التي يشتكي منها المطورون أو التي لها سوق برمجي واضح.
+
+لذلك لا يجوز تفسير:
+
+no indexed complaints
+=
+no pain
+
+يجب تقسيم evidence source إلى:
+
+indexed public evidence
+direct operational observation
+repeated workflow observation
+support/incident records
+documented workaround
+vendor self-report
+user community report
+
+وإذا كان المجال يعتمد أساسًا على العمل المحلي/الورقي/الهاتفي، فالحالة الصحيحة قد تبقى UNKNOWN إلى أن توجد ملاحظة تشغيلية مباشرة.
+
+### 28.2 Frequency × Stakes Gate
+
+وجود residual pain لا يكفي.
+
+قبل PREBUILD_KILL_TEST يجب تقدير:
+
+frequency
+stakes
+recoverability
+avoidable/manual cost
+
+ومنع تضخيم حالة نادرة أو منخفضة الأثر إلى فرصة منتج.
+
+### 28.3 Counterfactual No-Build Baseline
+
+يجب مقارنة:
+
+A = workflow الحالي بدون أداة جديدة
+B = workflow الحالي مع أفضل workaround بسيط
+C = التدخل المقترح
+
+ولا يكفي مقارنة C مع حالة سيئة مصطنعة.
+
+الشرط الأقوى هو:
+
+C يجب أن يغيّر القرار أو يقلل كلفة ذات معنى مقارنة بـ B، لا مقارنة بوضع افتراضي سيئ.
+
+### 28.4 Adoption Cost Before Build
+
+حتى لو كان Action Delta حقيقيًا، يجب فحص:
+
+configuration
+migration
+permissions
+training
+data preparation
+integration burden
+ongoing maintenance
+dependency risk
+
+قبل السماح بـ BUILD_ALLOWED.
+
+### 28.5 Opportunity ≠ Internal Primitive
+
+قد تكون الفجوة المعمارية حقيقية ومفيدة جدًا داخليًا، لكن هذا لا يجعلها منتجًا مستقلًا.
+
+الحالات يجب فصلها إلى:
+
+INTERNAL_PRIMITIVE
+RESEARCH_INSTRUMENT
+SMALL_TOOL_OPPORTUNITY
+PRODUCT_OPPORTUNITY
+
+مثال:
+Direct Impact Guard ما زال INTERNAL_PRIMITIVE / RESEARCH_INSTRUMENT، حتى مع نجاح اختبارات التنفيذ، لأن prior-art audit أظهر وجود طبقة خارجية مزدحمة بالـreceipts/provenance/attestation/rollback protocols.
+
+### 28.6 Prior-Art Freshness
+
+في مجالات سريعة مثل agent infrastructure وMCP يجب إعادة Solution Audit قرب أي BUILD_ALLOWED.
+
+القاعدة:
+
+prior-art result older than the current decision window
+→ recheck before build
+
+لا يجوز رفع قرار سابق إلى حاضر عبر الذاكرة.
+
+### 28.7 Independent Evidence Requirement
+
+مصدر واحد يمكن أن يثبت وجود إشارة، لكنه لا يثبت حجم السوق أو عمومية الحاجة.
+
+vendor claim
+≠
+independent demand evidence
+
+community complaint
+≠
+measured frequency
+
+successful prototype
+≠
+market need
+
+### 28.8 Action Delta Must Be Counterfactual
+
+صياغة Action Delta يجب أن تكون:
+
+same case
+same user
+same starting state
+
+Before:
+what would actually be done?
+
+After:
+what would actually be done?
+
+فقط الفرق السلوكي القابل للملاحظة يدخل الدليل.
+
+### 28.9 Strongest Incumbent Set
+
+لا نختبر ضد «أفضل منتج» فقط.
+
+نختبر ضد union:
+
+best direct tool
++
+best adjacent tool
++
+embedded feature
++
+script/CLI/library
++
+manual procedure
++
+no-build workaround
+
+ثم نستخدم أقوى نتيجة عملية منها كخط أساس للقتل.
+
+### 28.10 Domain Expansion Rule
+
+كل دورة شاملة يجب أن تمر على مزيج من:
+
+developer workflows
+small business operations
+documents/files
+data movement
+offline/local
+consumer utilities
+
+وأن تضيف مجالًا واحدًا على الأقل من خارج هذه المجموعة، مثل:
+
+field/service operations
+procurement/back-office
+education/administration
+privacy/local computing
+small-team coordination
+
+الغرض هو تقليل خطر أن يكون protocol نفسه منحازًا إلى نوع واحد من المشكلات.
+
+### 28.11 Portfolio-derived candidates
+
+المشروع السابق لا يصبح فرصة لمجرد أنه موجود.
+
+لكن كل OPEN frontier يمكن أن يولد Problem Candidate جديدًا إذا كان:
+
+observable
+repeated
+externally relevant
+and independently testable
+
+Examples from the current research corpus:
+
+- durable UNKNOWN effect reconciliation;
+- environment/version drift at execution boundaries;
+- semantic truth preservation across heterogeneous clients;
+- evidence reconstruction after process failure.
+
+هذه تبقى INTERNAL/RESEARCH candidates إلى أن يثبت ألم خارجي مستقل.
+
+### 28.12 No Forced Survivor
+
+إذا قتلت الجولة كل المرشحين:
+
+NO_MVP
+
+لا نرفع internal architecture إلى opportunity فقط لتجنب الفراغ.
+
+### 28.13 Current audit conclusion
+
+تطبيق هذه القواعد على مراجعة 2026-10-01 أدى إلى:
+
+- قتل generic independent agent-effect verification كفرصة مستقلة بسبب كثافة prior art.
+- قتل generic export reconciliation بسبب وجود حلول file-first عملية.
+- قتل generic CSV/XLSX pre-import validation/repair بسبب وجود عدة أدوات محلية مباشرة.
+- إبقاء offline conflict causal reconciliation في حالة NEEDS_DECISIVE_EXPERIMENT بدل اعتباره finalist مثبتًا.
+- إبقاء أي فرصة derived from Machine, Android, M0, Wedgettok, or la-rouine as INTERNAL/RESEARCH/OPEN until external problem evidence exists.
+
+الحالة الصحيحة بعد المراجعة:
+
+NO_CONFIRMED_PRODUCT_OPPORTUNITY
+
+وهذا ليس فشلًا للمنهج؛ إنه نتيجة مسموحة ومهمة.
