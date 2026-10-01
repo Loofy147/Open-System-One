@@ -1,0 +1,56 @@
+{
+  "schema_version": "behavioral-transition-conversation-index-v0.1",
+  "date": "2026-10-02",
+  "scope": "Current conversation-level research frontiers that are not yet represented as repository evidence",
+  "epistemic_rule": "Conversation-only records remain conversation provenance; they cannot promote repository evidence or product-opportunity status.",
+  "transitions": [
+    {
+      "transition_id": "bt-conversation-to-durable-frontier",
+      "type": "METHOD_TRANSITION",
+      "pre_state": "Research decisions/results exist partly as conversation narrative.",
+      "target_state": "Durable canonical records preserve claims, evidence, experiments, artifacts, decisions, contradictions, gaps and lineage.",
+      "desired_delta": "Continuation no longer depends on recalling prose; provenance becomes explicit.",
+      "status": "ARCHITECTURAL_TARGET / OPEN",
+      "source_scope": "CONVERSATION_ONLY"
+    },
+    {
+      "transition_id": "bt-matching-pattern-perfect-matching",
+      "type": "MATHEMATICAL_RESEARCH",
+      "pre_state": "A labelled boundary-gluing instance is given without relying on maximum-matching deficiency/cut gain.",
+      "target_state": "Perfect-matching feasibility is represented by the boundary matching family and gluing is decided by complementary feasible sets.",
+      "desired_delta": "PM under labelled boundary gluing becomes a finite boundary signature decision.",
+      "status": "EXPERIMENTALLY_SUPPORTED_FOR_ENUMERATED_SMALL_CASES; GENERALITY OPEN",
+      "source_scope": "CONVERSATION_ONLY",
+      "evidence_boundary": "Prior conversation recorded exhaustive n=4,5 enumeration with no SEA/strong-exchange counterexample and cited Wenzel as core source; repository evidence not asserted here."
+    },
+    {
+      "transition_id": "bt-gap-closure-rate-model",
+      "type": "MATHEMATICAL_RESEARCH",
+      "pre_state": "Residual demand D_i exceeds tolerance epsilon_i over horizon T.",
+      "target_state": "Selected mechanisms provide sufficient aggregate rate to satisfy all residual tolerances under cost/budget constraints.",
+      "desired_delta": "Automation/realization gap becomes a measurable rate-covering problem.",
+      "status": "OPEN",
+      "source_scope": "CONVERSATION_ONLY",
+      "evidence_boundary": "The model and R1-R7 code are user-supplied in the current conversation; no new execution result is asserted in this record."
+    },
+    {
+      "transition_id": "bt-z3-cyclic-observation-period",
+      "type": "RESEARCH_METHODOLOGY",
+      "pre_state": "A structural problem has candidate factorization/history refinements but uncertain observation period.",
+      "target_state": "Constraint solving/refinement identifies a consistent cyclic observation period with independently checked witnesses.",
+      "desired_delta": "Ambiguous structural hypotheses become finite, testable state transitions.",
+      "status": "OPEN / EXPERIMENTAL",
+      "source_scope": "CONVERSATION_ONLY"
+    },
+    {
+      "transition_id": "bt-ternary-loop-model-benchmark",
+      "type": "MODEL_RESEARCH",
+      "pre_state": "A compact recurrent/looped model architecture with ternary weights has design assumptions but incomplete empirical comparison.",
+      "target_state": "Architecture variants are benchmarked under fixed tasks/oracles with reproducible measurements.",
+      "desired_delta": "Design claims become benchmark-supported or are killed without conflating parameter count with useful behavior.",
+      "status": "OPEN / EXPERIMENTAL",
+      "source_scope": "CONVERSATION_ONLY"
+    }
+  ],
+  "boundary": "This index is a continuation aid, not a substitute for repository evidence. Each entry requires a later source artifact or experiment before promotion."
+}
