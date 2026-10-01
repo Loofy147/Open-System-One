@@ -12,15 +12,13 @@ from pathlib import Path
 
 POLICY = """package agent.authz
 
-valid if {
+default allow := false
+
+allow if {
     input.subject == "agent-1"
     input.capability == "read_repository"
     input.resource == "repo-a"
 }
-
-decision := {"allow": true, "reason": "allowed"} if valid
-
-decision := {"allow": false, "reason": "denied"} if not valid
 """
 
 
@@ -28,7 +26,7 @@ def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def run_eval(opa: str, policy: Path, input_path: Path) -> dict:
+def run_eval(opa: str, policy: Path, input_path: Path) -> bool:
     proc = subprocess.run(
         [
             opa,
@@ -38,14 +36,18 @@ def run_eval(opa: str, policy: Path, input_path: Path) -> dict:
             str(policy),
             "--input",
             str(input_path),
-            "data.agent.authz.decision",
+            "data.agent.authz.allow",
         ],
-        check=True,
+        check=False,
         capture_output=True,
         text=True,
     )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"OPA eval failed rc={proc.returncode}: {proc.stderr.strip()}"
+        )
     payload = json.loads(proc.stdout)
-    return payload["result"][0]["expressions"][0]["value"]
+    return payload["result"][0]["expressions"][0]["value"] is True
 
 
 def main() -> int:
@@ -81,8 +83,8 @@ def main() -> int:
         allow = run_eval(opa, policy, allow_path)
         deny = run_eval(opa, policy, deny_path)
 
-        assert allow == {"allow": True, "reason": "allowed"}, allow
-        assert deny == {"allow": False, "reason": "denied"}, deny
+        assert allow is True, allow
+        assert deny is False, deny
 
         receipt = {
             "schema_version": "oss-p0-opa-proof-v0.1",
@@ -102,14 +104,14 @@ def main() -> int:
                     "input_sha256": sha256_bytes(
                         json.dumps(allow_input, sort_keys=True).encode("utf-8")
                     ),
-                    "decision": allow,
+                    "decision": {"allow": True},
                 },
                 {
                     "name": "deny",
                     "input_sha256": sha256_bytes(
                         json.dumps(deny_input, sort_keys=True).encode("utf-8")
                     ),
-                    "decision": deny,
+                    "decision": {"allow": False},
                 },
             ],
             "negative_test": {
