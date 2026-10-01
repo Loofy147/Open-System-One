@@ -3,137 +3,148 @@
 Status: RESEARCH_ONLY — NO_MVP_AUTHORIZED
 Date: 2026-10-01
 
-Rule:
+## Core rule
+
 problem candidate -> evidence -> existing solutions -> kill -> status
 
-KILLED_AT_DESK means current solutions materially cover the stated problem, or evidence is too weak.
-SURVIVED_DESK_KILL means a plausible gap remains after current-source review. It is not MVP approval.
+A candidate is never promoted because the problem sounds painful or because implementation looks easy.
 
-## Developer tooling
+SURVIVED_DESK_KILL means only that a plausible residual gap remains. It is not build authorization.
 
-A. Required review without notification blast
-Evidence: GitHub community discussions still report the exact requirement in 2026; users want required team approval without prematurely subscribing/notifying the whole team.
-Existing solutions: GitHub team notification controls, CODEOWNERS, required-review rulesets; Mergify can request reviews conditionally and enforce review-related merge conditions.
-Kill: test whether GitHub + Mergify can implement peer review -> delayed senior-team request -> enforceable approval without changing the trust model.
-Status: SURVIVED_DESK_KILL.
+## Desk-kill results
 
-B. Reproducible environment bootstrap
-Existing solutions: GitHub devcontainers/Codespaces, npm package-lock, uv locking.
-Kill: a standalone tool would duplicate mature environment reproducibility mechanisms.
-Status: KILLED_AT_DESK.
+### Killed
 
-C. Duplicate issue triage
-Existing solution: GitHub duplicate-issue detection and native duplicate handling.
-Status: KILLED_AT_DESK.
+Developer tooling — reproducible environment bootstrap: devcontainers/Codespaces, package locks and uv locking already cover the generic problem.
+Developer tooling — duplicate issue triage: GitHub now has duplicate-issue detection and native duplicate handling.
+Developer tooling — required review without notification blast: GitHub supports team-notification controls, while Mergify supports conditional request_reviews and required-review enforcement. The remaining workflow can be composed without a new product primitive, so the generic problem is killed at desk stage.
+Small business — receipt capture: QuickBooks and comparable accounting/expense products already cover capture, extraction and reconciliation.
+Small business — generic connectorless reconciliation: the exact file-first problem is now directly covered by current products such as Reconcile, including CSV/Excel/JSON, multi-file reconciliation, mapping and discrepancy reports without ERP/API onboarding.
+Files/documents — duplicate cleanup: Czkawka and dupeGuru cover the generic problem.
+Files/documents — generic version confusion: cloud document systems already provide version/activity history and conflict mechanisms.
+Data handling — generic schema validation: Soda, Pandera, Frictionless and Data Contract tooling cover the general case.
+Data handling — generic CSV/XLSX diff: current browser-local and CLI tools already compare rows, keys, headers and cell-level changes.
+Local/offline — generic offline collection: ODK already covers offline collection and synchronization.
+Consumer utilities — warranty/receipt organizer: current apps already combine receipts, warranties and expiry reminders.
+Consumer utilities — recurring reminder: calendar/task products already support recurrence.
+Previously examined agent/OSS landscape — generic sandbox, policy, identity, browser automation and agent evaluation: OpenShell/OpenSandbox, OPA/OpenFGA/Cedar/SPIRE, Playwright MCP and AgentDojo cover these as established primitives.
 
-## Small business operations
+### Two finalists for pre-build falsification
 
-A. Receipt capture
-Evidence: current SME research reports meaningful finance-admin burden.
-Existing solutions: QuickBooks, Expensify, Dext, Zoho Expense and similar products already capture receipts, extract data and match transactions.
-Status: KILLED_AT_DESK.
+1. Local/offline conflict causal reconciliation
 
-B. Connectorless export-based exception reconciliation
-Problem: a small business exports CSV/XLSX/PDF from several systems and needs only the mismatches, without API integration setup.
-Evidence: Sage reported 52 digital tools, 27 logins and 19 working days/year lost to moving/re-entering information; an Irish SME survey reported five financial tools on average, 65% combining sources for a full picture and 43% re-entering the same information.
-Existing solutions: Zapier, n8n and accounting integrations cover many API-based workflows.
-Gap hypothesis: local, export-only, exception-first reconciliation may remain underserved.
-Status: SURVIVED_DESK_KILL.
-Next kill: compare against spreadsheet imports, accounting reconciliation, Zapier/n8n and low-cost products using the same export-only fixtures.
+Problem boundary: when multiple offline branches update the same record, the user needs to determine the causal branches, conflicting properties, authoritative state and correct resolution without reconstructing the history manually.
 
-C. Client onboarding / missing-information chase
-Existing solutions: HubSpot, Jotform-style portals and CRM workflows already support forms, uploads, reminders and follow-up.
-Status: KILLED_AT_DESK.
+Why it survived desk kill: ODK exposes conflict state, baseVersion, branchId, conflictingProperties, creator/user-agent metadata and version history, but its documentation notes that complex offline conflicts can remain hard to understand. CouchDB preserves conflicting revisions but does not retain which peer a particular revision came from.
 
-## Files and documents
+2. Independent agent-effect verification
 
-A. Duplicate-file cleanup
-Existing solutions: Czkawka and dupeGuru already provide cross-platform duplicate detection, protected reference folders, dry runs and safe deletion workflows.
-Status: KILLED_AT_DESK.
+Problem boundary: after an agent acts through any external runtime, an independent layer should be able to prove what authoritative state changed, under which authority/approval, within what declared impact envelope, and whether the result remained valid or was compensated.
 
-B. Generic version confusion
-Existing solutions: SharePoint/OneDrive and Google Drive provide version/activity history; duplicate finders and sync systems address many conflict cases.
-Status: KILLED_AT_DESK.
+Why it survived desk kill: audit/provenance, rollback and agent action logging are increasingly available. MAP explicitly provides full before/after state, tamper-evident ledgering, rollback strategies, persistent stores and verification. Therefore the residual gap is not 'audit logs are missing'; it is the stricter independence and cross-surface verification contract.
 
-## Data handling
+The current Direct Impact Guard is research evidence for the hypothesis, not proof of market need.
 
-A. Generic schema validation
-Existing solutions: Soda data contracts, Pandera, Frictionless and Data Contract CLI cover schema, type and constraint validation.
-Status: KILLED_AT_DESK.
+## Pre-build falsification rule
 
-B. Non-engineer file-handoff change explainer
-Problem: a person receiving recurring CSV/XLSX exports wants a deterministic pre-import report of structural changes and likely breakage.
-Evidence: Frictionless has active 2026 requests around provider schema transitions and optional/default columns, plus current CSV edge cases.
-Existing solutions: developer-oriented validators exist, but they generally require schemas/code/configuration.
-Gap hypothesis: a zero-setup local report may serve a different operator workflow.
-Status: SURVIVED_DESK_KILL.
-Next kill: test whether Excel/Sheets import previews or existing validator tooling can produce the same reliable decision with comparable effort.
+For each finalist, do not implement the proposed tool.
 
-## Local / offline workflows
+Instead ask:
 
-A. Generic offline collection
-Existing solutions: ODK Collect/Central already supports offline collection and later synchronization.
-Status: KILLED_AT_DESK.
+What is the cheapest experiment that could prove this tool is unnecessary?
 
-B. Explain and reconcile offline conflicts
-Evidence: ODK documents offline Entity conflicts and notes that resulting differences can be shown without always knowing the exact actions that caused them.
-Existing solutions: conflict labels/history and configurable offline database conflict handlers.
-Gap hypothesis: a narrow causal-diff artifact for human review may still be useful.
-Status: SURVIVED_DESK_KILL.
-Next kill: real offline conflict fixtures against ODK/RxDB/PouchDB-style workflows.
+The experiment must use the strongest existing solution or the smallest possible configuration of it.
 
-## Consumer utilities
+A finalist is killed when the existing system can satisfy the operational requirement with no material loss of correctness, evidence, control, or operator effort.
 
-A. Warranty/receipt organizer
-Existing solutions: current App Store products already combine receipt capture, warranty dates and expiry reminders.
-Status: KILLED_AT_DESK.
+## Falsification experiment F1 — offline conflict
 
-B. Recurring reminder utility
-Existing solutions: Google Tasks and Google Calendar support repeating tasks/events.
-Status: KILLED_AT_DESK.
+Fixture: 5 deterministic conflict cases: same-property parallel update; independent-property parallel update; chained offline branch; out-of-order create/update; three-way concurrent branch.
 
-## Previously examined agent / OSS landscape
+Procedure: use only the existing ODK conflict UI/API metadata and history.
 
-Sandbox / execution isolation:
-OpenShell and OpenSandbox directly cover sandbox runtime and lifecycle.
-Status: KILLED_AT_DESK as a generic standalone product problem.
+For every case ask the operator to produce: causal branch explanation; exact conflicting properties; authoritative/current state; resolution action; source/version references supporting the decision.
 
-Policy / authorization:
-OPA, OpenFGA, Cedar and SPIFFE/SPIRE cover policy decisions, relation authorization, policy language and workload identity/attestation.
-Status: KILLED_AT_DESK as a generic missing primitive.
+Kill threshold: if an operator can produce all five answers correctly for at least 4 of 5 cases, without manually reconstructing state outside ODK, the separate tool is killed.
 
-Browser automation:
-Playwright MCP already provides a browser automation surface.
-Status: KILLED_AT_DESK.
+Survival threshold: if at least 2 cases cannot be explained correctly from existing evidence, and the missing evidence is a repeatable structural deficiency rather than UI preference, continue.
 
-Agent security / evaluation:
-AgentDojo already provides dynamic prompt-injection attack/defense evaluation; other benchmark systems cover evaluation.
-Status: KILLED_AT_DESK.
+No code for the candidate is permitted during F1.
 
-Independent effect verification:
-Problem: external agents can have policy, sandbox, browser, identity and traces, while a durable control plane still needs an independent statement of what authoritative state actually changed.
-Desk finding: I did not find a common cross-surface contract combining observed post-state delta, bounded impact, rollback/compensation and authority revalidation.
-Status: SURVIVED_DESK_KILL.
-Existing research artifact: research/direct-impact-guard-v0.1.
-Constraint: this is not product validation; the current artifact still needs real external backends and fresh CI evidence.
+## Falsification experiment F2 — independent agent-effect verification
 
-## Current survivor set
+Fixture: one harmless state-changing action plus one undeclared side effect, one partial failure, and one authority revoke/replay case.
 
-1. Developer review routing without premature notification.
-2. Small-business export-only exception reconciliation.
-3. Human-readable file-handoff change explainer.
-4. Offline conflict causal diff/reconciliation.
-5. Independent agent-effect verification.
+Strongest existing comparison: MAP or an equivalent agent audit/rollback system.
 
-## MVP gate
+Procedure: for each run ask whether the existing system alone can independently reconstruct: actor/agent identity; authority and approval at execution; authoritative pre-state; authoritative post-state; exact delta and blast radius; rollback/compensation result; replay/revocation behavior; a receipt verifiable outside the acting agent.
 
-No MVP is authorized until a survivor passes:
-- multiple independent pain signals or direct operational evidence;
-- a measurable failure definition;
-- hands-on kill against the strongest existing alternatives;
-- a precise residual gap;
-- a narrow user/workflow boundary;
-- a reversible prototype experiment with explicit pass/fail thresholds;
-- independent verification of the claimed result.
+Kill threshold: if the existing stack can satisfy all eight for the full fixture without trusting the acting agent's narrative and without adding our control-plane semantics, kill the candidate.
 
-No candidate is currently MVP-authorized.
+Survival threshold: if one or more required facts remain unavailable or are only inferred from agent-reported traces, continue.
+
+No product UI or MVP is to be built for F2. Only an adapter fixture is permitted.
+
+## Experimental-winner rule
+
+Only after F1/F2 leave one surviving candidate may we build the experimental winner.
+
+The winner build is not an MVP and not a launch candidate.
+
+Its sole purpose is to answer the accumulated research questions from this work:
+
+### Evidence / epistemics
+
+Live World@revision R -> applicability -> versioned observation -> evidence -> verification event -> claim -> gate -> decision/revision.
+
+Historical applicability must not be mistaken for current authority.
+
+Every experiment must record source, exact revision/ref/commit, execution environment, run_id, input/state digest, result digest, observation event, independent verification, failures and negative results.
+
+Conversation-only observations do not become repository evidence until reproduced and recorded.
+
+### Control and authority
+
+The experimental winner must use task/action identity, capability contract, policy/relationship authorization, request-scoped approval, authority revalidation before replay, explicit idempotency, bounded impact, post-state verification and receipt reconstruction.
+
+The current native primitives are inputs, not assumptions: CapabilityKernel and Direct Impact Guard.
+
+### Execution surface neutrality
+
+External systems remain adapters:
+external capability -> narrow adapter -> capability contract -> receipt -> independent verification -> promote/reject
+
+GitHub, SQLite, browser, cloud agent, sandbox or any single vendor must not become architectural authority.
+
+### Storage / durability
+
+Where persistence is needed, use the intended split: BlobStore / TransactionalStore / QueryStore, with versioned contracts and schema identity.
+
+Do not use an external product's memory or history as the authority source.
+
+### Agent-surface characterization
+
+The experimental winner must be compatible with A0-A10: identity, read-only observation, untrusted content, scope, evidence fidelity, reversible mutation, approval, stop, duplicate request, environment identity and receipt reconstruction.
+
+### Research questions inherited from the previous work
+
+- Can an external agent capability be adopted without surrendering authority?
+- Can historical authorization remain historically true after current revocation?
+- Can idempotency be safe under authority changes and state drift?
+- Can impact be bounded independently of model intent?
+- Can unauthorized or unexpected changes be detected after execution?
+- Can rollback or compensation be proven rather than asserted?
+- Can agent traces remain distinct from authoritative evidence?
+- Can browser, sandbox, policy and identity surfaces be composed without vendor-specific leakage into the core?
+- Can a run be reconstructed after interruption or partial failure?
+- Can the same logical action be verified across different execution backends?
+- Can the system distinguish current authority from historical applicability?
+- Which parts of the proposed architecture are actually necessary after existing solutions are placed under adversarial comparison?
+
+## Hard stop
+
+No MVP authorization, pricing work, launch work, branding work or feature expansion follows from surviving desk research.
+
+The only next state is:
+
+PRE-BUILD FALSIFICATION -> one candidate survives -> EXPERIMENTAL WINNER -> evidence -> revalidation -> only then consider whether an MVP is warranted.
