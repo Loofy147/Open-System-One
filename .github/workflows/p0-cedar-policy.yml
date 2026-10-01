@@ -32,7 +32,7 @@ jobs:
           echo "CEDAR_BIN=$cedar_bin" >> "$GITHUB_ENV"
           "$cedar_bin" --version
 
-      - name: Run P0.05 proof
+      - name: Run exit-code-aware P0.05 proof
         run: |
           set -euo pipefail
           mkdir -p /tmp/p0-cedar
