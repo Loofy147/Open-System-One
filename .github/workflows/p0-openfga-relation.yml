@@ -27,7 +27,7 @@ jobs:
           test "$expected" = "$actual"
           tar -xzf /tmp/openfga/openfga.tar.gz -C /tmp/openfga
           chmod +x /tmp/openfga/openfga
-          /tmp/openfga/openfga --version
+          /tmp/openfga/openfga version
 
       - name: Start OpenFGA
         run: |
