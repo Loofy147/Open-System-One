@@ -4,39 +4,69 @@
   "branch": "research/dots-readiness-v0.1",
   "current_state": "PARTIAL_PROGRESS",
   "results": {
-    "P0.07-browser-substrate": "EXPERIMENTALLY_SUPPORTED",
-    "P0.08-run-correlation-substrate": "EXPERIMENTALLY_SUPPORTED",
     "P0.01-OpenShell": "BLOCKED_ENVIRONMENT",
     "P0.02-OpenSandbox": "BLOCKED_ENVIRONMENT",
-    "P0.03-OPA": "BLOCKED_ENVIRONMENT",
+    "P0.03-OPA": "EXPERIMENTALLY_SUPPORTED",
     "P0.04-OpenFGA": "BLOCKED_ENVIRONMENT",
     "P0.05-Cedar": "BLOCKED_ENVIRONMENT",
     "P0.06-SPIFFE-SPIRE": "BLOCKED_ENVIRONMENT",
+    "P0.07-browser-substrate": "EXPERIMENTALLY_SUPPORTED",
     "P0.07-Playwright-MCP": "BLOCKED_PACKAGE_OR_SERVER",
+    "P0.08-run-correlation-substrate": "EXPERIMENTALLY_SUPPORTED",
     "P0.08-OpenInference": "BLOCKED_PACKAGE",
     "P0.09-Inspect-AI": "BLOCKED_PACKAGE",
     "P0.10-BrowserGym": "BLOCKED_ENVIRONMENT",
     "P0.11-AgentDojo": "BLOCKED_PACKAGE_OR_PROVIDER",
     "P0.12-A2A-TCK": "BLOCKED_REPOSITORY_EXECUTION_ENVIRONMENT"
   },
+  "verified_runs": {
+    "browser_receipt_preflight": {
+      "run_id": 36919520778,
+      "run_number": 5,
+      "head_sha": "30325d5b26377e293cda1c783e9a535fadb5f964",
+      "conclusion": "success",
+      "steps": {
+        "receipt_tests": "success",
+        "browser_trace_preflight": "success"
+      }
+    },
+    "opa": {
+      "run_id": 36919727979,
+      "run_number": 2,
+      "head_sha": "248af9e55fd7049e66e599d94c0fab76ac3fb936",
+      "conclusion": "success",
+      "evidence_file": "research/agent-surfaces/evidence/P0_OPA_POLICY_2026-10-01.json"
+    }
+  },
+  "historical_failures_recorded": {
+    "browser_receipt_import_failure": {
+      "run_id": 36911443063,
+      "cause": "PYTHONPATH did not expose src/",
+      "repaired_in_commit": "30325d5b26377e293cda1c783e9a535fadb5f964"
+    },
+    "opa_fixture_failure": {
+      "run_id": 36919671101,
+      "cause": "invalid Rego fixture for OPA v1 runtime",
+      "repaired_in_commit": "248af9e55fd7049e66e599d94c0fab76ac3fb936"
+    }
+  },
   "environment": {
-    "python": "3.13.5",
-    "node": "22.16.0",
-    "playwright": "1.57.0",
-    "opentelemetry_api": "1.42.1",
-    "opentelemetry_sdk": "1.42.1",
-    "chromium": "144.0.7559.96",
-    "docker": false,
-    "podman": false,
-    "kubectl": false,
-    "rustc": false
+    "local_python": "3.13.5",
+    "local_node": "22.16.0",
+    "local_playwright": "1.57.0",
+    "local_opentelemetry_api": "1.42.1",
+    "local_opentelemetry_sdk": "1.42.1",
+    "local_chromium": "144.0.7559.96",
+    "local_docker": false,
+    "local_podman": false,
+    "local_kubectl": false,
+    "local_rustc": false
   },
   "blocking_facts": [
-    "Container environment cannot resolve github.com for git operations.",
-    "Docker, Podman, kubectl are absent, preventing sandbox/Kubernetes live proofs.",
-    "Playwright-managed browser executable was initially absent; system Chromium worked when explicitly selected.",
-    "Chromium policy blocks file:// and loopback navigation in the container; the preflight uses isolated page.set_content instead.",
-    "Playwright MCP, OpenInference, Inspect AI, AgentDojo and A2A TCK are not installed in the current Python/Node environment."
+    "Local container cannot resolve github.com for git operations.",
+    "Docker, Podman and kubectl are absent locally; GitHub Actions provides the missing container runtime for CI experiments.",
+    "Playwright MCP, OpenInference, Inspect AI, AgentDojo and A2A TCK remain uninstalled in the local environment.",
+    "The browser proof is still a generic Playwright substrate proof, not a Playwright MCP proof."
   ],
-  "next_environment": "GitHub Actions or dedicated Linux host with container runtime; install pinned external dependencies and execute P0.01-P0.12 one by one with receipts."
+  "next_environment": "Continue P0 through GitHub Actions: sandbox/container proofs first, then policy/identity, browser MCP, tracing/evaluation, and protocol compatibility. Promote only after positive+negative+receipt+independent verification+removal."
 }
