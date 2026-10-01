@@ -1,0 +1,128 @@
+{
+  "schema_version": "behavioral-transition-project-index-v0.1",
+  "date": "2026-10-02",
+  "scope": "Open-System-One current portfolio surface",
+  "note": "Project/PR descriptions are provenance records; they do not by themselves upgrade external-demand claims.",
+  "pull_requests": [
+    {
+      "pr": 1,
+      "title": "Establish Open System One foundation v0.1",
+      "source": "GitHub PR description",
+      "source_url": "https://github.com/Loofy147/Open-System-One/pull/1",
+      "transition_id": "bt-osone-foundation-v01",
+      "type": "HISTORICAL_FOUNDATION",
+      "pre_state": "Research components are fragmented and lack one typed foundation surface.",
+      "target_state": "Typed decision contract, replaceable backend, deterministic evaluation, evidence ledger and CI-backed research foundation exist.",
+      "desired_delta": "A reproducible research/control surface exists instead of ad hoc components.",
+      "status": "HISTORICAL / RESEARCH FOUNDATION",
+      "epistemic": "PR_REPORTED"
+    },
+    {
+      "pr": 2,
+      "title": "Recover v0.3 research frontier and executable capabilities",
+      "source": "GitHub PR description",
+      "source_url": "https://github.com/Loofy147/Open-System-One/pull/2",
+      "transition_id": "bt-osone-v03-frontier-recovery",
+      "type": "RESEARCH_RECOVERY",
+      "pre_state": "Earlier v0.3-stage capabilities/receipts are absent from the minimal foundation.",
+      "target_state": "Recoverable research capabilities and their evidence/guardrails are represented and executable.",
+      "desired_delta": "Historical research state becomes an auditable executable surface without claiming Jev reproduction or production calibration.",
+      "status": "RESEARCH / OPEN",
+      "evidence_boundary": "PR description reports 31 passed in 2.24s and 33 passed in 2.01s; this record treats those as PR_REPORTED until independently re-executed.",
+      "epistemic": "PR_REPORTED"
+    },
+    {
+      "pr": 3,
+      "title": "Research: self-conversion primitive and MCP REST bridge",
+      "source": "GitHub PR description",
+      "source_url": "https://github.com/Loofy147/Open-System-One/pull/3",
+      "transition_id": "bt-osone-mcp-rest-proof-artifact",
+      "type": "RESEARCH_ARTIFACT",
+      "pre_state": "A self-conversion/MCP-to-REST path is not represented as a bounded test artifact.",
+      "target_state": "The path is represented by a focused proof artifact with integration tests and no production-autonomy claim.",
+      "desired_delta": "The research question becomes executable and inspectable rather than conceptual.",
+      "status": "RESEARCH_ONLY",
+      "epistemic": "PR_REPORTED"
+    },
+    {
+      "pr": 4,
+      "title": "Extract standalone Hamiltonian verifier",
+      "source": "GitHub PR description",
+      "source_url": "https://github.com/Loofy147/Open-System-One/pull/4",
+      "transition_id": "bt-hamiltonian-verifier-extraction",
+      "type": "RESEARCH_INSTRUMENT",
+      "pre_state": "The verifier is embedded in Symlib and a first extraction used the wrong axis/colour relation.",
+      "target_state": "Standalone verifier preserves the source predicate, rejects the known mutated case, and avoids a Symlib runtime dependency.",
+      "desired_delta": "Verified legacy predicate extraction becomes independently usable while generalized correctness remains open.",
+      "status": "EXPERIMENTALLY_SUPPORTED_FOR_LEGACY_PREDICATE; GENERALIZED_CORRECTNESS_OPEN",
+      "evidence_boundary": "PR description reports canonical/exhaustive/source-derived checks and explicit superseded commits.",
+      "epistemic": "PR_REPORTED"
+    },
+    {
+      "pr": 5,
+      "title": "research: transition-centered opportunity representation v0.3",
+      "source": "GitHub PR",
+      "source_url": "https://github.com/Loofy147/Open-System-One/pull/5",
+      "transition_id": "bt-methodology-problem-to-transition",
+      "type": "METHODOLOGY",
+      "pre_state": "Opportunity research is organized around problem/tool candidates.",
+      "target_state": "Opportunity research is represented as state transitions with explicit mechanisms, oracles and lineage.",
+      "desired_delta": "Transition becomes the primary research object without erasing problem/evidence history.",
+      "status": "DRAFT / STRUCTURAL_VALIDATION_PASS / METHOD_OPEN",
+      "epistemic": "RESEARCH_IMPLEMENTATION"
+    }
+  ],
+  "current_project_transitions": [
+    {
+      "transition_id": "bt-osone-evidence-control-surface",
+      "project": "Open-System-One",
+      "type": "INTERNAL_PRIMITIVE / RESEARCH_AUTHORITY",
+      "pre_state": "Research/execution/evidence are distributed across projects and experiments.",
+      "target_state": "Common lineage connects source records, transitions, executions, evidence and decisions.",
+      "status": "INTERNAL / OPEN"
+    },
+    {
+      "transition_id": "bt-capability-kernel-authorized-effect",
+      "project": "Open-System-One",
+      "type": "INTERNAL_PRIMITIVE",
+      "status": "EXPERIMENTALLY_SUPPORTED",
+      "evidence_ref": "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json"
+    },
+    {
+      "transition_id": "bt-direct-impact-bounded-mutation",
+      "project": "Open-System-One",
+      "type": "INTERNAL_PRIMITIVE / RESEARCH_INSTRUMENT",
+      "status": "RESEARCH / OPEN"
+    },
+    {
+      "transition_id": "bt-durable-run-transition-identity",
+      "project": "m0-durable-run",
+      "type": "RESEARCH_INSTRUMENT",
+      "status": "EXPERIMENTALLY_SUPPORTED"
+    },
+    {
+      "transition_id": "bt-android-unknown-effect-reconciliation",
+      "project": "Llms-mcp-android",
+      "type": "RESEARCH_FRONTIER",
+      "status": "OPEN"
+    },
+    {
+      "transition_id": "bt-machine-research-state-verification",
+      "project": "Machine",
+      "type": "RESEARCH_INSTRUMENT",
+      "status": "OPEN / EXPERIMENTAL"
+    },
+    {
+      "transition_id": "bt-wedgettok-product-hypothesis",
+      "project": "Wedgettok",
+      "type": "PRODUCT_HYPOTHESIS",
+      "status": "PRODUCT_HYPOTHESIS / DEMAND_UNKNOWN"
+    },
+    {
+      "transition_id": "bt-la-rouine-local-digitization",
+      "project": "la-rouine-platform",
+      "type": "PRODUCT_HYPOTHESIS / LOCAL_EXPERIMENT",
+      "status": "PRODUCT_HYPOTHESIS / DEMAND_UNKNOWN"
+    }
+  ]
+}
