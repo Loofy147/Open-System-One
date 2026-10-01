@@ -50,13 +50,27 @@ class CapabilityKernelTests(unittest.TestCase):
         self.assertEqual(decision, Decision.DENY)
         self.assertEqual(reason, "policy_or_relation_denied")
 
-    def test_side_effect_has_approval_boundary(self):
-        request = self.request(side_effect=True)
+    def test_side_effect_has_request_scoped_approval_boundary(self):
+        request = self.request(side_effect=True, key="mutation-a")
+        other = self.request(side_effect=True, key="mutation-b")
         decision, _ = self.kernel.decide(request)
         self.assertEqual(decision, Decision.APPROVAL_REQUIRED)
-        self.kernel.approve(request.run_id)
+        self.kernel.approve(request.idempotency_key)
         decision, _ = self.kernel.decide(request)
         self.assertEqual(decision, Decision.ALLOW)
+        other_decision, _ = self.kernel.decide(other)
+        self.assertEqual(other_decision, Decision.APPROVAL_REQUIRED)
+
+    def test_explicit_deny_overrides_allow_rule(self):
+        self.kernel.add_rule(
+            subject="agent-1",
+            capability="read_repository",
+            target="repo-a",
+            allow=False,
+        )
+        decision, reason = self.kernel.decide(self.request())
+        self.assertEqual(decision, Decision.DENY)
+        self.assertEqual(reason, "explicit_policy_deny")
 
     def test_idempotency_replays_same_observation_under_same_authority(self):
         (self.root / "result.txt").write_text("stable-result\n", encoding="utf-8")
