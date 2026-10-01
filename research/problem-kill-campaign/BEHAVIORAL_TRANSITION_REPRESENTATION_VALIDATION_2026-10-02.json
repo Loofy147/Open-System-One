@@ -1,0 +1,27 @@
+{
+  "schema_version": "behavioral-transition-representation-validation-v0.1",
+  "date": "2026-10-02",
+  "source_snapshot_id": "osone-opportunity-v0.2-2026-10-01",
+  "source_commit": "a52edc18ba321d6ac4847388791ec55a9894bbad",
+  "target_branch": "research/behavioral-transition-v0.3",
+  "target_head": "f4f5d8bef373ae355dfc98ef0b79d45f49b3ca89",
+  "checks": {
+    "source_snapshot_identity": "PASS",
+    "mapping_version_consistency": "PASS",
+    "mapping_digest_consistency": "PASS",
+    "source_records_immutable_rule": "PASS",
+    "no_status_upgrade_rule": "PASS",
+    "duplicate_transition_ids": "PASS",
+    "current_candidate_accounting": "PASS (2/2)",
+    "legacy_killed_candidate_accounting": "PASS (12/12)",
+    "inferred_not_direct_rule": "PASS",
+    "frontier_transition_count": "PASS (24)"
+  },
+  "result": "STRUCTURAL_VALIDATION_PASS",
+  "limitations": [
+    "GitHub Actions workflow was added, but no workflow run was observable through the available connector at the time of this record.",
+    "Deterministic replay of the committed Python re-encoder was not independently executed in this turn.",
+    "Target transitions reconstructed from the v0.2 audit remain INFERRED; re-encoding does not create historical observations."
+  ],
+  "next_test": "Observe/execute the CI replay and compare generated projection plus canonical digest against the committed expected representation."
+}
