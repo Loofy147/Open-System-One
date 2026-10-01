@@ -1,0 +1,13 @@
+name: forced-burden-filter
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate-ledger:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate forced burden ledger
+        run: python3 research/behavioral-transition/forced_burden_filter.py research/behavioral-transition/CURRENT_BURDEN_LEDGER_2026-10-02.json
