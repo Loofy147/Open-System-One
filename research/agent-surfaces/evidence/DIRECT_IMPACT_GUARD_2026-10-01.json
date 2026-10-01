@@ -1,0 +1,53 @@
+{
+  "schema_version": "direct-impact-guard-evidence-v0.1",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "source_ref": "research/direct-impact-guard-v0.1",
+  "implementation_commit": "eb33d1c4fb254a3ecaa5137be5953a5f0cf7c4d9",
+  "local_verification": {
+    "environment": {
+      "python": "3.13.x",
+      "method": "isolated local reproduction of the committed implementation semantics",
+      "network_ci": "not used"
+    },
+    "unit_tests": {
+      "passed": 10,
+      "failed": 0
+    },
+    "coordinator_smoke": {
+      "result": "COORDINATOR_INTEGRATION_OK",
+      "approval_boundary": "blocked before mutation",
+      "authorized_commit": "COMMITTED",
+      "post_revoke_replay": "blocked by current authority decision"
+    }
+  },
+  "hardening_found_during_verification": [
+    "receipt construction duplicate-field bug fixed before evidence capture",
+    "partial executor failure now triggers rollback and produces an explicit outcome",
+    "idempotent replay now rejects when observed post-state has drifted",
+    "authority is rechecked in ImpactCoordinator before coordinated replay"
+  ],
+  "claims": [
+    {
+      "claim": "Direct state deltas are bounded by declared scope and change budget.",
+      "status": "EXPERIMENTALLY_SUPPORTED",
+      "evidence": "10/10 local unit tests plus direct proof lab semantics."
+    },
+    {
+      "claim": "Rejected or partially failed mutations can be rolled back when the backend supports restore().",
+      "status": "EXPERIMENTALLY_SUPPORTED",
+      "evidence": "unexpected-scope, budget, delete, postcondition, and executor-failure rollback tests."
+    },
+    {
+      "claim": "Capability authority can be composed upstream so approval and revoke are not bypassed by idempotent replay.",
+      "status": "EXPERIMENTALLY_SUPPORTED",
+      "evidence": "coordinator integration smoke."
+    }
+  ],
+  "limitations": [
+    "No fresh GitHub Actions run was observed for this newly introduced branch workflow.",
+    "DictStateBackend is only a deterministic proof backend.",
+    "Rollback is backend-dependent.",
+    "Non-transactional distributed side effects require compensating actions.",
+    "TOCTOU between authority check and external commit remains an adapter-level concern."
+  ]
+}
