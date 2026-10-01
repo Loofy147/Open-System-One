@@ -1,0 +1,79 @@
+{
+  "schema_version": "oss-p0-pinned-sources-v0.1",
+  "observed_date": "2026-10-01",
+  "rule": "pin exact commit for proof; re-pin only through an explicit revision",
+  "sources": {
+    "NVIDIA/OpenShell": {
+      "commit": "1b77cd4e931258d7e33beb486d202d1086d23dee",
+      "license": "Apache-2.0",
+      "capability": "sandbox policy enforcement",
+      "github_url": "https://github.com/NVIDIA/OpenShell/tree/1b77cd4e931258d7e33beb486d202d1086d23dee"
+    },
+    "opensandbox-group/OpenSandbox": {
+      "commit": "c7dc78a4090e5de2b9119e9bd93952cae24f87bd",
+      "license": "Apache-2.0",
+      "capability": "sandbox lifecycle API/SDK",
+      "github_url": "https://github.com/opensandbox-group/OpenSandbox/tree/c7dc78a4090e5de2b9119e9bd93952cae24f87bd"
+    },
+    "open-policy-agent/opa": {
+      "commit": "d566972d31c899e4826cbeb78013b027417721b9",
+      "license": "Apache-2.0",
+      "capability": "external policy decision point",
+      "github_url": "https://github.com/open-policy-agent/opa/tree/d566972d31c899e4826cbeb78013b027417721b9"
+    },
+    "openfga/openfga": {
+      "commit": "97943bf64d85ac3015272d90ab1145696db9ef5b",
+      "license": "Apache-2.0",
+      "capability": "relationship-based authorization",
+      "github_url": "https://github.com/openfga/openfga/tree/97943bf64d85ac3015272d90ab1145696db9ef5b"
+    },
+    "cedar-policy/cedar": {
+      "commit": "2cfa86bab4776d587e96e8da43a37fc44622411a",
+      "license": "Apache-2.0",
+      "capability": "typed authorization policy language/PDP",
+      "github_url": "https://github.com/cedar-policy/cedar/tree/2cfa86bab4776d587e96e8da43a37fc44622411a"
+    },
+    "spiffe/spire": {
+      "commit": "30b6b0db6e068c211e88cf9fd667265df331100f",
+      "license": "Apache-2.0",
+      "capability": "workload identity/SVID",
+      "github_url": "https://github.com/spiffe/spire/tree/30b6b0db6e068c211e88cf9fd667265df331100f"
+    },
+    "microsoft/playwright-mcp": {
+      "commit": "f183dad4a52965583e3cc1d59b88cdc279e2e57d",
+      "license": "Apache-2.0",
+      "capability": "browser capability via MCP",
+      "github_url": "https://github.com/microsoft/playwright-mcp/tree/f183dad4a52965583e3cc1d59b88cdc279e2e57d"
+    },
+    "Arize-ai/openinference": {
+      "commit": "f8c41e5578087add54a1544e91bd83e636a321ac",
+      "license": "Apache-2.0",
+      "capability": "AI tracing semantic conventions/instrumentation",
+      "github_url": "https://github.com/Arize-ai/openinference/tree/f8c41e5578087add54a1544e91bd83e636a321ac"
+    },
+    "UKGovernmentBEIS/inspect_ai": {
+      "commit": "6bea9cd4f6981bf50703284e1595710e8dec6ad4",
+      "license": "MIT",
+      "capability": "reproducible AI evaluation",
+      "github_url": "https://github.com/UKGovernmentBEIS/inspect_ai/tree/6bea9cd4f6981bf50703284e1595710e8dec6ad4"
+    },
+    "ServiceNow/BrowserGym": {
+      "commit": "c05d7f38f4f788d6e4ee960512c3d5c8aabc6e42",
+      "license": "Apache-2.0",
+      "capability": "browser-agent benchmark environment",
+      "github_url": "https://github.com/ServiceNow/BrowserGym/tree/c05d7f38f4f788d6e4ee960512c3d5c8aabc6e42"
+    },
+    "ethz-spylab/agentdojo": {
+      "commit": "089ed468cf3ed0322acc66b0211f26d9d90dbf60",
+      "license": "MIT",
+      "capability": "agent security/prompt-injection benchmark",
+      "github_url": "https://github.com/ethz-spylab/agentdojo/tree/089ed468cf3ed0322acc66b0211f26d9d90dbf60"
+    },
+    "a2aproject/a2a-tck": {
+      "commit": "263b9cfaf16a554bdfb166a7ba5b67716e946349",
+      "license": "Apache-2.0",
+      "capability": "A2A protocol compatibility testing",
+      "github_url": "https://github.com/a2aproject/a2a-tck/tree/263b9cfaf16a554bdfb166a7ba5b67716e946349"
+    }
+  }
+}

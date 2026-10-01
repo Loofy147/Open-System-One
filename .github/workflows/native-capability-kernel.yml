@@ -1,0 +1,47 @@
+name: Native capability kernel proof
+
+on:
+  push:
+    branches:
+      - research/dots-readiness-v0.1
+  workflow_dispatch:
+
+jobs:
+  native-kernel-proof:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: "${{ github.workspace }}/src"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run unit tests
+        run: python -m unittest -v tests/test_agent_surface_kernel.py
+
+      - name: Run direct proof lab
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/native-capability-kernel
+          python research/agent-surfaces/lab/native_capability_kernel_proof.py | tee /tmp/native-capability-kernel/receipt.json
+
+      - name: Validate receipt shape
+        run: |
+          python - <<'PY'
+          import json
+          p="/tmp/native-capability-kernel/receipt.json"
+          x=json.load(open(p))
+          assert x["status"]=="EXPERIMENTALLY_SUPPORTED"
+          assert x["checks"]["policy_and_relation_intersection"]=="ALLOW"
+          assert x["checks"]["revocation"]=="DENY"
+          assert "DENY: policy_or_relation_denied" in x["checks"]["revoked_replay"]
+          assert x["checks"]["historical_receipt_authorization"]["decision"]=="ALLOW"
+          assert len(x["checks"]["receipt_sha256"])==64
+          print("RECEIPT_OK")
+          PY
+
+      - name: Upload direct proof receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-capability-kernel-proof
+          path: /tmp/native-capability-kernel/receipt.json
+          if-no-files-found: error

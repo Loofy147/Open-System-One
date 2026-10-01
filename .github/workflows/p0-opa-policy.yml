@@ -1,0 +1,40 @@
+name: P0 OPA policy proof
+
+on:
+  push:
+    branches:
+      - research/dots-readiness-v0.1
+  workflow_dispatch:
+
+jobs:
+  opa-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pinned branch
+        uses: actions/checkout@v4
+
+      - name: Install pinned OPA runtime
+        env:
+          OPA_VERSION: "v1.21.1"
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/open-policy-agent/opa/releases/download/$OPA_VERSION/opa_linux_amd64_static" -o /tmp/opa
+          curl -fsSL "https://github.com/open-policy-agent/opa/releases/download/$OPA_VERSION/opa_linux_amd64_static.sha256" -o /tmp/opa.sha256
+          expected="$(awk '{print $1}' /tmp/opa.sha256)"
+          actual="$(sha256sum /tmp/opa | awk '{print $1}')"
+          test "$expected" = "$actual"
+          chmod +x /tmp/opa
+          /tmp/opa version
+
+      - name: Run P0.03 proof
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p0-opa
+          OPA_BIN=/tmp/opa python research/agent-surfaces/lab/p0_opa_policy_proof.py | tee /tmp/p0-opa/receipt.json
+
+      - name: Upload durable CI receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-opa-receipt
+          path: /tmp/p0-opa/receipt.json
+          if-no-files-found: error

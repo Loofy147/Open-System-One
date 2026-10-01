@@ -1,0 +1,85 @@
+{
+  "schema_version": "behavioral-transition-representation-recipes-v0.1",
+  "mapping_version": "bt-v0.3-reencode-v0.1",
+  "source_snapshot_id": "osone-opportunity-v0.2-2026-10-01",
+  "generated_on": "2026-10-02",
+  "rules": {
+    "current_candidate_source": "CURRENT_OPPORTUNITY_STATE_2026-10-01.json",
+    "killed_candidate_source": "OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md",
+    "inferred_target_transition": "Recipe content is inference unless a source record explicitly contains the target transition.",
+    "status_preservation": "Copy legacy decision/status; never upgrade through re-encoding.",
+    "supplemental_research": "Internal/research transitions are included only as explicitly classified supplemental records."
+  },
+  "target_transition_recipes": [
+    [
+      "offline-conflict-causal-reconciliation",
+      "An offline conflict occurs; operator must reconstruct causal/version/property evidence and choose a safe resolution.",
+      "INFERRED_FROM_LEGACY_RECORD"
+    ],
+    [
+      "semantic-file-handoff-breakage-preflight",
+      "A recurring CSV/XLSX version arrives; recipient must decide accept, reject, or request correction based on downstream semantic impact.",
+      "INFERRED_FROM_LEGACY_RECORD"
+    ],
+    [
+      "GitHub review routing without premature notification",
+      "Review eligibility is satisfied; required reviewer routing occurs only at the correct workflow point.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "SMB export-only reconciliation",
+      "Related exports arrive; discrepancies become an actionable reconciliation result.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic CSV/XLSX diff",
+      "Two file versions exist; relevant structural/row/cell changes become visible before downstream use.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic pre-import CSV repair/validation",
+      "An import-bound file arrives; invalid/risky structure or values are detected or repaired before import.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic sandbox",
+      "An untrusted execution request starts; execution remains inside an isolated bounded runtime.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic policy/authorization",
+      "A capability request reaches authorization; policy/relation decision is explicit before effect.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic browser automation",
+      "A browser task is triggered; required browser actions execute reproducibly.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic agent receipt/provenance",
+      "An agent action completes; the effect is independently reconstructable and verifiable.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic MCP discovery/validation",
+      "A client needs a capability; server metadata/schema/conformance becomes discoverable and inspectable.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic offline collection",
+      "A field operator works without connectivity; data is captured offline and synchronized later.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic inventory/reorder from exports",
+      "Inventory/export state reaches reorder review; reorder candidates become actionable.",
+      "INFERRED_FROM_AUDIT"
+    ],
+    [
+      "Generic Algerian WhatsApp/COD order management",
+      "An order arrives through DM/WhatsApp/phone; it becomes a validated and tracked order record.",
+      "INFERRED_FROM_AUDIT"
+    ]
+  ]
+}

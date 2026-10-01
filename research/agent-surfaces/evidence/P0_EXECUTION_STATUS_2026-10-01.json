@@ -1,0 +1,138 @@
+{
+  "schema_version": "oss-p0-execution-status-v0.1",
+  "observed_at": "2026-10-01",
+  "branch": "research/dots-readiness-v0.1",
+  "current_state": "PARTIAL_PROGRESS",
+  "results": {
+    "P0.01-OpenShell": "BLOCKED_ENVIRONMENT",
+    "P0.02-OpenSandbox": "OPEN",
+    "P0.03-OPA": "EXPERIMENTALLY_SUPPORTED",
+    "P0.04-OpenFGA": "EXPERIMENTALLY_SUPPORTED",
+    "P0.05-Cedar": "EXPERIMENTALLY_SUPPORTED",
+    "P0.06-SPIFFE-SPIRE": "BLOCKED_ENVIRONMENT",
+    "P0.07-browser-substrate": "EXPERIMENTALLY_SUPPORTED",
+    "P0.07-Playwright-MCP": "BLOCKED_PACKAGE_OR_SERVER",
+    "P0.08-run-correlation-substrate": "EXPERIMENTALLY_SUPPORTED",
+    "P0.08-OpenInference": "BLOCKED_PACKAGE",
+    "P0.09-Inspect-AI": "BLOCKED_PACKAGE",
+    "P0.10-BrowserGym": "BLOCKED_ENVIRONMENT",
+    "P0.11-AgentDojo": "BLOCKED_PACKAGE_OR_PROVIDER",
+    "P0.12-A2A-TCK": "BLOCKED_REPOSITORY_EXECUTION_ENVIRONMENT"
+  },
+  "verified_runs": {
+    "browser_receipt_preflight": {
+      "run_id": 36919520778,
+      "run_number": 5,
+      "head_sha": "30325d5b26377e293cda1c783e9a535fadb5f964",
+      "conclusion": "success",
+      "steps": {
+        "receipt_tests": "success",
+        "browser_trace_preflight": "success"
+      }
+    },
+    "opa": {
+      "run_id": 36919727979,
+      "run_number": 2,
+      "head_sha": "248af9e55fd7049e66e599d94c0fab76ac3fb936",
+      "conclusion": "success",
+      "evidence_file": "research/agent-surfaces/evidence/P0_OPA_POLICY_2026-10-01.json"
+    },
+    "cedar": {
+      "run_id": 36919985797,
+      "run_number": 3,
+      "head_sha": "98f0b59ccfd91e8b6601907f13334413dfde8848",
+      "conclusion": "success",
+      "evidence_file": "research/agent-surfaces/evidence/P0_CEDAR_POLICY_2026-10-01.json"
+    },
+    "openfga": {
+      "run_id": 36920909469,
+      "run_number": 4,
+      "head_sha": "b7a7237cc64d829bfb261c99d89742c704975911",
+      "conclusion": "success",
+      "evidence_file": "research/agent-surfaces/evidence/P0_OPENFGA_RELATION_2026-10-01.json"
+    },
+    "opensandbox_current": {
+      "run_id": 36921516623,
+      "run_number": 13,
+      "head_sha": "7e94b522a9311fdb9b4c1a0c37b76c3f625fde01",
+      "status": "in_progress",
+      "completed_steps": [
+        "Docker runtime verification",
+        "release checkout at b1a29cf93a823a95913f7943010febb3f29de05c",
+        "SDK/server installation",
+        "source path validation",
+        "config file generation",
+        "config validation"
+      ],
+      "pending_steps": [
+        "server startup",
+        "create/inspect/execute/read-artifact/destroy proof",
+        "post-destroy negative test",
+        "independent Docker cleanup"
+      ]
+    },
+    "native_capability_kernel": {
+      "run_id": 36926926846,
+      "run_number": 6,
+      "head_sha": "cf4d6ffa122a5a0a0ea613bd0276349f42bb6d11",
+      "conclusion": "success",
+      "unit_tests": "8/8",
+      "proof_lab": "success",
+      "receipt_validation": "RECEIPT_OK",
+      "evidence_file": "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json"
+    }
+  },
+  "historical_failures_recorded": {
+    "browser_receipt_import_failure": {
+      "run_id": 36911443063,
+      "cause": "PYTHONPATH did not expose src/",
+      "repaired_in_commit": "30325d5b26377e293cda1c783e9a535fadb5f964"
+    },
+    "opa_fixture_failure": {
+      "run_id": 36919671101,
+      "cause": "invalid Rego fixture for OPA v1 runtime",
+      "repaired_in_commit": "248af9e55fd7049e66e599d94c0fab76ac3fb936"
+    },
+    "cedar_harness_failure": {
+      "run_id": 36919893851,
+      "cause": "harness treated Cedar DENY exit code 2 as an execution error",
+      "repaired_in_commit": "98f0b59ccfd91e8b6601907f13334413dfde8848"
+    },
+    "openfga_harness": {
+      "run_id": 36920861340,
+      "cause": "Bash filename interpolation used an undefined OPENFGA_VERSION_linux_amd64 variable; after correction, the same workflow then failed only because the CLI uses the version subcommand rather than --version.",
+      "repaired_commit": "b7a7237cc64d829bfb261c99d89742c704975911"
+    },
+    "opensandbox_startup": [
+      {
+        "run_id": 36920399095,
+        "cause": "installed entrypoint failed to import opensandbox_server after package installation",
+        "repaired_by": "source-tree PYTHONPATH execution"
+      },
+      {
+        "run_id": 36921197544,
+        "cause": "config validation read ~/.sandbox.toml instead of the generated runner-temp config",
+        "repaired_in_commit": "b082c858e7c4d875be88f8cf7808b75d29c67496"
+      }
+    ]
+  },
+  "environment": {
+    "local_python": "3.13.5",
+    "local_node": "22.16.0",
+    "local_playwright": "1.57.0",
+    "local_opentelemetry_api": "1.42.1",
+    "local_opentelemetry_sdk": "1.42.1",
+    "local_chromium": "144.0.7559.96",
+    "local_docker": false,
+    "local_podman": false,
+    "local_kubectl": false,
+    "local_rustc": false
+  },
+  "blocking_facts": [
+    "Local container cannot resolve github.com for git operations.",
+    "Docker, Podman and kubectl are absent locally; GitHub Actions provides the missing container runtime for CI experiments.",
+    "Playwright MCP, OpenInference, Inspect AI, AgentDojo and A2A TCK remain uninstalled in the local environment.",
+    "The browser proof is still a generic Playwright substrate proof, not a Playwright MCP proof."
+  ],
+  "next_environment": "Native Capability Kernel is EXPERIMENTALLY_SUPPORTED as a control-plane primitive. Continue by adding durable relation/policy stores and replaceable hardened execution adapters; do not promote the local subprocess executor to a sandbox."
+}

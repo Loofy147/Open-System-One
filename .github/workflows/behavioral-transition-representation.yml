@@ -1,0 +1,56 @@
+name: Behavioral Transition Representation
+
+on:
+  push:
+    branches:
+      - research/behavioral-transition-v0.3
+  pull_request:
+    branches:
+      - research/behavioral-transition-v0.3
+
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Re-encode v0.2 opportunity corpus
+        run: |
+          python tools/research/reencode_behavioral_transition.py             --state research/problem-kill-campaign/CURRENT_OPPORTUNITY_STATE_2026-10-01.json             --audit research/problem-kill-campaign/OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md             --recipes research/problem-kill-campaign/TRANSITION_REPRESENTATION_RECIPES_v0.1.json             --output /tmp/behavioral-transition-opportunity-projection.json
+
+      - name: Validate replay invariants
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p = Path("/tmp/behavioral-transition-opportunity-projection.json")
+          x = json.loads(p.read_text(encoding="utf-8"))
+
+          assert x["source_schema"] == "experimental-opportunity-state-v0.2"
+          assert x["mapping_version"] == "bt-v0.3-reencode-v0.1"
+          assert x["representation_semantics"]["source_immutable"] is True
+          assert x["representation_semantics"]["reencoding_is_verification"] is False
+          assert x["representation_semantics"]["reencoding_is_new_evidence"] is False
+          assert x["representation_semantics"]["epistemic_upgrade_allowed"] is False
+
+          transitions = x["transitions"]
+          ids = [t["transition_id"] for t in transitions]
+          assert len(ids) == len(set(ids))
+          assert len(transitions) == 14
+          assert sum(t["type"] == "RESEARCH_CANDIDATE" for t in transitions) == 2
+          assert sum(t["type"] == "KILLED_CANDIDATE" for t in transitions) == 12
+
+          for t in transitions:
+              if str(t.get("representation_status", "")).startswith("INFERRED"):
+                  ep = t.get("epistemic")
+                  if isinstance(ep, dict):
+                      assert ep.get("target_transition") != "DIRECT_OBSERVATION"
+
+          assert x["validation"]["ok"] is True
+          print("TRANSITION_REPLAY_OK")
+          print("transition_count=", len(transitions))
+          print("current_candidates=", sum(t["type"] == "RESEARCH_CANDIDATE" for t in transitions))
+          print("killed_candidates=", sum(t["type"] == "KILLED_CANDIDATE" for t in transitions))
+          PY

@@ -1,0 +1,41 @@
+{
+  "schema_version": "gap-engine-transition-mapping-v0.1",
+  "engine_version": "user-supplied 2026-10-02",
+  "mapping_version": "bt-v0.3",
+  "fields": {
+    "dimensions": "TransitionTarget.pre_state + observation source set",
+    "observations": "RawObservationSet",
+    "fit_dim": "FittedTransitionModel",
+    "k": "current_transition.rate",
+    "se_k": "current_transition.rate_uncertainty",
+    "horizon": "TargetTransition.horizon",
+    "tolerance": "TargetTransition.acceptance_boundary",
+    "gap_table": "GapAssessment",
+    "R": "GapAssessment.missing_rate_point_estimate",
+    "mechanisms": "MechanismCandidateSet",
+    "plan": "MechanismPlan",
+    "chosen": "MechanismPlan.selected_mechanisms",
+    "cost": "MechanismPlan.cost",
+    "margin": "MechanismPlan.forecast_margin",
+    "lift": "MechanismPlan.predicted_effect",
+    "lift_se": "MechanismPlan.effect_uncertainty",
+    "missing_rate": "GapAssessment.missing_rate_deterministic_lower_bound",
+    "reconcile": "AggregateLiftCalibration",
+    "apply_update": "ModelRevision"
+  },
+  "provenance_policy": {
+    "k": "DERIVED",
+    "gap_classification": "INFERRED",
+    "plan": "DERIVED",
+    "feedback_observation": "DIRECT_OBSERVATION after execution",
+    "feedback_update": "DERIVED",
+    "cause_shares": "MODEL_DERIVED / ASSUMPTION"
+  },
+  "non_upgrade_rules": [
+    "Re-encoding does not create evidence.",
+    "Simulation does not establish external demand.",
+    "Execution does not establish transition outcome.",
+    "Aggregate feedback does not identify individual mechanism effects.",
+    "Confidence labels are not coverage guarantees without a joint validation contract."
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": "dots-p0-preflight-receipt-v0.1",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "test": "P0.07-browser-substrate",
+  "scope": "local browser capability plus OpenTelemetry run correlation; NOT Playwright MCP integration",
+  "environment": {
+    "python": "3.13.5",
+    "playwright": "1.57.0",
+    "opentelemetry_api": "1.42.1",
+    "opentelemetry_sdk": "1.42.1",
+    "chromium": "144.0.7559.96"
+  },
+  "runs": [
+    {
+      "run_id": "p0-local-browser-2026-10-01-001",
+      "status": "PASS",
+      "browser_result": "SAFE_OK",
+      "span_names": [
+        "browser.set_content",
+        "browser.click",
+        "browser.observe",
+        "p0.browser.run"
+      ],
+      "span_count": 4,
+      "trace_id": "fe63f347b6b06829e50302047b841013"
+    },
+    {
+      "run_id": "p0-local-browser-2026-10-01-001",
+      "status": "PASS",
+      "browser_result": "SAFE_OK",
+      "span_names": [
+        "browser.set_content",
+        "browser.click",
+        "browser.observe",
+        "p0.browser.run"
+      ],
+      "span_count": 4,
+      "trace_id": "a393fc9d188dbfd68b0ada885fb4de5a"
+    },
+    {
+      "run_id": "p0-local-browser-2026-10-01-001",
+      "attempt": 3,
+      "status": "PASS",
+      "browser_result": "SAFE_OK",
+      "span_names": [
+        "browser.set_content",
+        "browser.click",
+        "browser.observe",
+        "p0.browser.run"
+      ],
+      "span_count": 4,
+      "trace_id": "9cda88ecb2bb64318403edb12d842a5e"
+    }
+  ],
+  "what_this_establishes": [
+    "A browser automation primitive can be executed in the current environment.",
+    "A single OpenTelemetry trace can correlate browser actions to a stable run_id."
+  ],
+  "what_this_does_not_establish": [
+    "Playwright MCP server behavior",
+    "MCP transport behavior",
+    "browser session policy isolation",
+    "external-site permissions",
+    "OpenInference semantic conventions"
+  ],
+  "environment_blockers": [
+    "The Playwright-managed browser executable is not cached.",
+    "file:// navigation is blocked by the current Chromium policy.",
+    "127.0.0.1 navigation is blocked by the current Chromium policy.",
+    "Docker, Podman, and kubectl are not installed in the current execution environment."
+  ],
+  "notes": [
+    "Three independent executions of the same local preflight succeeded.",
+    "The repeated executions are test attempts, not proof of Dots or Playwright MCP idempotency."
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": "pre-build-falsification-matrix-v0.1",
+  "status": "READY_FOR_EXECUTION",
+  "finalists": [
+    {
+      "id": "F1",
+      "candidate": "offline conflict causal reconciliation",
+      "incumbent": "ODK Central",
+      "kill_cost": "configuration / incumbent hands-on",
+      "kill_threshold": "4/5 deterministic cases fully resolved from incumbent evidence",
+      "survival_threshold": "2/5 require manual reconstruction with structural evidence gap",
+      "status": "OPEN"
+    },
+    {
+      "id": "F2",
+      "candidate": "independent agent-effect verification",
+      "incumbent": "Model Action Protocol (MAP) plus strongest accessible agent audit stack",
+      "kill_cost": "small adapter fixture",
+      "kill_threshold": "8/8 reconstruction facts satisfied without trusting acting-agent narrative",
+      "survival_threshold": ">=1 required fact unavailable or only inferred across boundary",
+      "status": "OPEN"
+    }
+  ],
+  "common_stop": "No MVP work before a finalist survives falsification.",
+  "winner_mode": "research_instrument_only"
+}

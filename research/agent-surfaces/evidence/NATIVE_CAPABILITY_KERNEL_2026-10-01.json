@@ -1,0 +1,45 @@
+{
+  "schema_version": "native-capability-kernel-proof-v0.1",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "source_ref": {
+    "repository": "Loofy147/Open-System-One",
+    "branch": "research/dots-readiness-v0.1",
+    "head": "cf4d6ffa122a5a0a0ea613bd0276349f42bb6d11"
+  },
+  "execution": {
+    "github_actions_run_id": 36926926846,
+    "run_number": 6,
+    "job_id": 110586441116,
+    "conclusion": "success",
+    "unit_tests": "8/8",
+    "receipt_validation": "RECEIPT_OK",
+    "proof_lab": "success"
+  },
+  "checks": {
+    "policy_and_relation_intersection": "ALLOW",
+    "explicit_deny_precedence": "PASS via unit test",
+    "approval_boundary": "APPROVAL_REQUIRED",
+    "approval_scope": "APPROVAL_REQUIRED",
+    "same_authority_idempotency": true,
+    "revocation": "DENY",
+    "revoked_replay": "DENY: policy_or_relation_denied",
+    "historical_receipt_authorization": {
+      "decision": "ALLOW",
+      "reason": "policy_and_relation_allowed"
+    },
+    "artifact_sha256": "1bc56bdac6c4e54b3c7a43d09becec2d35b6686f727617e2dc07e79bb72d8d81",
+    "receipt_sha256": "a3d8e78a80378006fd4feecf324c63e01b75365552fb5ba7cce84a309f824696"
+  },
+  "negative_findings": [
+    "Earlier kernel version could replay a cached observation after revoke; revalidation-before-replay fixed this.",
+    "Earlier receipt recomputed current authority; receipts now preserve authorization observed at execution time.",
+    "Earlier approval was run-scoped; approval is now request/idempotency-key scoped.",
+    "Earlier deny rules were ignored; explicit deny now has precedence."
+  ],
+  "limitations": [
+    "The local subprocess executor is not an OS sandbox.",
+    "Relation state is in-memory in v0.1 and is not yet durable.",
+    "Policy rules are exact-match rules; no wildcard or hierarchy semantics are implemented yet.",
+    "No external OSS runtime is required or imported by this primitive."
+  ]
+}

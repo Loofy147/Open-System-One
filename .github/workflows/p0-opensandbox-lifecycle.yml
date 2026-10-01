@@ -1,0 +1,127 @@
+name: P0 OpenSandbox lifecycle proof
+
+on:
+  push:
+    branches:
+      - research/dots-readiness-v0.1
+  workflow_dispatch:
+
+jobs:
+  opensandbox-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Open-System-One
+        uses: actions/checkout@v4
+
+      - name: Verify Docker runtime
+        run: |
+          set -euo pipefail
+          docker version
+          docker info
+
+      - name: Checkout pinned OpenSandbox release
+        run: |
+          set -euo pipefail
+          git clone https://github.com/opensandbox-group/OpenSandbox /tmp/OpenSandbox
+          cd /tmp/OpenSandbox
+          git checkout --detach b1a29cf93a823a95913f7943010febb3f29de05c
+          test "$(git rev-parse HEAD)" = "b1a29cf93a823a95913f7943010febb3f29de05c"
+
+      - name: Install pinned OpenSandbox dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir /tmp/OpenSandbox/sdks/sandbox/python /tmp/OpenSandbox/server
+          PYTHONPATH="/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src" python -c "import opensandbox_server, opensandbox; print(opensandbox_server.__file__); print(opensandbox.__file__)"
+
+      - name: Export pinned OpenSandbox source paths
+        run: |
+          echo "PYTHONPATH=/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src" >> "$GITHUB_ENV"
+
+      - name: Prepare isolated server configuration
+        run: |
+          set -euo pipefail
+          export P0_HOME="$RUNNER_TEMP/p0-home"
+          mkdir -p "$P0_HOME"
+          cat > "$P0_HOME/.sandbox.toml" <<'EOF'
+          [server]
+          host = "127.0.0.1"
+          port = 8080
+          max_sandbox_timeout_seconds = 3600
+
+          [runtime]
+          type = "docker"
+          execd_image = "opensandbox/execd:v1.1.0"
+
+          [store]
+          type = "sqlite"
+          path = "/tmp/opensandbox-p0.db"
+
+          [docker]
+          network_mode = "bridge"
+          port_range_min = 40000
+          port_range_max = 41000
+          drop_capabilities = ["AUDIT_WRITE", "MKNOD", "NET_ADMIN", "NET_RAW", "SYS_ADMIN", "SYS_MODULE", "SYS_PTRACE", "SYS_TIME", "SYS_TTY_CONFIG"]
+          no_new_privileges = true
+          pids_limit = 512
+
+          [ingress]
+          mode = "direct"
+          EOF
+
+      - name: Validate OpenSandbox configuration
+        env:
+          PYTHONPATH: "/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src"
+          SANDBOX_CONFIG_PATH: ${{ runner.temp }}/p0-home/.sandbox.toml
+        run: |
+          set -euo pipefail
+          python -c "from opensandbox_server.config import load_config; print(load_config())"
+
+
+      - name: Start OpenSandbox server
+        env:
+          OPENSANDBOX_INSECURE_SERVER: "YES"
+          HOME: ${{ runner.temp }}/p0-home
+          SANDBOX_CONFIG_PATH: ${{ runner.temp }}/p0-home/.sandbox.toml
+          PYTHONPATH: "/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src"
+        run: |
+          set -euo pipefail
+          cd /tmp/OpenSandbox/server
+          python -m opensandbox_server.main > "$RUNNER_TEMP/opensandbox-server.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/opensandbox-server.pid"
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:8080/health >/tmp/opensandbox-health.json; then
+              cat /tmp/opensandbox-health.json
+              exit 0
+            fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/opensandbox-server.log"
+          exit 1
+
+      - name: Run P0.02 lifecycle proof
+        env:
+          OPEN_SANDBOX_DOMAIN: "localhost:8080"
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p0-opensandbox
+          python research/agent-surfaces/lab/p0_opensandbox_lifecycle_proof.py | tee /tmp/p0-opensandbox/receipt.json
+
+      - name: Independent Docker cleanup check
+        run: |
+          set -euo pipefail
+          sandbox_id="$(python -c 'import json; print(json.load(open("/tmp/p0-opensandbox/receipt.json"))["sandbox"]["id"])')"
+          remaining="$(docker ps -a --filter "label=opensandbox.io/id=$sandbox_id" --format '{{.ID}}')"
+          if [ -n "$remaining" ]; then
+            echo "Sandbox container still exists after destroy: $remaining"
+            exit 1
+          fi
+
+      - name: Upload durable CI receipt and server log
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-opensandbox-receipt
+          path: |
+            /tmp/p0-opensandbox/receipt.json
+            ${{ runner.temp }}/opensandbox-server.log
+          if-no-files-found: error

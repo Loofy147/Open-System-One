@@ -1,0 +1,47 @@
+{
+  "schema_version": "oss-p0-openfga-proof-v0.1",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "test": "P0.04-OpenFGA",
+  "source_ref": {
+    "repository": "openfga/openfga",
+    "inspected_commit": "97943bf64d85ac3015272d90ab1145696db9ef5b",
+    "runtime_release": "v1.21.0"
+  },
+  "execution": {
+    "github_actions_run_id": 36920909469,
+    "run_number": 4,
+    "job_id": 110566419494,
+    "head_sha": "b7a7237cc64d829bfb261c99d89742c704975911",
+    "conclusion": "success",
+    "artifact_id": 11192145350,
+    "artifact_zip_sha256": "dd681646a08075e12058ec3c455010fbcdfa1a68012867130d6c159234efcbb1"
+  },
+  "runtime": {
+    "health": {
+      "status": "SERVING"
+    },
+    "base_url": "http://127.0.0.1:8080",
+    "binary_checksum_verified": true
+  },
+  "store": {
+    "id": "01M3WJ1DA3C5Y2XAZZDS6A4D8F",
+    "model_id": "01M3WJ1DA4158SG536XMTNBE8K",
+    "model_sha256": "ff6e3469b2fb46a9070c23ae9642eac361e2003e230415396765dad4bc01fc41"
+  },
+  "cases": {
+    "allow_after_grant": true,
+    "deny_other_user": false,
+    "deny_after_revoke": false
+  },
+  "negative_test": {
+    "mutation": "delete user:agent-1 reader relation",
+    "observed": "authorization revoked"
+  },
+  "scope": [
+    "proves OpenFGA relation-based authorization over HTTP for the fixed corpus",
+    "proves tuple deletion revokes authorization",
+    "does not prove Open-System-One integration",
+    "does not prove distributed storage, HA, or external SDK behavior",
+    "top-level OpenFGA license previously observed as Apache-2.0; transitive dependency licensing was not exhaustively cleared"
+  ]
+}

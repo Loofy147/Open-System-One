@@ -1,0 +1,48 @@
+{
+  "schema_version": "forced-burden-filter-rules-v0.1",
+  "date": "2026-10-02",
+  "decision_order": [
+    "EXISTENCE",
+    "NECESSITY",
+    "DUPLICATION",
+    "EXISTING_MECHANISM",
+    "AUTOMATION",
+    "REQUIRED_CONTROL",
+    "DECISIVE_EXPERIMENT",
+    "EXTERNAL_BLOCKER",
+    "STALE_REBASE"
+  ],
+  "dispositions": [
+    "KILL",
+    "MERGE",
+    "ABSORB",
+    "AUTOMATE",
+    "BOUND",
+    "PROVE",
+    "DEFER",
+    "REBASE"
+  ],
+  "hard_invariants": {
+    "unclassified_count": 0,
+    "ownerless_actionless_count": 0,
+    "silent_defer_count": 0,
+    "representation_only_status_upgrades": 0,
+    "killed_reopened_without_new_evidence": 0
+  },
+  "default_policy": {
+    "no_new_code_before_target_transition": true,
+    "incumbent_first": true,
+    "no_build_is_valid": true,
+    "unknown_must_have_action": true,
+    "deferred_must_have_wake_condition": true,
+    "required_controls_are_bounded_not_deleted": true
+  },
+  "reactivation_rule": {
+    "killed_item_requires_one_of": [
+      "new evidence",
+      "changed world revision",
+      "changed population/scope",
+      "contradiction of original kill basis"
+    ]
+  }
+}

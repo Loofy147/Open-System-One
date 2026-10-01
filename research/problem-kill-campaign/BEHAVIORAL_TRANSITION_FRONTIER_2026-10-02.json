@@ -1,0 +1,419 @@
+{
+  "schema_version": "behavioral-transition-frontier-v0.3",
+  "status": "REGENERATED_DERIVED_VIEW",
+  "date": "2026-10-02",
+  "source_snapshot": {
+    "snapshot_id": "osone-opportunity-v0.2-2026-10-01",
+    "repository": "Loofy147/Open-System-One",
+    "source_branch": "research/experimental-opportunity-v0.2",
+    "source_commit": "a52edc18ba321d6ac4847388791ec55a9894bbad",
+    "source_files": [
+      {
+        "path": "docs/research/EXPERIMENTAL_OPPORTUNITY_PROTOCOL_v0.2.md",
+        "blob_sha": "0ae374817921ce7b9bf051fe7295545d369f502f"
+      },
+      {
+        "path": "docs/research/EXPERIMENTAL_OPPORTUNITY_RECORD_TEMPLATES_v0.2.md",
+        "blob_sha": "69d954bdbba0e2bb3a4e659f82139cfba16eccf6"
+      },
+      {
+        "path": "research/problem-kill-campaign/CURRENT_OPPORTUNITY_STATE_2026-10-01.json",
+        "blob_sha": "dcb37e1128beba818b4c6b82a54b9f8b045a91c0"
+      },
+      {
+        "path": "research/problem-kill-campaign/OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md",
+        "blob_sha": "4f9866703b0ee188551c925051e677133db4f5f2"
+      },
+      {
+        "path": "research/problem-kill-campaign/OPPORTUNITY_COVERAGE_MATRIX_2026-10-01.json",
+        "blob_sha": "e7dcfbc23d5ccf465cf356ed6a726e49f7b1cade"
+      }
+    ]
+  },
+  "mapping": {
+    "path": "research/problem-kill-campaign/TRANSITION_REPRESENTATION_MAPPING_v0.1.json",
+    "mapping_version": "bt-v0.3-reencode-v0.1",
+    "mapping_digest": "c439760c84a2eb01fe0aa8ef2cef80e42f6cbb08e2e03d11181ae3aa9222deac"
+  },
+  "representation_rules": {
+    "source_records_immutable": true,
+    "status_promotion_by_reencoding": false,
+    "inferred_transition_is_not_observation": true,
+    "reencoding_is_not_verification": true,
+    "reencoding_is_not_new_evidence": true
+  },
+  "transitions": [
+    {
+      "transition_id": "bt-methodology-problem-to-transition",
+      "type": "METHOD_TRANSITION",
+      "source_record_refs": [
+        "docs/research/EXPERIMENTAL_OPPORTUNITY_PROTOCOL_v0.2.md",
+        "research/problem-kill-campaign/CURRENT_OPPORTUNITY_STATE_2026-10-01.json"
+      ],
+      "source_basis": "v0.2 methodology plus current design discussion",
+      "representation_status": "INFERRED",
+      "pre_state": "Discovery is organized around problem statements and possible tools.",
+      "trigger": "Start of a new research/opportunity cycle.",
+      "target_state": "Discovery is organized around explicit state transitions and only then searches mechanisms.",
+      "desired_delta": "Problem becomes a derived description; target transition becomes primary research object.",
+      "oracle": "Representation replay must preserve source status and expose an explicit target transition without upgrading evidence.",
+      "current_status": "OPEN / EXPERIMENTAL"
+    },
+
+    {
+      "transition_id": "bt-offline-conflict-causal-reconciliation",
+      "legacy_record_id": "offline-conflict-causal-reconciliation",
+      "type": "RESEARCH_CANDIDATE",
+      "source_basis": "v0.2 current state + portfolio audit",
+      "representation_status": "INFERRED_FROM_LEGACY_RECORD",
+      "pre_state": "Offline branches update shared state and an operator must inspect incumbent conflict information.",
+      "trigger": "A multi-branch offline synchronization conflict occurs.",
+      "target_state": "Operator can identify causal branch/version structure, conflicting properties, current authoritative state, resolution action, and supporting evidence.",
+      "desired_delta": "Conflict handling moves from manual reconstruction to evidence-complete resolution.",
+      "strongest_incumbent_set": ["ODK Central", "RxDB", "CouchDB"],
+      "oracle": "5-case expected causal/property/version resolution key",
+      "kill_test": "F1: kill if >=4/5 are fully resolvable without manual reconstruction; survive only if >=2/5 require manual reconstruction due to structural evidence gap.",
+      "epistemic": {
+        "problem": "ESTABLISHED",
+        "residual_pain": "EXPERIMENTALLY_SUPPORTED",
+        "gap": "INFERENCE",
+        "desired_delta": "HYPOTHESIS",
+        "current_transition": "UNKNOWN"
+      },
+      "status": "NEEDS_DECISIVE_EXPERIMENT"
+    },
+
+    {
+      "transition_id": "bt-semantic-file-handoff-breakage-preflight",
+      "legacy_record_id": "semantic-file-handoff-breakage-preflight",
+      "type": "RESEARCH_CANDIDATE",
+      "source_basis": "v0.2 current state + portfolio audit",
+      "representation_status": "INFERRED_FROM_LEGACY_RECORD",
+      "pre_state": "Recipient receives a recurring CSV/XLSX artifact before a downstream import/action.",
+      "trigger": "A new file version is received.",
+      "target_state": "Recipient can determine whether the change is cosmetic, structurally relevant, or decision-changing and can accept, reject, or request correction.",
+      "desired_delta": "Downstream decision is made earlier and with explicit semantic impact evidence.",
+      "strongest_incumbent_set": ["Excel/Sheets import behavior", "ImportFix", "CSV validators", "schema/lineage tools where setup is feasible"],
+      "oracle": "10-case accept/reject/request-correction decision key",
+      "kill_test": "F2: kill if incumbent workflow produces the same decision on >=8/10 cases without material configuration burden.",
+      "epistemic": {
+        "reality": "OPEN",
+        "residual_pain": "HYPOTHESIS",
+        "gap": "HYPOTHESIS",
+        "desired_delta": "HYPOTHESIS",
+        "current_transition": "UNKNOWN"
+      },
+      "status": "NEEDS_DECISIVE_EXPERIMENT"
+    },
+
+    {
+      "transition_id": "bt-github-review-routing",
+      "legacy_record_id": "GitHub review routing without premature notification",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Review-worthy change reaches repository workflow.",
+      "trigger": "Review eligibility conditions are satisfied.",
+      "target_state": "Required review is routed conditionally without premature notification.",
+      "desired_delta": "Correct reviewer-routing action occurs only when conditions are met.",
+      "kill_scope": "Generic problem killed because GitHub + Mergify were judged sufficient for the audited scope.",
+      "epistemic": "INFERRED",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-smb-export-reconciliation",
+      "legacy_record_id": "SMB export-only reconciliation",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Multiple operational exports represent related records.",
+      "trigger": "Exports are received and need reconciliation.",
+      "target_state": "Discrepancies are identified and reconciled into an actionable result.",
+      "desired_delta": "Manual cross-file reconciliation is replaced by a practical discrepancy decision.",
+      "kill_scope": "Generic file-first reconciliation products already cover CSV/Excel/JSON discrepancy workflows.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-csv-xlsx-diff",
+      "legacy_record_id": "Generic CSV/XLSX diff",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Two file versions exist.",
+      "trigger": "Recipient needs to know what changed.",
+      "target_state": "Structural and row/cell changes are exposed before downstream use.",
+      "desired_delta": "Manual comparison is replaced by explicit change detection.",
+      "kill_scope": "Current browser/CLI tools cover structure and row/cell comparison.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-preimport-validation",
+      "legacy_record_id": "Generic pre-import CSV repair/validation",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Import-bound file may contain structural/value problems.",
+      "trigger": "File is presented for import.",
+      "target_state": "Risky/invalid input is detected or repaired before import.",
+      "desired_delta": "Import failure or bad data is prevented before downstream action.",
+      "kill_scope": "Existing local/browser tools already provide validation, repair and import-risk reporting.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-sandbox",
+      "legacy_record_id": "Generic sandbox",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Untrusted execution request exists.",
+      "trigger": "Execution begins.",
+      "target_state": "Execution occurs inside an isolated bounded runtime.",
+      "desired_delta": "Untrusted actions are prevented from escaping declared execution boundaries.",
+      "kill_scope": "OpenShell/OpenSandbox already cover the generic isolation/runtime lifecycle scope audited.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-policy-authorization",
+      "legacy_record_id": "Generic policy/authorization",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Capability/action request is presented.",
+      "trigger": "Authorization is evaluated before execution.",
+      "target_state": "Decision is explicitly allow/deny with relation and policy semantics.",
+      "desired_delta": "Unauthorized execution is blocked before effect.",
+      "kill_scope": "OPA/OpenFGA/Cedar/SPIRE cover the major generic primitives in the audited scope.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-browser-automation",
+      "legacy_record_id": "Generic browser automation",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Browser task is expressed as an intent.",
+      "trigger": "Automation begins.",
+      "target_state": "Deterministic browser actions execute against the required page state.",
+      "desired_delta": "Manual browser interaction is replaced by reproducible automation.",
+      "kill_scope": "Playwright MCP already provides the generic browser capability surface.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-agent-receipt-provenance",
+      "legacy_record_id": "Generic agent receipt/provenance",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Agent action occurs with runtime evidence.",
+      "trigger": "Action completes.",
+      "target_state": "The effect is independently reconstructable and verifiable.",
+      "desired_delta": "Acting-agent narrative is no longer the sole basis for effect claims.",
+      "kill_scope": "NOA Receipt, AERF, CAVA, AgentProvenance and related prior art substantially overlap the generic target.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-mcp-discovery-validation",
+      "legacy_record_id": "Generic MCP discovery/validation",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Client needs a compatible MCP capability.",
+      "trigger": "Capability lookup/validation begins.",
+      "target_state": "Server metadata/schema/conformance is discoverable and inspectable.",
+      "desired_delta": "Manual server discovery and schema checking are reduced.",
+      "kill_scope": "Official MCP Registry + Inspector cover the generic audited scope.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-offline-collection",
+      "legacy_record_id": "Generic offline collection",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Field operator has no stable connectivity.",
+      "trigger": "Data must be collected offline.",
+      "target_state": "Data is captured durably offline and synchronized later.",
+      "desired_delta": "Connectivity no longer blocks routine collection.",
+      "kill_scope": "ODK already provides mature offline collection/synchronization.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-inventory-reorder",
+      "legacy_record_id": "Generic inventory/reorder from exports",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Inventory/exports represent current stock.",
+      "trigger": "Reorder review occurs.",
+      "target_state": "Reorder candidates are identified and ordered using available data.",
+      "desired_delta": "Manual reorder calculation is reduced.",
+      "kill_scope": "Current spreadsheet templates, CSV-first products and reorder tools cover the generic workflow.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-generic-algeria-whatsapp-cod",
+      "legacy_record_id": "Generic Algerian WhatsApp/COD order management",
+      "type": "KILLED_CANDIDATE",
+      "source_basis": "portfolio audit only",
+      "representation_status": "INFERRED_FROM_AUDIT",
+      "pre_state": "Customer order arrives through DM/WhatsApp/phone.",
+      "trigger": "Order is received.",
+      "target_state": "Order is captured, validated and tracked through fulfillment.",
+      "desired_delta": "Manual order capture/tracking is replaced by a structured workflow.",
+      "kill_scope": "Multiple Algeria-focused products already cover broad DM/WhatsApp/COD capture and tracking.",
+      "status": "KILLED_AT_DESK"
+    },
+
+    {
+      "transition_id": "bt-opensystemone-evidence-control-surface",
+      "type": "INTERNAL_RESEARCH",
+      "source_basis": "current portfolio audit",
+      "representation_status": "INFERRED",
+      "pre_state": "Research, execution and evidence are distributed across projects and experiments.",
+      "trigger": "A research/action event needs durable provenance and decision linkage.",
+      "target_state": "The event is represented through a common control/evidence lineage surface.",
+      "desired_delta": "Project-local facts can be linked to claims, evidence, decisions and verification without making the repository itself the architecture.",
+      "status": "INTERNAL_PRIMITIVE / RESEARCH_AUTHORITY",
+      "epistemic": "INFERRED"
+    },
+
+    {
+      "transition_id": "bt-capability-kernel-authorized-effect",
+      "type": "INTERNAL_PRIMITIVE",
+      "source_ref": {
+        "path": "research/agent-surfaces/evidence/NATIVE_CAPABILITY_KERNEL_2026-10-01.json",
+        "branch": "research/dots-readiness-v0.1",
+        "head": "cf4d6ffa122a5a0a0ea613bd0276349f42bb6d11"
+      },
+      "representation_status": "COPIED_PLUS_DERIVED",
+      "pre_state": "A capability request could otherwise rely on stale authorization, broad approval scope, or an unbounded cached replay.",
+      "trigger": "Capability execution or idempotent replay is attempted.",
+      "target_state": "Current policy/relation is revalidated; approval is request-scoped; execution records authorization at execution time; receipt preserves historical authority; revoked replay is denied.",
+      "desired_delta": "Execution crosses the authority boundary only under current authorization and retains reconstructable historical authorization.",
+      "oracle": "Existing proof lab + unit tests + receipt validation.",
+      "evidence_status": "EXPERIMENTALLY_SUPPORTED",
+      "negative_findings_preserved": [
+        "Earlier replay path could use cached observation after revoke.",
+        "Earlier receipts recomputed current authority instead of execution-time authority.",
+        "Earlier approval was run-scoped.",
+        "Earlier deny rules lacked precedence."
+      ]
+    },
+
+    {
+      "transition_id": "bt-direct-impact-bounded-mutation",
+      "type": "INTERNAL_PRIMITIVE",
+      "source_basis": "current research audit",
+      "representation_status": "INFERRED_FROM_EXISTING_WORK",
+      "pre_state": "Mutation mechanism may change more state than declared or leave partial state after failure.",
+      "trigger": "A mutation plan is applied.",
+      "target_state": "Actual delta remains within declared scope/budget/postconditions, with rollback on violation or partial executor failure and a receipt containing pre/post state and delta.",
+      "desired_delta": "Mutation becomes bounded, reversible on violation, and independently reconstructable.",
+      "status": "INTERNAL_PRIMITIVE / RESEARCH_INSTRUMENT",
+      "epistemic": "INFERRED_FROM_EXISTING_WORK"
+    },
+
+    {
+      "transition_id": "bt-durable-run-transition-identity",
+      "type": "INTERNAL_RESEARCH",
+      "source_basis": "m0-durable-run current audit",
+      "representation_status": "INFERRED_FROM_EXISTING_WORK",
+      "pre_state": "A run may lose identity/state across retry or process restart.",
+      "trigger": "Retry/restart occurs around an execution.",
+      "target_state": "Run identity and effect semantics survive restart; same run can be retried without duplicate execution.",
+      "desired_delta": "Transition identity remains stable across process failure.",
+      "status": "RESEARCH_INSTRUMENT",
+      "epistemic": "EXPERIMENTALLY_SUPPORTED"
+    },
+
+    {
+      "transition_id": "bt-android-unknown-effect-reconciliation",
+      "type": "INTERNAL_RESEARCH",
+      "source_basis": "Llms-mcp-android current audit",
+      "representation_status": "INFERRED_FROM_EXISTING_WORK",
+      "pre_state": "Caller cannot determine whether an external side effect occurred after a process/provider failure.",
+      "trigger": "Effect status becomes ambiguous.",
+      "target_state": "UNKNOWN is reconciled to COMPLETED or CONFIRMED_NOT_EXECUTED, or remains explicitly unresolved without unsafe automatic duplication.",
+      "desired_delta": "External effect uncertainty becomes an explicit convergent state machine.",
+      "status": "OPEN / RESEARCH_FRONTIER",
+      "epistemic": "EXPERIMENTALLY_SUPPORTED"
+    },
+
+    {
+      "transition_id": "bt-machine-research-state-verification",
+      "type": "RESEARCH_METHODOLOGY",
+      "source_basis": "current Machine research corpus",
+      "representation_status": "INFERRED",
+      "pre_state": "A research operation produces a candidate state/claim with uncertain provenance.",
+      "trigger": "Experiment or interpretive operation completes.",
+      "target_state": "Observed result is separated from interpretation and promoted only through explicit verification/evidence.",
+      "desired_delta": "Research state transitions remain provenance-bound and non-inflationary.",
+      "status": "RESEARCH_INSTRUMENT",
+      "epistemic": "INFERRED"
+    },
+
+    {
+      "transition_id": "bt-wedgettok-product-hypothesis",
+      "type": "PRODUCT_HYPOTHESIS",
+      "source_basis": "current portfolio audit",
+      "representation_status": "INFERRED_FROM_PROJECT_STATE",
+      "pre_state": "Creator/experience material exists in draft/feed workflow.",
+      "trigger": "Experience becomes publishable under host/runtime constraints.",
+      "target_state": "A usable feed experience is published and consumed with the intended interaction semantics.",
+      "desired_delta": "Creation-to-consumption workflow produces repeatable user-visible feed behavior.",
+      "status": "PRODUCT_HYPOTHESIS",
+      "epistemic": "INFERRED",
+      "demand_state": "UNKNOWN"
+    },
+
+    {
+      "transition_id": "bt-la-rouine-local-digitization",
+      "type": "PRODUCT_HYPOTHESIS",
+      "source_basis": "current portfolio audit",
+      "representation_status": "INFERRED_FROM_PROJECT_STATE",
+      "pre_state": "Local business information/order/content is fragmented across manual channels.",
+      "trigger": "Business publishes or updates operational/customer-facing information.",
+      "target_state": "Information is represented in a structured localized workflow suitable for the intended business action.",
+      "desired_delta": "Manual fragmentation is reduced without requiring a generic all-in-one ERP replacement.",
+      "status": "PRODUCT_HYPOTHESIS / LOCAL EXPERIMENT",
+      "epistemic": "INFERRED",
+      "demand_state": "UNKNOWN"
+    },
+
+    {
+      "transition_id": "bt-gap-closure-rate-model",
+      "type": "MATHEMATICAL_RESEARCH",
+      "source_basis": "conversation artifact on 2026-10-02",
+      "representation_status": "USER_SUPPLIED_MODEL_REPRESENTATION",
+      "pre_state": "Residual demand exceeds tolerance on one or more dimensions.",
+      "trigger": "Mechanisms contribute rates K_im over horizon T.",
+      "target_state": "Residual_i <= epsilon_i for all required dimensions.",
+      "desired_delta": "Choose a mechanism set that closes the required rate gap within constraints/cost.",
+      "formula": "residual_i(x) = D_i * exp(-(k_i + sum_m K_im x_m) * T)",
+      "relations_under_review": ["R1 rate/noisy-OR complement", "R2 k identification under Gaussian log-noise", "R3 monotone submodular reduction", "R4 convex continuous objective", "R5 exponential feasibility equals linear rate covering", "R6 LP dual sensitivity", "R7 budgeted greedy behavior"],
+      "evidence_status": "USER_REPORTED / OPEN",
+      "important_limit": "No new execution result is claimed in this representation because data-analysis execution was unavailable in this turn."
+    }
+  ],
+  "summary": {
+    "legacy_killed_candidates_represented": 12,
+    "current_opportunity_candidates_represented": 2,
+    "internal_or_research_transitions_represented": 9,
+    "source_records_preserved": true,
+    "epistemic_upgrades_from_reencoding": 0,
+    "new_product_opportunities_created_by_reencoding": 0,
+    "current_external_product_opportunity_state": "NO_CONFIRMED_PRODUCT_OPPORTUNITY"
+  },
+  "next_discriminating_action": "Run deterministic representation replay from source_snapshot + bt-v0.3-reencode-v0.1 mapping; then execute incumbent-only F1/F2 without candidate tooling and record results as separate experiments."
+}

@@ -33,3 +33,17 @@ This repository is not a Jev reproduction, does not contain proprietary Jev weig
 - `runtime/browser/` — browser/ONNX execution notes and lab integration contract
 
 See `docs/DECISION_CONTRACT_v0.1.md` and `docs/RESEARCH_PROTOCOL.md` first.
+## OpenAI Dots readiness
+
+The branch research/dots-readiness-v0.1 contains a product-boundary-independent readiness and characterization layer for OpenAI Dots:
+
+- docs/dots/ — readiness contract, onboarding brief, validation matrix, first-task pack, and characterization report
+- src/open_system_one/dots/ — receipt and local task-contract policy primitives
+- tests/test_dots_receipt.py — receipt contract and negative tests
+- research/dots/dots_first_run_manifest_v0.1.json — first-access test manifest
+
+Dots are treated as a replaceable execution surface. Open-System-One remains the durable authority for claims, evidence, decisions, verification, and provenance.
+## Agent surfaces
+
+The branch research/dots-readiness-v0.1 also contains a vendor-neutral registry and common characterization protocol for external agent surfaces. See docs/agent-surfaces/AGENT_SURFACE_REGISTRY_v0.1.md, docs/agent-surfaces/AGENT_SURFACE_COMMON_TEST_PROTOCOL_v0.1.md, and docs/agent-surfaces/AGENT_SURFACE_EXPERIMENT_PLAN_v0.1.md.
+The same branch also contains docs/agent-surfaces/AGENT_GAP_MAP_v0.1.md for direct/infrastructure/indirect coverage and docs/agent-surfaces/MICRO_ACTIVATION_PROOF_CARD_v0.1.md for evidence-backed narrow integrations.
