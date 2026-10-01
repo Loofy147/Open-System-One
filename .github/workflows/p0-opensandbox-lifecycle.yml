@@ -72,9 +72,11 @@ jobs:
       - name: Validate OpenSandbox configuration
         env:
           PYTHONPATH: "/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src"
+          SANDBOX_CONFIG_PATH: ${{ runner.temp }}/p0-home/.sandbox.toml
         run: |
           set -euo pipefail
-          python -c "from opensandbox_server.config import load_config; print(load_config())" 
+          python -c "from opensandbox_server.config import load_config; print(load_config())"
+
 
       - name: Start OpenSandbox server
         env:
