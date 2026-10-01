@@ -1,0 +1,60 @@
+name: P0 OpenFGA relation authorization proof
+
+on:
+  push:
+    branches:
+      - research/dots-readiness-v0.1
+  workflow_dispatch:
+
+jobs:
+  openfga-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Open-System-One
+        uses: actions/checkout@v4
+
+      - name: Install OpenFGA v1.21.0
+        env:
+          OPENFGA_VERSION: "1.21.0"
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/openfga
+          curl -fsSL "https://github.com/openfga/openfga/releases/download/v$OPENFGA_VERSION/openfga_$OPENFGA_VERSION_linux_amd64.tar.gz" -o /tmp/openfga/openfga.tar.gz
+          curl -fsSL "https://github.com/openfga/openfga/releases/download/v$OPENFGA_VERSION/checksums.txt" -o /tmp/openfga/checksums.txt
+          expected="$(grep " openfga_$OPENFGA_VERSION_linux_amd64.tar.gz$" /tmp/openfga/checksums.txt | awk '{print $1}')"
+          actual="$(sha256sum /tmp/openfga/openfga.tar.gz | awk '{print $1}')"
+          test -n "$expected"
+          test "$expected" = "$actual"
+          tar -xzf /tmp/openfga/openfga.tar.gz -C /tmp/openfga
+          chmod +x /tmp/openfga/openfga
+          /tmp/openfga/openfga --version
+
+      - name: Start OpenFGA
+        run: |
+          set -euo pipefail
+          /tmp/openfga/openfga run --playground-enabled=false > "$RUNNER_TEMP/openfga.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/openfga.pid"
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8080/healthz >/tmp/openfga-health.json; then
+              cat /tmp/openfga-health.json
+              exit 0
+            fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/openfga.log"
+          exit 1
+
+      - name: Run P0.04 proof
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/p0-openfga
+          python research/agent-surfaces/lab/p0_openfga_relation_proof.py | tee /tmp/p0-openfga/receipt.json
+
+      - name: Upload durable CI receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: p0-openfga-receipt
+          path: |
+            /tmp/p0-openfga/receipt.json
+            ${{ runner.temp }}/openfga.log
+          if-no-files-found: error
