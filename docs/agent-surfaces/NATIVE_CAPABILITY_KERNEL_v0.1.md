@@ -12,7 +12,7 @@ The kernel separates:
 
 - **Policy decision**: typed request + explicit policy rule.
 - **Relationship authorization**: subject/capability/target grant state that can be revoked.
-- **Approval**: explicit run-scoped gate for side effects.
+- **Approval**: explicit request-scoped gate for side effects.
 - **Execution**: fixed local working root; no vendor API is required.
 - **Observation**: stdout/stderr/exit status/artifact digest.
 - **Receipt**: run correlation + deterministic hashes + idempotency identity.
@@ -34,7 +34,7 @@ This kernel is not a replacement for a hardened container runtime, remote policy
 The direct local suite must prove:
 1. policy + relationship intersection;
 2. revoke -> deny;
-3. side-effect approval gate;
+3. side-effect request-scoped approval gate and deny precedence;
 4. idempotent replay;
 5. artifact digest and receipt correlation;
 6. target path escape rejection.
