@@ -69,13 +69,21 @@ jobs:
           mode = "direct"
           EOF
 
+      - name: Validate OpenSandbox configuration
+        env:
+          PYTHONPATH: "/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src"
+        run: |
+          set -euo pipefail
+          python -c "from opensandbox_server.config import load_config; print(load_config())" 
+
       - name: Start OpenSandbox server
         env:
           OPENSANDBOX_INSECURE_SERVER: "YES"
           HOME: ${{ runner.temp }}/p0-home
+          PYTHONPATH: "/tmp/OpenSandbox/server:/tmp/OpenSandbox/sdks/sandbox/python/src"
         run: |
           set -euo pipefail
-          opensandbox-server > "$RUNNER_TEMP/opensandbox-server.log" 2>&1 &
+          opensandbox-server --config "$HOME/.sandbox.toml" > "$RUNNER_TEMP/opensandbox-server.log" 2>&1 &
           echo $! > "$RUNNER_TEMP/opensandbox-server.pid"
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:8080/health >/tmp/opensandbox-health.json; then
