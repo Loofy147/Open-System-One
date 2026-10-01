@@ -2,48 +2,64 @@
   "schema_version": "experimental-opportunity-state-v0.2",
   "status": "NEEDS_DECISIVE_EXPERIMENT",
   "no_mvp_authorized": true,
+  "audit_ref": "research/problem-kill-campaign/OPPORTUNITY_PORTFOLIO_AUDIT_2026-10-01.md",
   "governed_by": "docs/research/EXPERIMENTAL_OPPORTUNITY_PROTOCOL_v0.2.md",
   "cycle_date": "2026-10-01",
   "candidates": [
     {
       "candidate_id": "offline-conflict-causal-reconciliation",
-      "problem_statement": "Offline branches can produce conflicts whose causal history is not directly reconstructible from the incumbent evidence surface.",
+      "problem_statement": "When offline branches update shared state, an operator may lack sufficient causal evidence to explain and safely resolve the conflict.",
       "affected_user_context": "operator resolving multi-branch offline synchronization conflicts",
-      "status": "PREBUILD_KILL_TEST",
+      "status": "NEEDS_DECISIVE_EXPERIMENT",
       "reality": "ESTABLISHED",
       "residual_pain": "EXPERIMENTALLY_SUPPORTED",
-      "gap_statement": "INFERENCE",
+      "gap": "INFERENCE",
       "action_delta": "HYPOTHESIS",
-      "incumbent": "ODK Central conflict evidence/history",
+      "strongest_incumbent_set": [
+        "ODK Central",
+        "RxDB",
+        "CouchDB"
+      ],
       "kill_test": "F1",
       "oracle": "5-case expected causal/property/version resolution key",
-      "current_decision": "NEEDS_DECISIVE_EXPERIMENT",
-      "next_discriminating_action": "Run F1 using only incumbent evidence; kill at >=4/5 fully resolvable cases."
+      "next_discriminating_action": "Incumbent-only 5-case test; kill if >=4/5 are fully resolvable without manual reconstruction."
     },
     {
-      "candidate_id": "independent-agent-effect-verification",
-      "problem_statement": "After agent execution, an independent layer may still lack a cross-surface proof of authoritative pre/post state, exact impact, authority-at-execution, and rollback/replay behavior.",
-      "affected_user_context": "system owner verifying actions performed through heterogeneous agent runtimes",
-      "status": "PREBUILD_KILL_TEST",
-      "reality": "ESTABLISHED",
-      "residual_pain": "EXPERIMENTALLY_SUPPORTED",
-      "gap_statement": "INFERENCE",
+      "candidate_id": "semantic-file-handoff-breakage-preflight",
+      "problem_statement": "Recipients of recurring CSV/XLSX handoffs may need to know whether a change will alter downstream decisions, not merely whether the file parses.",
+      "affected_user_context": "non-engineer or operations recipient of recurring file exports",
+      "status": "NEEDS_DECISIVE_EXPERIMENT",
+      "reality": "OPEN",
+      "residual_pain": "HYPOTHESIS",
+      "gap": "HYPOTHESIS",
       "action_delta": "HYPOTHESIS",
-      "incumbent": "MAP plus strongest accessible agent audit/provenance stack",
+      "strongest_incumbent_set": [
+        "Excel/Sheets import behavior",
+        "ImportFix",
+        "CSV validators",
+        "schema/lineage tools where setup is feasible"
+      ],
       "kill_test": "F2",
-      "oracle": "8-field independent reconstruction checklist",
-      "current_decision": "NEEDS_DECISIVE_EXPERIMENT",
-      "next_discriminating_action": "Run F2 with harmless mutation, undeclared side effect, partial failure and revoke/replay fixture."
+      "oracle": "10-case accept/reject/request-correction decision key",
+      "next_discriminating_action": "Incumbent comparison on 10 cases; kill if >=8/10 produce the same decision without material configuration."
     }
   ],
-  "inherited_research_questions": [
-    "historical applicability vs current authority",
-    "safe idempotency under revoke and state drift",
-    "bounded impact independent of model intent",
-    "independent evidence vs agent telemetry",
-    "rollback/compensation proof",
-    "cross-surface adapter neutrality",
-    "run reconstruction after interruption/partial failure"
+  "killed_since_previous_state": [
+    "independent agent-effect verification as a standalone opportunity due NOA/AERF/CAVA/AgentProvenance prior art",
+    "generic SMB export reconciliation due file-first reconciliation incumbents",
+    "generic CSV/XLSX diff and pre-import validation due current local/browser tools",
+    "generic Algerian WhatsApp/COD order management due multiple local solutions",
+    "generic MCP discovery/validation due MCP Registry and Inspector"
   ],
-  "method_status": "OPEN / EXPERIMENTAL"
+  "internal_research_frontiers": [
+    "CapabilityKernel",
+    "Direct Impact Guard",
+    "Android UNKNOWN effect reconciliation",
+    "M0 durable run/restart idempotency",
+    "Machine experimental methodology",
+    "Wedgettok product hypothesis",
+    "la-rouine local product hypothesis"
+  ],
+  "method_status": "OPEN / EXPERIMENTAL",
+  "hard_rule": "No candidate is BUILD_ALLOWED until its pre-build falsification test fails to kill the intervention."
 }
