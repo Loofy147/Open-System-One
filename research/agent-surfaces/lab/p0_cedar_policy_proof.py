@@ -24,7 +24,9 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def authorize(cedar: str, policy: Path, entities: Path, action: str) -> str:
+def authorize(
+    cedar: str, policy: Path, entities: Path, action: str
+) -> tuple[str, int]:
     proc = subprocess.run(
         [
             cedar,
@@ -44,11 +46,12 @@ def authorize(cedar: str, policy: Path, entities: Path, action: str) -> str:
         capture_output=True,
         text=True,
     )
-    if proc.returncode != 0:
+    if proc.returncode not in (0, 2):
         raise RuntimeError(
-            f"Cedar authorize failed rc={proc.returncode}: {proc.stderr.strip()}"
+            f"Cedar authorize failed rc={proc.returncode}: "
+            f"{proc.stderr.strip() or proc.stdout.strip()}"
         )
-    return proc.stdout.strip()
+    return proc.stdout.strip(), proc.returncode
 
 
 def main() -> int:
@@ -65,13 +68,17 @@ def main() -> int:
         policy.write_text(POLICY, encoding="utf-8")
         entities.write_text(ENTITIES, encoding="utf-8")
 
-        allow_raw = authorize(cedar, policy, entities, "read_repository")
-        deny_raw = authorize(cedar, policy, entities, "write_repository")
+        allow_raw, allow_rc = authorize(
+            cedar, policy, entities, "read_repository"
+        )
+        deny_raw, deny_rc = authorize(
+            cedar, policy, entities, "write_repository"
+        )
 
         allow = allow_raw.splitlines()[0].strip()
         deny = deny_raw.splitlines()[0].strip()
-        assert allow == "ALLOW", allow_raw
-        assert deny == "DENY", deny_raw
+        assert allow == "ALLOW" and allow_rc == 0, (allow_raw, allow_rc)
+        assert deny == "DENY" and deny_rc == 2, (deny_raw, deny_rc)
 
         receipt = {
             "schema_version": "oss-p0-cedar-proof-v0.1",
@@ -93,6 +100,7 @@ def main() -> int:
                         b'Agent::"agent-1"|Action::"read_repository"|Repository::"repo-a"'
                     ),
                     "decision": "ALLOW",
+                    "exit_code": allow_rc,
                 },
                 {
                     "name": "deny",
@@ -100,6 +108,7 @@ def main() -> int:
                         b'Agent::"agent-1"|Action::"write_repository"|Repository::"repo-a"'
                     ),
                     "decision": "DENY",
+                    "exit_code": deny_rc,
                 },
             ],
             "negative_test": {
@@ -108,6 +117,7 @@ def main() -> int:
             },
             "scope": [
                 "proves bounded typed authorization evaluation for the fixed corpus",
+                "proves the harness distinguishes Cedar DENY (exit 2) from execution failure",
                 "does not prove Open-System-One integration",
                 "does not prove Cedar distributed deployment or HA behavior",
             ],
