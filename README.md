@@ -27,9 +27,15 @@ This repository is not a Jev reproduction, does not contain proprietary Jev weig
 
 - `src/open_system_one/` — contract and reference logic
 - `tests/` — contract/property/kill tests
-- `docs/` — architecture and research protocol
-- `research/` — experiment specifications and evidence receipts
+- `docs/` — architecture and research contracts
+- `research/` — experiment specifications, conformance fixtures, and evidence receipts
+- `schema/` — machine-readable contract schemas
 - `configs/` — reproducible benchmark configuration
 - `runtime/browser/` — browser/ONNX execution notes and lab integration contract
 
-See `docs/DECISION_CONTRACT_v0.1.md` and `docs/RESEARCH_PROTOCOL.md` first.
+Start with:
+- `docs/CANONICAL_ARCHITECTURE_CONVERGENCE_v0.1.md`
+- `docs/ARCHITECTURE_CONVERGENCE_GAP_REGISTER_v0.1.md`
+- `docs/LEGACY_SALVAGE_AUDIT_v0.1.md`
+
+The convergence contract is provisional until its first end-to-end conformance slice executes successfully.
