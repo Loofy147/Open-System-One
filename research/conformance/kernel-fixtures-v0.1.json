@@ -1,0 +1,46 @@
+{
+  "schema": "open_system_one.kernel_conformance_fixtures.v0.1",
+  "status": "DRAFT",
+  "cases": [
+    {
+      "id": "K01",
+      "name": "run-to-evidence linkage",
+      "assertions": [
+        "an evidence record references an existing run",
+        "a result record does not become a claim merely because the run succeeded"
+      ]
+    },
+    {
+      "id": "K02",
+      "name": "verification distinction",
+      "assertions": [
+        "verification status is represented separately from execution status",
+        "peer completion or artifact presence does not imply verification"
+      ]
+    },
+    {
+      "id": "K03",
+      "name": "provenance pin",
+      "assertions": [
+        "material records can be traced to repository/ref/path/commit",
+        "scope and evidence references remain inspectable after transport"
+      ]
+    },
+    {
+      "id": "K04",
+      "name": "replay safety",
+      "assertions": [
+        "a repeated run identity cannot silently create a new equivalent effect",
+        "UNKNOWN effect state is not implicitly treated as safe-to-repeat"
+      ]
+    },
+    {
+      "id": "K05",
+      "name": "authority separation",
+      "assertions": [
+        "proposal/reasoning metadata cannot itself grant execution authority",
+        "authorization is represented outside model/tool prose"
+      ]
+    }
+  ]
+}
