@@ -6,10 +6,10 @@
     "repository": "Loofy147/Llms-mcp-android",
     "base_ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
     "branch": "conformance/t2-caller-recovery-v0.1",
-    "head_commit": "3c2fd3d2dda639c6bfa3f2d6c64589e009299523",
+    "head_commit": "309b47f323ea2be326cbf788341bd8c83cd58c54",
     "pull_request": 16,
-    "workflow_run": 37254548378,
-    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37254548378",
+    "workflow_run": 37254867999,
+    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37254867999",
     "workflow": "Build debug APK and Android tests",
     "environment": "GitHub Actions ubuntu-latest; JDK 17; Gradle 8.9; Android API 35; google_apis x86_64; Pixel 7 Pro profile"
   },
@@ -41,21 +41,33 @@
       "status": "PENDING_INSTRUMENTATION_RESULT"
     }
   },
-  "negative_history": {
-    "prior_head": "11db801c3a9e6cc7d4c8b6cda3348daea98a488d",
-    "prior_workflow_run": 37254486898,
-    "prior_result": "BUILD_FAILURE",
-    "cause": "debug caller service was missing imports for runtime primitives",
-    "disposition": "corrected in 3c2fd3d2dda639c6bfa3f2d6c64589e009299523; unit tests now PASS"
-  },
+  "negative_history": [
+    {
+      "head": "11db801c3a9e6cc7d4c8b6cda3348daea98a488d",
+      "workflow_run": 37254486898,
+      "result": "BUILD_FAILURE",
+      "cause": "debug caller service was missing imports for runtime primitives",
+      "disposition": "corrected in 3c2fd3d2dda639c6bfa3f2d6c64589e009299523"
+    },
+    {
+      "head": "3c2fd3d2dda639c6bfa3f2d6c64589e009299523",
+      "workflow_run": 37254548378,
+      "result": "INSTRUMENTATION_COMPILE_FAILURE",
+      "cause": "CallerRecoveryTest used JUnit assertTrue(message,condition) with the arguments reversed on multiple assertions",
+      "disposition": "corrected in 309b47f323ea2be326cbf788341bd8c83cd58c54"
+    }
+  ],
   "current_observation": {
-    "build_job": "PASS",
-    "unit_tests": "PASS",
-    "apk_build": "PASS",
-    "instrumentation_job": "IN_PROGRESS"
+    "latest_head": "309b47f323ea2be326cbf788341bd8c83cd58c54",
+    "workflow_run": 37254867999,
+    "workflow_status": "QUEUED",
+    "prior_build_unit_apk": "PASS",
+    "prior_instrumentation_result": "BUILD_FAILED_BEFORE_TEST_EXECUTION",
+    "latest_instrumentation_status": "PENDING"
   },
   "limits": [
-    "B4/B5 are not promoted until connectedDebugAndroidTest concludes.",
+    "B4/B5 are not promoted until connectedDebugAndroidTest executes and concludes.",
+    "Compile failures in the harness are recorded separately from semantic test outcomes.",
     "No B6/B7 claims are included in this experiment.",
     "No general exactly-once guarantee is claimed."
   ]
