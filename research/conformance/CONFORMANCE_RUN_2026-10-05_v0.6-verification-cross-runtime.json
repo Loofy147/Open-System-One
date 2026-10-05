@@ -1,0 +1,89 @@
+{
+  "schema": "open_system_one.conformance_run.v0.6",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.5-verification-m0.json",
+  "recorded_at": "2026-10-05T03:24:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Latest M0 and UWS source representations were fetched from their current conformance branches and the represented adapter semantics were reconstructed and executed in isolated local Python harnesses. Both runtimes independently executed a completed Run/step, Observation, independent Verification that rejected value 55, Evidence linkage, and cache preservation. This is not clean-clone CI.",
+    "classification": [
+      "PASS",
+      "FAIL",
+      "NOT_REPRESENTED",
+      "NOT_PROVEN"
+    ]
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "pr": 4,
+      "branch": "conformance/cache-contract-v0.1",
+      "head_commit": "3a0fc93a6d09b2c36c5ac9ba1dcc70b43a87e690",
+      "files": {
+        "core.py": "11f5c50f6f423512d99bc019a119d80311c01a98",
+        "schemas.py": "9ed99131363aa5cfc8c6322109368fb014d91014",
+        "test_m0.py": "8685b8b13d22e3142ba058e349a380f9b58e117f",
+        "conformance_adapter.py": "8c7a40856d777873894d962b38bb4667394e9271"
+      },
+      "results": {
+        "K-IDENTITY-01": "PASS",
+        "K-EVIDENCE-01": "PASS",
+        "K-VERIFY-01": "PASS",
+        "K-UNKNOWN-01": "NOT_REPRESENTED",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "chain": {
+        "run_status": "completed",
+        "observed_value": 55,
+        "verification_status": "failed",
+        "evidence_links": "Run -> Observation -> Verification"
+      }
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "pr": 21,
+      "branch": "conformance/cache-contract-v0.1",
+      "head_commit": "63127616a62212ac365b7ff521f6eb02b00da5c4",
+      "files": {
+        "system/scripts/uws_runtime.py": "6c850552fe592e35247de09bdbdf293662ad5049",
+        "system/runtime_tests/test_uws_runtime.py": "d8223ddb794058fe27262f036151ee4beff07814",
+        "conformance_adapter.py": "cbd3236bfef3839a18a56676ca2a1f88ad5708cc"
+      },
+      "results": {
+        "K-IDENTITY-01": "NOT_PROVEN",
+        "K-EVIDENCE-01": "PASS",
+        "K-VERIFY-01": "PASS",
+        "K-UNKNOWN-01": "NOT_REPRESENTED",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "chain": {
+        "run_status": "completed",
+        "observed_value": 55,
+        "verification_status": "failed",
+        "evidence_links": "Run -> Observation -> Verification"
+      }
+    }
+  ],
+  "interpretation": {
+    "G03_capability_verification_boundary": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "G02_cross_repository_conformance": "OPEN",
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "positive_result": "The execution-observation-verification-evidence separation is now reproduced in two materially different runtime implementations, and the verifier can reject a completed result.",
+    "negative_result": "UWS does not yet represent same-run-id/different-goal replay semantics; neither runtime represents UNKNOWN external effects or the full authority boundary."
+  },
+  "limits": [
+    "The demonstrated boundary uses runtime execution/step semantics, not yet the full Capability/CapabilityInvocation contract.",
+    "No clean-clone CI result.",
+    "Cache source-drift freshness remains unproven.",
+    "Verification records do not yet establish authorization or truth."
+  ],
+  "next_discriminating_actions": [
+    "Add a source-drift invalidation test that preserves, but refuses authoritative reuse of, stale cache material.",
+    "Implement UNKNOWN_OUTCOME and reconciliation before replay.",
+    "Reconcile the verified boundary with Android CapabilityExecutor semantics.",
+    "Decide whether UWS should adopt explicit run-id/request binding or another equivalent identity invariant."
+  ]
+}
