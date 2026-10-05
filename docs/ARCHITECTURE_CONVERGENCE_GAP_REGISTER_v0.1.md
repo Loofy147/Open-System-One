@@ -30,10 +30,10 @@ Acceptance: execute -> observe -> verify -> evidence, including capability/effec
 ## G-04 — UNKNOWN outcome semantics
 Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Question: How is an ambiguous external effect represented and reconciled without accidental duplicate execution?
-Action: map the proven semantic core onto Android CapabilityExecutor and execute B4/B5, then B6/B7.
-Latest evidence: M0 and UWS both pass the same U-01/U-02/U-03/U-04 reconciliation tests. The exact repository test files each execute 4/4 PASS. A separate two-process restart check in both runtimes preserved UNKNOWN across process exit, blocked replay, allowed reconciliation to CONFIRMED_NOT_EXECUTED, and then allowed one new reservation. The semantic contract is pinned to Android RuntimeStore.kt at ref 78afd5d3d7716fe31a5f109a5796eb3db7f99970, blob 5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e. A new Android T2 B4/B5 integration experiment is now executing on API 35/Pixel 7 Pro at commit 3c2fd3d2dda639c6bfa3f2d6c64589e009299523; build, unit tests, and APK assembly have passed, while connectedDebugAndroidTest remains IN_PROGRESS.
+Action: complete Android B4/B5, then B6 concurrent recovery.
+Latest evidence: M0 and UWS both pass the same U-01/U-02/U-03/U-04 reconciliation tests. The exact repository test files each execute 4/4 PASS. A separate two-process restart check in both runtimes preserved UNKNOWN across process exit, blocked replay, allowed reconciliation to CONFIRMED_NOT_EXECUTED, and then allowed one new reservation. The semantic contract is pinned to Android RuntimeStore.kt at ref 78afd5d3d7716fe31a5f109a5796eb3db7f99970, blob 5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e. Android B4/B5 integration has a corrected head 309b47f323ea2be326cbf788341bd8c83cd58c54 with unit tests and APK build PASS; connectedDebugAndroidTest for workflow 37254867999 is still IN_PROGRESS. The previous instrumentation run 37254548378 failed before semantic execution because of test-harness assertion argument order and is recorded separately.
 Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.9-unknown-outcome.json; research/conformance/ANDROID_T2_B4_B5_EXPERIMENT_2026-10-05_v0.1.json
-Limits: this proves the cross-runtime semantic core, not the full Android caller-side lifecycle. B4 caller dies after provider completion, B5 caller dies before dispatch, B6 concurrent recovery, and B7 stale callback/result ordering remain OPEN until their Android instrumentation cases conclude. No real external provider effect was exercised in M0/UWS; no clean-clone CI; general exactly-once is not claimed.
+Limits: this proves the cross-runtime semantic core, not the full Android caller-side lifecycle. B4 caller dies after provider completion, B5 caller dies before dispatch, and B6 concurrent recovery remain unverified at the Android integration boundary. No real external provider effect was exercised in M0/UWS; no clean-clone CI; general exactly-once is not claimed.
 Acceptance: UNKNOWN is durable, blocks replay, requires explicit reconciliation, permits a new reservation only after CONFIRMED_NOT_EXECUTED, and remains separate from Evidence/Authority; the same behavior is reproduced at the Android CapabilityExecutor boundary.
 
 ## G-05 — Provenance/egress
@@ -79,9 +79,19 @@ Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.8-cache-b
 Limits: no clean-clone CI; the reuse gate accepts an externally supplied observed digest rather than owning arbitrary content retrieval/recomputation; capability/effect semantics remain outside this cache contract.
 Acceptance: two materially different implementations preserve stale/invalid cache material, refuse reuse after source drift or integrity mismatch, and keep cache distinct from Evidence/Authority while cache-backed material remains independently verifiable.
 
+## G-11 — Stale result / causal ordering
+Status: EXPERIMENTALLY_SUPPORTED
+Priority: P0
+Question: Can an older execution result become authoritative after a newer terminal result?
+Action: define minimal monotonic attempt/revision semantics, then reproduce the failure through a production-shaped late-callback path before implementing a fix.
+Latest evidence: deterministic repository-native kill test StaleResultOrderingTest.lateOlderResultMustNotRegressNewerTerminalRun failed on commit e697e1f6a2a60c8336297fc343d2815157b5cc9d under GitHub Actions workflow 37254953362. 36 tests completed, 1 failed; org.junit.ComparisonFailure at StaleResultOrderingTest.kt:46. The test wrote a newer SUCCEEDED result with output new, then appended an older FAILED result with output old; a fresh JournalRuntimeStore reload returned old/FAILED.
+Evidence reference: research/conformance/ANDROID_T2_B7_KILL_RESULT_2026-10-05_v0.1.json
+Limits: this proves durable arrival-order regression at JournalRuntimeStore, not yet a Binder callback path. No fix has been applied.
+Acceptance: a stale result cannot regress a newer causal revision; the durable record retains the newer authoritative state; late results are rejected or explicitly recorded as non-authoritative.
+
 ## Priority order
 
-P0: G-01 -> G-02 -> G-03 -> G-04
+P0: G-01 -> G-02 -> G-03 -> G-04 -> G-11
 P1: G-05 -> G-07 -> G-10 -> G-09
 Parallel research: G-06
 Hygiene: G-08
@@ -102,12 +112,15 @@ The Verification boundary then moved from a single-runtime result to two materia
 
 G-10 is now EXPERIMENTALLY_SUPPORTED rather than merely OPEN; the remaining work is verification depth and integration boundaries, not whether caches can be valuable reusable Artifacts.
 
-G-04 is now EXPERIMENTALLY_SUPPORTED_WITH_LIMITS at the semantic-core level. The same UNKNOWN/reconciliation state machine is implemented and exercised in M0 and UWS, and it is directly grounded in the Android RuntimeStore effect semantics. This does not upgrade the unexecuted Android caller-lifecycle cases.
+G-04 is now EXPERIMENTALLY_SUPPORTED_WITH_LIMITS at the semantic-core level. The same UNKNOWN/reconciliation state machine is implemented and exercised in M0 and UWS, and it is directly grounded in the Android RuntimeStore effect semantics. Android caller B4/B5 remains pending at the integration boundary.
 
-P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, complete Capability/effect semantics, and the remaining Android lifecycle/concurrency cases are not yet established.
+A new P0 G-11 was opened by a deterministic kill test. The current Android JournalRuntimeStore has experimentally demonstrated stale-result regression: a late older RunRecord can overwrite a newer terminal state because authority follows journal arrival order rather than a causal/monotonic revision.
+
+P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, complete Capability/effect semantics, Android B4/B5 integration, concurrent recovery, and causal result ordering are not yet closed.
 
 Next actions:
-1. map the UNKNOWN_OUTCOME semantic core into Android CapabilityExecutor and execute B4/B5;
-2. execute B6 concurrent recovery and B7 stale callback ordering;
-3. decide whether UWS should adopt an explicit run-id/request binding invariant or an equivalent identity contract;
-4. add clean-clone CI where repository infrastructure supports it.
+1. complete and record Android B4/B5;
+2. define and test the smallest causal revision boundary for G-11;
+3. execute B6 with two independent recovery actors/processes and measure dispatch count separately from effect count;
+4. only then implement the minimal B6/G-11 repairs;
+5. add clean-clone CI where repository infrastructure supports it.
