@@ -1,0 +1,61 @@
+{
+  "schema": "open_system_one.conformance_run.v0.7-cache-reuse",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.6-verification-cross-runtime.json",
+  "recorded_at": "2026-10-05T03:31:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Latest cache-reuse primitives and repository-native tests were fetched from the current M0 and UWS conformance branches. Focused source-reconstructed checks executed source-drift, same-source revalidation, and stale preservation cases. This is not clean-clone CI.",
+    "fixture": "K-CACHE-01 plus source-drift reuse negative cases"
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "pr": 4,
+      "head_commit": "6b240efc58ea288a21a1940c7155b0ac4383a385",
+      "files": {
+        "cache.py": "c10ef904a5bf7c2751b9a9019c3523680414f6dc",
+        "test_m0.py": "8a2c33a7a995fde10f403588d35fc89be6b26547"
+      },
+      "results": {
+        "source_drift_reuse": "PASS",
+        "same_source_requires_revalidation": "PASS",
+        "stale_cache_remains_preserved": "PASS"
+      }
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "pr": 21,
+      "head_commit": "eda91af73c2fc710ae5e88c1a690959d5510e24c",
+      "files": {
+        "system/scripts/cache_policy.py": "b7b6465e344519b0d52e09772e798f86c8d0fcfc",
+        "system/runtime_tests/test_uws_runtime.py": "9a00ceab993ded52c48c0cac9cc8707b3b836b77",
+        "system/scripts/uws_runtime.py": "6c850552fe592e35247de09bdbdf293662ad5049"
+      },
+      "results": {
+        "source_drift_reuse": "PASS",
+        "same_source_requires_revalidation": "PASS",
+        "stale_cache_remains_preserved": "PASS"
+      }
+    }
+  ],
+  "semantics": {
+    "source_drift": "reusable=false, reason=source_revision_changed",
+    "same_source_with_revalidate_before_use": "reusable=false, reason=revalidation_required",
+    "stale_status": "reusable=false, reason=cache_not_fresh",
+    "preservation": "cache record remains readable after reuse refusal or stale transition"
+  },
+  "disposition": {
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "limits": [
+      "This proves a reuse gate, not truth of cached content.",
+      "Independent Verification is required before cache-backed material advances epistemic state.",
+      "No clean-clone CI result.",
+      "Integrity digest is recorded but not yet independently recomputed by the reuse gate."
+    ]
+  },
+  "next_discriminating_actions": [
+    "Apply independent Verification specifically to a cache-backed result after the reuse gate.",
+    "Add integrity-digest mismatch as a live negative case.",
+    "Implement UNKNOWN_OUTCOME plus reconciliation before replay."
+  ]
+}

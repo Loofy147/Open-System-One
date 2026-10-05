@@ -1,0 +1,54 @@
+{
+  "schema": "open_system_one.conformance_run.v0.2",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.1.json",
+  "recorded_at": "2026-10-05T02:56:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Focused cache checks were run from the modified source representations fetched from pinned GitHub branches. This is not clean-clone repository CI.",
+    "fixture": "K-CACHE-01"
+  },
+  "cache_contract": {
+    "schema_path": "schema/cache-reference.v0.1.json",
+    "schema_blob_sha": "283c9a0905355d8b2306d0489a3cfad4da6527f1",
+    "semantics": [
+      "cache is a valuable reusable Artifact",
+      "source/derivation is explicit",
+      "integrity identity is explicit",
+      "freshness/status is explicit",
+      "reuse policy is explicit",
+      "invalidation conditions are explicit",
+      "authority is none"
+    ]
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "branch": "conformance/cache-contract-v0.1",
+      "commit": "9e54127b685a29fda639817dd9e6535e2fb1a28a",
+      "schema_blob_sha": "739143ea7a7c20727213fee8a175ce2eee6b57b9",
+      "test_blob_sha": "a9452123779b91ceaba1d6e4b8b23883983adf55",
+      "result": "PASS",
+      "observation": "cache_m0_001 persisted; fresh record remained intact after stale successor; authority stayed none"
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "branch": "conformance/cache-contract-v0.1",
+      "commit": "dc1f7e0cbea8b59a00306cf477a2bda2d0c76151",
+      "runtime_blob_sha": "11232783f2034483c41ad1638c21d2ab3bcf1f33",
+      "test_blob_sha": "aaae75a72003285169217adcc1357cd9b41064d3",
+      "result": "PASS",
+      "observation": "cache_uws_001 persisted atomically; state changed fresh -> stale; no temporary file remained"
+    }
+  ],
+  "disposition": {
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "P0_G01_G02_G03_G04": "OPEN",
+    "limits": [
+      "focused reconstructed source checks only",
+      "no clean-clone CI result",
+      "no proof of freshness truth after source drift",
+      "no independent Verification boundary yet"
+    ]
+  },
+  "next_action": "Run K-CACHE-01 through repository-native conformance paths, then add a source-drift invalidation negative case."
+}

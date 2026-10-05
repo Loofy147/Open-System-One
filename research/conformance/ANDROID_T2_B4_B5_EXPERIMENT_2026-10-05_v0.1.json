@@ -1,0 +1,98 @@
+{
+  "schema": "open_system_one.android_t2_b4_b5_experiment.v0.1",
+  "recorded_at": "2026-10-05T02:18:00Z",
+  "status": "IN_PROGRESS",
+  "implementation": {
+    "repository": "Loofy147/Llms-mcp-android",
+    "base_ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
+    "branch": "conformance/t2-caller-recovery-v0.1",
+    "head_commit": "79b224eec1e215e091c22778666cdf699d5d4875",
+    "pull_request": 16,
+    "workflow_run": 37255832130,
+    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255832130",
+    "workflow": "Build debug APK and Android tests",
+    "environment": "GitHub Actions ubuntu-latest; JDK 17; Gradle 8.9; Android API 35; google_apis x86_64; Pixel 7 Pro profile",
+    "workflow_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255832130"
+  },
+  "cases": {
+    "B4": {
+      "hypothesis": "provider completes the effect; caller process dies before local completion persistence; restart classifies UNKNOWN and reconciles by operation identity without redispatch",
+      "test": "app/src/androidTest/java/com/hicham/llmchat/runtime/t2/CallerRecoveryTest.kt:b4_callerDiesAfterProviderCompletion_reconcilesWithoutRedispatch",
+      "acceptance": [
+        "caller processInstanceId changes",
+        "decision=CONFIRMED_COMPLETED",
+        "provider=COMPLETED",
+        "requests=1",
+        "effects=1",
+        "replay=false"
+      ],
+      "status": "PENDING_CURRENT_WORKFLOW"
+    },
+    "B5": {
+      "hypothesis": "caller process dies after durable reservation but before provider dispatch; restart proves provider operation absent, reconciles CONFIRMED_NOT_EXECUTED, then dispatches exactly once",
+      "test": "app/src/androidTest/java/com/hicham/llmchat/runtime/t2/CallerRecoveryTest.kt:b5_callerDiesBeforeDispatch_reconcilesNotExecutedThenDispatchesOnce",
+      "acceptance": [
+        "caller processInstanceId changes",
+        "decision=CONFIRMED_NOT_EXECUTED",
+        "provider=COMPLETED",
+        "requests=1",
+        "effects=1",
+        "replay=true"
+      ],
+      "status": "PENDING_CURRENT_WORKFLOW"
+    }
+  },
+  "negative_history": [
+    {
+      "head": "11db801c3a9e6cc7d4c8b6cda3348daea98a488d",
+      "workflow_run": 37254486898,
+      "result": "BUILD_FAILURE",
+      "cause": "debug caller service was missing imports for runtime primitives",
+      "disposition": "corrected in 3c2fd3d2dda639c6bfa3f2d6c64589e009299523"
+    },
+    {
+      "head": "3c2fd3d2dda639c6bfa3f2d6c64589e009299523",
+      "workflow_run": 37254548378,
+      "result": "INSTRUMENTATION_COMPILE_FAILURE",
+      "cause": "CallerRecoveryTest used JUnit assertTrue(message,condition) with the arguments reversed on multiple assertions",
+      "disposition": "corrected in 309b47f323ea2be326cbf788341bd8c83cd58c54"
+    },
+    {
+      "head": "309b47f323ea2be326cbf788341bd8c83cd58c54",
+      "workflow_run": 37254867999,
+      "result": "INSTRUMENTATION_HARNESS_FAILURE",
+      "cause": "StackOverflowError in getProcessInstanceId because Kotlin property processInstanceId recursively resolved to the generated getter",
+      "disposition": "corrected in ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6 by renaming the backing property"
+    },
+    {
+      "head": "ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6",
+      "workflow_run": 37255335292,
+      "result": "B5_TEST_FAILURE",
+      "cause": "Provider getState() threw when operation was absent; caller harness treated absence via the wrong exception contract, so B5 never reached the intended CONFIRMED_NOT_EXECUTED recovery assertion.",
+      "disposition": "Corrected on 79b224eec1e215e091c22778666cdf699d5d4875 by making provider getState() return explicit ABSENT and consuming that state in caller recovery."
+    },
+    {
+      "head": "ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6",
+      "workflow_run": 37255335292,
+      "result": "INSTRUMENTATION_HARNESS_BOUNDARY_FAILURE",
+      "cause": "Caller crash injection used the same Android process as the instrumentation runner",
+      "disposition": "corrected in 9f7b50849018cab5c7bbc32cfa251c1a093ad22c9 by isolating T2CallerService in :t2caller"
+    }
+  ],
+  "current_observation": {
+    "latest_head": "79b224eec1e215e091c22778666cdf699d5d4875",
+    "workflow_run": 37255832130,
+    "build_job": "IN_PROGRESS",
+    "unit_tests": "PASS",
+    "apk_build": "IN_PROGRESS",
+    "instrumentation_job": "PENDING",
+    "latest_change": "B5 recovery now treats provider ABSENT as confirmed non-execution before reconciliation",
+    "next_required": "complete workflow and inspect emulator results"
+  },
+  "limits": [
+    "B4/B5 are not promoted until connectedDebugAndroidTest executes and concludes.",
+    "Compile failures in the harness are recorded separately from semantic test outcomes.",
+    "No B6/B7 claims are included in this experiment.",
+    "No general exactly-once guarantee is claimed."
+  ]
+}

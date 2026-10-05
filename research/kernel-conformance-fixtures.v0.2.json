@@ -1,0 +1,114 @@
+{
+  "version": 2,
+  "status": "DRAFT",
+  "purpose": "Small cross-runtime semantic fixtures for Run, Observation, Verification, Evidence, authority, continuation, and cache boundaries. These fixtures do not prove runtime conformance until executed by at least two materially different implementations.",
+  "cases": [
+    {
+      "id": "K-IDENTITY-01",
+      "name": "run identity is stable",
+      "input": {
+        "run_id": "run_conformance_001",
+        "goal": "validate a deterministic capability path"
+      },
+      "assertions": [
+        "run_id remains identical across continuation and observation records",
+        "the same run_id is not silently reused for a different goal"
+      ]
+    },
+    {
+      "id": "K-EVIDENCE-01",
+      "name": "observation is not evidence",
+      "input": {
+        "observation_id": "obs_001",
+        "evidence_id": "ev_001"
+      },
+      "assertions": [
+        "an observation may be recorded without automatically becoming evidence",
+        "an evidence reference carries attributable source identity",
+        "evidence status does not imply truth without verification"
+      ]
+    },
+    {
+      "id": "K-VERIFY-01",
+      "name": "verification may reject a result",
+      "input": {
+        "target_type": "artifact",
+        "target_id": "artifact_001",
+        "verification_status": "failed"
+      },
+      "assertions": [
+        "verification status may be failed even when execution produced a result",
+        "a failed verification cannot be upgraded to passed by repetition alone"
+      ]
+    },
+    {
+      "id": "K-UNKNOWN-01",
+      "name": "ambiguous external effect remains unknown",
+      "input": {
+        "effect_id": "effect_001",
+        "status": "UNKNOWN_OUTCOME"
+      },
+      "assertions": [
+        "UNKNOWN_OUTCOME is not treated as success",
+        "UNKNOWN_OUTCOME is not treated as safe-to-repeat",
+        "reconciliation is required before authoritative terminal classification"
+      ]
+    },
+    {
+      "id": "K-AUTHORITY-01",
+      "name": "authority is scoped and pinned",
+      "input": {
+        "authority_id": "authority_execution_001",
+        "owner_repo": "Loofy147/example-runtime",
+        "ref": "main",
+        "commit": "0123456789abcdef0123456789abcdef01234567",
+        "status": "current"
+      },
+      "assertions": [
+        "authority is bound to an explicit concern",
+        "repository identity and exact ref are preserved",
+        "known gaps remain visible",
+        "protocol reachability does not itself establish semantic authority"
+      ]
+    },
+    {
+      "id": "K-FRONTIER-01",
+      "name": "continuation frontier is a projection",
+      "input": {
+        "run_id": "run_conformance_001",
+        "frontier_revision": 3
+      },
+      "assertions": [
+        "frontier revisions are ordered",
+        "frontier records may identify open items and next actions",
+        "frontier state does not itself authorize an effect"
+      ]
+    },
+    {
+      "id": "K-CACHE-01",
+      "name": "cache is a valuable reusable artifact without authority",
+      "input": {
+        "cache_id": "cache_001",
+        "kind": "derived_result",
+        "derived_from": [
+          "run_conformance_001",
+          "artifact_001"
+        ],
+        "source_ref": "Loofy147/example-runtime@0123456789abcdef0123456789abcdef01234567",
+        "integrity_digest": "sha256:example",
+        "status": "fresh",
+        "reuse_policy": "revalidate_before_use",
+        "invalidation_conditions": [
+          "source revision changes",
+          "integrity mismatch"
+        ]
+      },
+      "assertions": [
+        "a cache remains identifiable as a reusable artifact after creation",
+        "cache reuse policy is explicit and may require revalidation",
+        "stale or invalid cache state does not require silent deletion",
+        "cache reuse does not establish evidence, truth, authorization, or semantic authority"
+      ]
+    }
+  ]
+}

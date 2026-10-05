@@ -1,0 +1,49 @@
+{
+  "schema": "open_system_one.android_t2_b7_fix_result.v0.1",
+  "recorded_at": "2026-10-05T02:27:10Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "source": {
+    "repository": "Loofy147/Llms-mcp-android",
+    "branch": "conformance/t2-b7-causal-fix-v0.1",
+    "commit": "d5d80fd4d55ab4f50195ae90fb1bf7be1e4e7db4",
+    "workflow_run": 37255174576,
+    "workflow_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255174576"
+  },
+  "prior_kill": {
+    "commit": "e697e1f6f2a60c8336297fc343d2815157b5cc9d",
+    "workflow_run": 37254953362,
+    "result": "FAIL",
+    "evidence": "36 tests completed, 1 failed; stale older RunRecord became authoritative over newer terminal result"
+  },
+  "repair": {
+    "invariant": "terminal Run state is write-once",
+    "implementation": [
+      "InMemoryRuntimeStore.saveRun refuses writes when an existing Run is terminal.",
+      "JournalRuntimeStore.saveRun replays current state and refuses writes when the existing Run is terminal."
+    ],
+    "tests_added": "terminal Run immutability test covering a late result with the same terminal status."
+  },
+  "verification": {
+    "build_job": "PASS",
+    "unit_tests": "PASS",
+    "apk_build": "PASS",
+    "stale_ordering_test": "PASS as part of the full unit-test suite",
+    "instrumentation_job": "FAIL, but failure is attributable to unrelated B4/B5 harness StackOverflowError in T2CallerService.getProcessInstanceId",
+    "instrumentation_limit": "The B7 fix itself was not the cause of the instrumentation failure; B4/B5 tests did not reach their semantic scenarios."
+  },
+  "disposition": {
+    "G11": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "claim": "The minimal terminal write-once guard prevents the experimentally demonstrated JournalRuntimeStore arrival-order regression for terminal Run state.",
+    "limits": [
+      "No causal revision field has been added.",
+      "No production Binder stale-callback path has been exercised.",
+      "Late non-terminal/parallel state semantics are not covered by this minimal fix.",
+      "No merge performed."
+    ]
+  },
+  "next_action": [
+    "Keep the terminal write-once fix isolated pending review.",
+    "Test B7 through a production-shaped late callback path if one exists.",
+    "Resolve B4/B5 harness separately; do not use their instrumentation failure to invalidate or certify B7."
+  ]
+}

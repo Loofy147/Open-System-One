@@ -1,0 +1,90 @@
+{
+  "schema": "open_system_one.conformance_run.v0.4",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.3-adapters.json",
+  "recorded_at": "2026-10-05T03:08:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Latest repository-native adapter logic was fetched from the GitHub branches at their current PR heads and its represented semantics were reconstructed and executed in an isolated local Python harness. Container-side direct clone was unavailable because external DNS/network access was unavailable. No claim of clean-clone CI is made.",
+    "classification": [
+      "PASS",
+      "FAIL",
+      "NOT_REPRESENTED",
+      "NOT_PROVEN"
+    ]
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "branch": "conformance/cache-contract-v0.1",
+      "pr": 4,
+      "head_commit": "3b035c3bf859e818e4e793bc30068f32e6282718",
+      "files": {
+        "core.py": "11f5c50f6f423512d99bc019a119d80311c01a98",
+        "test_m0.py": "041abd3114924cde92769d4df58bc1f13d797c1b",
+        "conformance_adapter.py": "7f086d441d7935a7d20067a05d7ef9368b487869",
+        "schemas.py": "739143ea7a7c20727213fee8a175ce2eee6b57b9"
+      },
+      "adapter_results": {
+        "K-IDENTITY-01": "PASS",
+        "K-EVIDENCE-01": "NOT_REPRESENTED",
+        "K-VERIFY-01": "NOT_REPRESENTED",
+        "K-UNKNOWN-01": "NOT_REPRESENTED",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "observations": [
+        "same run_id with a different execution request is now explicitly rejected",
+        "same run_id with the same request remains replay-safe",
+        "cache fresh -> stale successor preserves the original record"
+      ]
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "branch": "conformance/cache-contract-v0.1",
+      "pr": 21,
+      "head_commit": "587bb71e476fca9e11e3479f83feddbb72c306cb",
+      "files": {
+        "system/scripts/uws_runtime.py": "11232783f2034483c41ad1638c21d2ab3bcf1f33",
+        "system/runtime_tests/test_uws_runtime.py": "aaae75a72003285169217adcc1357cd9b41064d3",
+        "conformance_adapter.py": "a7867803994301edb3de2bac732859ad70538e32"
+      },
+      "adapter_results": {
+        "K-IDENTITY-01": "NOT_PROVEN",
+        "K-EVIDENCE-01": "NOT_REPRESENTED",
+        "K-VERIFY-01": "NOT_REPRESENTED",
+        "K-UNKNOWN-01": "NOT_REPRESENTED",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "observations": [
+        "run identity replay for a changed goal is not represented by the inspected UWS runtime",
+        "cache reference persistence is atomic and stale state remains readable"
+      ]
+    }
+  ],
+  "cache_contract": {
+    "schema_path": "schema/cache-reference.v0.1.json",
+    "schema_blob_sha": "283c9a0905355d8b2306d0489a3cfad4da6527f1",
+    "result": "K-CACHE-01 PASS in both implementations",
+    "limits": [
+      "freshness is represented, not independently proven against source drift",
+      "cache material has not crossed an independent Verification boundary",
+      "no clean-clone CI result"
+    ]
+  },
+  "disposition": {
+    "G01_kernel_intersection": "OPEN",
+    "G02_cross_repository_conformance": "OPEN",
+    "G03_capability_verification_boundary": "OPEN",
+    "G04_unknown_effect_reconciliation": "OPEN",
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS"
+  },
+  "next_discriminating_actions": [
+    "Implement the smallest independent Verification record in M0 or UWS and prove it can reject a completed result.",
+    "Add source-drift invalidation to K-CACHE-01 without deleting the stale cache.",
+    "Model UNKNOWN_OUTCOME plus reconciliation before replay.",
+    "Add repository-native CI execution for the adapter commands where repository CI is available."
+  ]
+}

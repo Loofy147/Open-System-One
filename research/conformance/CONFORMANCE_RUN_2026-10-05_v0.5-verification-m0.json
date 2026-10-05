@@ -1,0 +1,59 @@
+{
+  "schema": "open_system_one.conformance_run.v0.5",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.4-identity-cache.json",
+  "recorded_at": "2026-10-05T03:15:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Latest M0 source representations were fetched from the current conformance branch and the repository-native adapter semantics were reconstructed and executed in an isolated local Python harness. The resulting execution chain was Run -> Observation -> independent Verification -> Evidence, with cache checks in the same run. This is not clean-clone CI.",
+    "classification": [
+      "PASS",
+      "FAIL",
+      "NOT_REPRESENTED",
+      "NOT_PROVEN"
+    ]
+  },
+  "implementation": {
+    "name": "m0-durable-run",
+    "branch": "conformance/cache-contract-v0.1",
+    "pr": 4,
+    "head_commit": "3a0fc93a6d09b2c36c5ac9ba1dcc70b43a87e690",
+    "files": {
+      "core.py": "11f5c50f6f423512d99bc019a119d80311c01a98",
+      "schemas.py": "9ed99131363aa5cfc8c6322109368fb014d91014",
+      "test_m0.py": "8685b8b13d22e3142ba058e349a380f9b58e117f",
+      "conformance_adapter.py": "8c7a40856d777873894d962b38bb4667394e9271"
+    },
+    "adapter_results": {
+      "K-IDENTITY-01": "PASS",
+      "K-EVIDENCE-01": "PASS",
+      "K-VERIFY-01": "PASS",
+      "K-UNKNOWN-01": "NOT_REPRESENTED",
+      "K-AUTHORITY-01": "NOT_REPRESENTED",
+      "K-FRONTIER-01": "NOT_REPRESENTED",
+      "K-CACHE-01": "PASS"
+    },
+    "observed_chain": {
+      "run_id": "run_conformance-verification",
+      "observation_id": "observation_d014c16c2e864196a28da931205a0d26",
+      "verification_id": "verification_b2c919cfc05a4d1b8a3bbc22b0865a5a",
+      "evidence_id": "evidence_5f4e9485931d4b1b8ef2ac3e4c0d49ea",
+      "verification_status": "failed",
+      "reason": "independent verifier required even sum; observed value was 55 while Run status remained completed"
+    }
+  },
+  "disposition": {
+    "G03_capability_verification_boundary": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "G02_cross_repository_conformance": "OPEN",
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "limits": [
+      "Only M0 has executed the complete chain so far.",
+      "UNKNOWN_OUTCOME and authority/frontier semantics remain absent in M0.",
+      "No clean-clone CI result."
+    ]
+  },
+  "next_discriminating_actions": [
+    "Implement and execute the same minimal Observation -> Verification -> Evidence boundary in UWS.",
+    "Add source-drift invalidation to the cache fixture while preserving the stale artifact.",
+    "Implement UNKNOWN_OUTCOME plus reconciliation before replay."
+  ]
+}
