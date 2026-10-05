@@ -30,8 +30,8 @@ Acceptance: execute -> observe -> verify -> evidence, including capability/effec
 ## G-04 — UNKNOWN outcome semantics
 Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Question: How is an ambiguous external effect represented and reconciled without accidental duplicate execution?
-Action: complete Android B4/B5, then B6 concurrent recovery.
-Latest evidence: M0 and UWS both pass the same U-01/U-02/U-03/U-04 reconciliation tests. The exact repository test files each execute 4/4 PASS. A separate two-process restart check in both runtimes preserved UNKNOWN across process exit, blocked replay, allowed reconciliation to CONFIRMED_NOT_EXECUTED, and then allowed one new reservation. The semantic contract is pinned to Android RuntimeStore.kt at ref 78afd5d3d7716fe31a5f109a5796eb3db7f99970, blob 5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e. Android B4/B5 integration has a corrected head 309b47f323ea2be326cbf788341bd8c83cd58c54 with unit tests and APK build PASS; connectedDebugAndroidTest for workflow 37254867999 is still IN_PROGRESS. The previous instrumentation run 37254548378 failed before semantic execution because of test-harness assertion argument order and is recorded separately.
+Action: complete Android B4/B5 against external-staging-authority, then B6 concurrent recovery.
+Latest evidence: M0 and UWS both pass the same U-01/U-02/U-03/U-04 reconciliation tests. Cross-repository review also identified canonical-capability-core and external-staging-authority as existing implementations of the same semantic family; these are now the preferred reference/qualification path rather than new parallel semantics. The exact repository test files each execute 4/4 PASS. A separate two-process restart check in both runtimes preserved UNKNOWN across process exit, blocked replay, allowed reconciliation to CONFIRMED_NOT_EXECUTED, and then allowed one new reservation. The semantic contract is pinned to Android RuntimeStore.kt at ref 78afd5d3d7716fe31a5f109a5796eb3db7f99970, blob 5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e. Android B4/B5 integration has a corrected head 309b47f323ea2be326cbf788341bd8c83cd58c54 with unit tests and APK build PASS; connectedDebugAndroidTest for workflow 37254867999 is still IN_PROGRESS. The previous instrumentation run 37254548378 failed before semantic execution because of test-harness assertion argument order and is recorded separately.
 Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.9-unknown-outcome.json; research/conformance/ANDROID_T2_B4_B5_EXPERIMENT_2026-10-05_v0.1.json
 Limits: this proves the cross-runtime semantic core, not the full Android caller-side lifecycle. B4 caller dies after provider completion, B5 caller dies before dispatch, and B6 concurrent recovery remain unverified at the Android integration boundary until the current workflow concludes. No real external provider effect was exercised in M0/UWS; no clean-clone CI; general exactly-once is not claimed.
 Acceptance: UNKNOWN is durable, blocks replay, requires explicit reconciliation, permits a new reservation only after CONFIRMED_NOT_EXECUTED, and remains separate from Evidence/Authority; the same behavior is reproduced at the Android CapabilityExecutor boundary.
@@ -119,8 +119,16 @@ A new P0 G-11 was opened by a deterministic kill test. The current Android Journ
 P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, complete Capability/effect semantics, Android B4/B5 integration, concurrent recovery, and causal result ordering are not yet closed.
 
 Next actions:
-1. complete and record Android B4/B5;
+1. complete and record Android B4/B5 against external-staging-authority;
 2. define and test the smallest causal revision boundary for G-11;
 3. execute B6 with two independent recovery actors/processes and measure dispatch count separately from effect count;
-4. only then implement the minimal B6/G-11 repairs;
-5. add clean-clone CI where repository infrastructure supports it.
+4. complete the canonical-capability-core -> Open-System-One semantic crosswalk;
+5. then implement only the minimal proven B6/G-11 repairs;
+6. add clean-clone CI where repository infrastructure supports it.
+
+## 2026-10-05 repository-review references
+
+- `docs/CONVERGENCE_STATUS_AND_EXECUTION_PLAN_v0.1.md`
+- `research/conformance/CROSS_REPOSITORY_ARCHITECTURE_REVIEW_2026-10-05_v0.1.md`
+
+The cross-repository review does not promote any new universal authority. It identifies canonical-capability-core as the strongest existing capability/reconciliation reference, external-staging-authority as the preferred independent qualification target, My_browser as an acquisition/evidence vertical, Conversational as a Frontier projection reference, recursive-audit as an epistemic/assurance vertical, and Machine as a parallel substrate research track.
