@@ -6,10 +6,10 @@
     "repository": "Loofy147/Llms-mcp-android",
     "base_ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
     "branch": "conformance/t2-caller-recovery-v0.1",
-    "head_commit": "79b224eec1e215e091c22778666cdf699d5d4875",
+    "head_commit": "9f7b50849018cab5c7bbc32cfa251c1a093ad22c9",
     "pull_request": 16,
-    "workflow_run": 37255832130,
-    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37254867999",
+    "workflow_run": 37255335292,
+    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255335292",
     "workflow": "Build debug APK and Android tests",
     "environment": "GitHub Actions ubuntu-latest; JDK 17; Gradle 8.9; Android API 35; google_apis x86_64; Pixel 7 Pro profile",
     "workflow_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255832130"
@@ -26,7 +26,7 @@
         "effects=1",
         "replay=false"
       ],
-      "status": "NOT_DIRECTLY_REPORTED_BUT_NOT_THE_REPORTED_FAILURE"
+      "status": "PENDING_CORRECTED_INSTRUMENTATION"
     },
     "B5": {
       "hypothesis": "caller process dies after durable reservation but before provider dispatch; restart proves provider operation absent, reconciles CONFIRMED_NOT_EXECUTED, then dispatches exactly once",
@@ -39,7 +39,7 @@
         "effects=1",
         "replay=true"
       ],
-      "status": "HARNESS_FAILURE_CORRECTED; PENDING_NEW_RUN"
+      "status": "PENDING_CORRECTED_INSTRUMENTATION"
     }
   },
   "negative_history": [
@@ -70,18 +70,26 @@
       "result": "B5_TEST_FAILURE",
       "cause": "Provider getState() threw when operation was absent; caller harness treated absence via the wrong exception contract, so B5 never reached the intended CONFIRMED_NOT_EXECUTED recovery assertion.",
       "disposition": "Corrected on 79b224eec1e215e091c22778666cdf699d5d4875 by making provider getState() return explicit ABSENT and consuming that state in caller recovery."
+    },
+    {
+      "head": "ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6",
+      "workflow_run": 37255335292,
+      "result": "INSTRUMENTATION_HARNESS_BOUNDARY_FAILURE",
+      "cause": "Caller crash injection used the same Android process as the instrumentation runner",
+      "disposition": "corrected in 9f7b50849018cab5c7bbc32cfa251c1a093ad22c9 by isolating T2CallerService in :t2caller"
     }
   ],
   "current_observation": {
+    "latest_head": "9f7b50849018cab5c7bbc32cfa251c1a093ad22c9",
+    "workflow_run": 37255335292,
     "build_job": "PASS",
     "unit_tests": "PASS",
     "apk_build": "PASS",
-    "prior_instrumentation_workflow": 37255335292,
-    "prior_instrumentation_conclusion": "FAIL",
-    "prior_failure_scope": "B5 test only reported failure; instrumentation log says 3/4 tests completed, 1 failed.",
-    "corrected_head": "79b224eec1e215e091c22778666cdf699d5d4875",
-    "corrected_workflow": 37255832130,
-    "corrected_workflow_status": "QUEUED"
+    "instrumentation_job": "FAIL",
+    "failure_class": "HARNESS_BOUNDARY_FAILURE",
+    "failure_detail": "T2CallerService was running in the instrumentation process; killProcess() terminated the runner. This prevented B4/B5 semantic assertions from being observed.",
+    "correction": "T2CallerService now declares android:process=:t2caller in app/src/debug/AndroidManifest.xml",
+    "next_run_required": true
   },
   "limits": [
     "B4/B5 are not promoted until connectedDebugAndroidTest executes and concludes.",
