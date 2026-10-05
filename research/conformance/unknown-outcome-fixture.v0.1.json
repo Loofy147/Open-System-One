@@ -6,7 +6,7 @@
     "repository": "Loofy147/Llms-mcp-android",
     "ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
     "file": "app/src/main/java/com/hicham/llmchat/runtime/RuntimeStore.kt",
-    "blob_sha": ""
+    "blob_sha": "5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e"
   },
   "cases": [
     {
@@ -17,7 +17,8 @@
         "mark effect UNKNOWN",
         "same effect reservation is blocked",
         "reconcile UNKNOWN to COMPLETED",
-        "effect count remains one"
+        "effect count remains one",
+        "a later reservation remains blocked after confirmed completion"
       ]
     },
     {
@@ -28,7 +29,8 @@
         "mark effect UNKNOWN",
         "reconcile UNKNOWN to CONFIRMED_NOT_EXECUTED",
         "same effect can be reserved again",
-        "new execution can occur once"
+        "new execution can occur once",
+        "completion blocks later replay"
       ]
     },
     {
@@ -39,6 +41,15 @@
         "recover interrupted effects",
         "effect becomes UNKNOWN",
         "replay remains blocked until reconciliation"
+      ]
+    },
+    {
+      "id": "U-04",
+      "name": "incompatible identity conflicts",
+      "assertions": [
+        "reserve effect",
+        "reuse same effect_id with changed capability/action version",
+        "reservation is CONFLICT rather than replay"
       ]
     }
   ]
