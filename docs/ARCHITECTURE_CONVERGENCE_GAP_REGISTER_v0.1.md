@@ -67,13 +67,14 @@ Acceptance: product uses stable semantics, not repository internals.
 ## G-10 — Cache validity/reuse
 Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Question: What minimum semantics preserve the operational value of caches without allowing stale/derived material to become authority?
-Action: add source-drift invalidation and independent Verification before allowing cache-backed results to advance epistemic state.
+Action: apply independent Verification specifically to cache-backed results; add integrity-digest mismatch as a live negative case.
 Evidence:
-- Open-System-One cache-reference schema defines identity, derivation, source, integrity, status, reuse policy, invalidation conditions, evidence role, and authority=none.
-- M0 and UWS both pass K-CACHE-01 and preserve fresh/stale cache material.
-- The independent Verification boundary now exists in both runtimes, but it has not yet been applied specifically to a cache-backed result.
-Limits: freshness truth after source drift is not established; cache material is preserved but not yet proven safe to promote epistemically after drift.
-Acceptance: two materially different implementations preserve stale/invalid cache material, refuse authoritative reuse after source drift, and keep cache distinct from Evidence/Authority.
+- Open-System-One cache-reference schema and CACHE_REUSE_GATE_CONTRACT define artifact identity, provenance, integrity, status, reuse policy, source-match requirements, and explicit revalidation.
+- M0 and UWS both pass source-drift negative cases: source mismatch blocks reuse; revalidate_before_use remains a gate even when source matches; stale material remains preserved.
+- The independent Verification boundary exists in both runtimes, but cache-backed content has not yet been independently verified as an epistemic input.
+Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.7-cache-reuse.json
+Limits: reuse-gate correctness does not establish truth of cached content; integrity digest is recorded but not yet recomputed by the reuse gate; no clean-clone CI.
+Acceptance: two materially different implementations preserve stale/invalid cache material, refuse reuse after source drift or integrity mismatch, and keep cache distinct from Evidence/Authority.
 
 ## Priority order
 
@@ -90,7 +91,7 @@ A gap closes only after its discriminating action executes and the resulting evi
 
 The initial conformance pass exposed partial shared Run semantics and explicit absent concepts.
 
-The cache tranche established a reusable Artifact boundary in M0 and UWS with provenance, integrity, status, reuse policy, and invalidation conditions.
+The cache tranche established a reusable Artifact boundary in M0 and UWS with provenance, integrity, status, reuse policy, and invalidation conditions. Source-drift reuse gates now refuse reuse on source mismatch and preserve the artifact.
 
 The M0 identity mismatch was exposed, repaired, and converted into a regression boundary that rejects same-run-id reuse for a different execution request.
 
@@ -99,7 +100,8 @@ The Verification boundary then moved from a single-runtime result to two materia
 P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, capability/effect semantics, and UNKNOWN external-effect reconciliation are not yet established.
 
 Next actions:
-1. apply source-drift invalidation to cache-backed reuse and preserve the stale artifact;
-2. implement UNKNOWN_OUTCOME plus reconciliation before replay;
-3. reconcile the verification boundary with Android CapabilityExecutor semantics;
-4. decide whether UWS should adopt an explicit run-id/request binding invariant or an equivalent identity contract.
+1. verify a cache-backed result through the independent Verification boundary;
+2. add integrity-digest mismatch as a negative reuse case;
+3. implement UNKNOWN_OUTCOME plus reconciliation before replay;
+4. reconcile the verification boundary with Android CapabilityExecutor semantics;
+5. decide whether UWS should adopt an explicit run-id/request binding invariant or an equivalent identity contract.
