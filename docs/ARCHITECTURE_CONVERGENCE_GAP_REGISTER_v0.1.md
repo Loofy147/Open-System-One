@@ -8,22 +8,24 @@
 Status: OPEN
 Question: Which fields are invariant across Run, Observation, Verification, Evidence, Artifact, Claim, Decision, DecisionRevision, Relationship, Contradiction, Gap?
 Action: extract schemas/contracts from Open-System-One, UWS, m0, and Android; classify fields as invariant, adapter-local, unresolved.
-Latest evidence: first reconstructed conformance pass shows that M0 and UWS share some Run durability semantics but do not expose the full common record graph. The current machine-readable schemas therefore remain a draft intersection, not an established canonical kernel.
+Latest evidence: the conformance work now has explicit draft references for Observation and Verification, but the common record graph remains only partially represented across implementations.
 Acceptance: minimal machine-readable kernel without forcing implementation-specific fields into it.
 
 ## G-02 — Cross-repository conformance
 Status: OPEN
 Question: Can materially different implementations satisfy the same semantic contract?
-Action: shared fixtures for identity, terminal states, evidence linkage, replay, contradiction, and cache artifacts, executed through repository-native adapters.
-Latest evidence: repository-native adapters now exist on M0 and UWS branches. M0 adapter execution produced K-IDENTITY-01=FAIL and K-CACHE-01=PASS; UWS produced K-IDENTITY-01=NOT_PROVEN and K-CACHE-01=PASS. The M0 failure is a concrete semantic mismatch: current lookup reuses an existing run_id for a different goal. The adapters did not fabricate support for absent concepts. Full conformance therefore remains OPEN.
-Acceptance: two independent implementations pass the same semantic assertions where both represent them, and mismatches are explicit.
+Action: shared fixtures for identity, terminal states, evidence linkage, replay, contradiction, verification, and cache artifacts, executed through repository-native adapters.
+Latest evidence: M0 now passes K-IDENTITY-01, K-VERIFY-01, K-EVIDENCE-01, and K-CACHE-01 after an explicit identity fix and independent verification implementation. UWS still has K-IDENTITY-01=NOT_PROVEN and does not yet represent the verification/evidence boundary. Full conformance therefore remains OPEN.
+Acceptance: two independent implementations pass the same semantic assertions where represented, and mismatches remain explicit.
 
 ## G-03 — Capability/Verification boundary
-Status: OPEN
+Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Question: What is the smallest contract allowing a Capability to produce an Observation that an independent Verifier can assess?
-Action: reconcile Android CapabilityExecutor with UWS/m0 execution/evidence.
-Latest evidence: M0 has executable Run -> Evidence, but no independent Verification record. UWS has execution/checkpoint/retry state, but no independent verification representation in the inspected runtime.
-Acceptance: execute -> observe -> verify -> evidence without model prose as authority.
+Action: reproduce the proven M0 boundary in UWS and then reconcile with Android CapabilityExecutor.
+Latest evidence: M0 executes a completed Run, records an Observation with a digest, applies an independent verifier, records status=failed for observed value 55, and records Evidence linking the Run, Observation, and Verification. The Run remains completed. The boundary is therefore experimentally supported in one implementation.
+Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.5-verification-m0.json
+Limits: not yet cross-runtime; verifier authority/identity semantics are still provisional; UNKNOWN external effects remain outside the boundary.
+Acceptance: execute -> observe -> verify -> evidence without model prose as authority, reproduced by materially different implementations.
 
 ## G-04 — UNKNOWN outcome semantics
 Status: OPEN across systems; local evidence exists in Android/m0 regimes.
@@ -69,9 +71,9 @@ Action: complete repository-native K-CACHE-01 execution, then add source-drift i
 Evidence:
 - Open-System-One schema/cache-reference.v0.1.json defines identity, derivation, source, integrity, status, reuse policy, invalidation conditions, evidence role, and authority=none.
 - m0-durable-run branch conformance/cache-contract-v0.1 adds cache v1 validation, append-only cache-state tests, and a repository-native conformance adapter.
-- unified-knowledge-work-system branch conformance/cache-contract.v0.1 adds atomic cache-reference persistence, cache-state tests, and a repository-native conformance adapter.
+- unified-knowledge-work-system branch conformance/cache-contract-v0.1 adds atomic cache-reference persistence, cache-state tests, and a repository-native conformance adapter.
 - Focused adapter execution returned K-CACHE-01=PASS in both implementations.
-Limits: no clean-clone CI result; freshness truth after source drift is not established; cache content has not crossed an independent Verification boundary.
+Limits: no clean-clone CI result; freshness truth after source drift is not established; cache content has only now crossed an independent Verification boundary in M0, not yet UWS.
 Acceptance: two materially different implementations pass the cache fixture and preserve stale/invalid artifacts without promoting them to Evidence or Authority.
 
 ## Priority order
@@ -89,13 +91,14 @@ A gap closes only after its discriminating action executes and the resulting evi
 
 The first discriminating cross-runtime pass was intentionally not used to close any P0 gap. It produced partial positive evidence and explicit negative/non-represented findings.
 
-A bounded cache-artifact conformance slice was then added. It confirms that cache material can be represented as a valuable reusable Artifact with explicit provenance, integrity, status, reuse policy, and invalidation conditions in two materially different runtimes.
+A bounded cache-artifact conformance slice confirmed that cache material can be represented as a valuable reusable Artifact with explicit provenance, integrity, status, reuse policy, and invalidation conditions in two materially different runtimes.
 
-Repository-native adapters were then added. They expose an important negative result rather than smoothing it away: M0 currently fails the stronger run-identity assertion for reuse of the same run_id with a different goal. UWS does not currently represent that contract. This keeps G-02 OPEN with a precise discriminating mismatch.
+Repository-native adapters then exposed a concrete M0 identity mismatch rather than hiding it. M0 was repaired to reject same-run-id reuse for a different execution request, and that negative case now passes its regression boundary.
+
+The first independent Verification boundary was then implemented and executed in M0. A completed Run produced value 55; an independent verifier requiring an even result marked the Observation as failed; Evidence linked the Run, Observation, and Verification. This moves G-03 from OPEN to EXPERIMENTALLY_SUPPORTED_WITH_LIMITS without claiming cross-runtime closure.
 
 Next actions:
-1. fix or explicitly version the M0 same-run-id/different-goal behavior and add it as a regression boundary;
-2. implement the smallest independent Verification record;
+1. reproduce Observation -> Verification -> Evidence in UWS;
+2. add source-drift invalidation for K-CACHE-01 while preserving stale cache material;
 3. implement UNKNOWN_OUTCOME plus reconciliation before replay;
-4. run source-drift invalidation for K-CACHE-01;
-5. wire adapter execution into repository-native CI where available.
+4. wire adapter execution into repository-native CI where available.
