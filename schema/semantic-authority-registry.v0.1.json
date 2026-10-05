@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/blob/control-plane/kernel-contract-v0.1/schema/semantic-authority-registry.v0.1.json",
+  "title": "Semantic Authority Registry v0.1",
+  "description": "Minimal registry entry for identifying the authoritative implementation boundary for a semantic concern without promoting reachability or protocol ownership into authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "authority_id",
+    "concern",
+    "owner_repo",
+    "ref",
+    "status",
+    "scope",
+    "known_gaps",
+    "updated_at"
+  ],
+  "properties": {
+    "authority_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "concern": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owner_repo": {
+      "type": "string",
+      "pattern": "^[^/\\s]+/[^/\\s]+$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "commit": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "current",
+        "research",
+        "historical",
+        "superseded",
+        "unknown"
+      ]
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "known_gaps": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "verified_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "supersedes": {
+      "type": ["string", "null"]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
