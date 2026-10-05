@@ -45,11 +45,12 @@ Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS; terminal immutability is not a gen
 4. Android B4/B5
 Branch: conformance/t2-caller-recovery-v0.1
 Current head: 9f7b50849018cab5c7bbc32cfa251c1a093ad22c
-Latest workflow: 37255335292
-Build and unit tests pass.
-Instrumentation result: failure because the caller test service was initially in the same process as the instrumentation runner; killProcess therefore crashed the runner.
+Latest workflow: 37255832130
+Build and unit tests pass on the current head; APK build is currently executing in workflow 37255832130.
+Previous instrumentation failure was a harness boundary defect because the caller service shared the instrumentation process; killProcess therefore crashed the runner.
 Correction now applied: T2CallerService uses android:process=:t2caller.
-Status: semantic B4/B5 result remains UNKNOWN/PENDING until this corrected process boundary is executed.
+An additional B5 correction now treats provider ABSENT as confirmed non-execution evidence before reconciliation.
+Status: semantic B4/B5 result remains UNKNOWN/PENDING until workflow 37255832130 completes.
 
 5. Verification and cache
 M0 and UWS independently pass the cross-runtime Verification/Evidence fixture tranche.
