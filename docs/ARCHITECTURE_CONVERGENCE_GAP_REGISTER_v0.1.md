@@ -19,7 +19,7 @@ Latest evidence: M0 and UWS independently pass the same semantic core for Verifi
 Acceptance: two independent implementations pass the same semantic assertions where represented, with no unsupported semantics fabricated by adapters.
 
 ## G-03 — Capability/Verification boundary
-Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS_WITH_LIMITS
+Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Question: What is the smallest contract allowing a Capability to produce an Observation that an independent Verifier can assess?
 Action: reconcile the proven runtime boundary with Android CapabilityExecutor and verify effect identity/verification obligations.
 Latest evidence: M0 and UWS independently execute a completed Run/step, record an Observation with provenance/integrity, apply an independent verifier that rejects value 55, and record Evidence linking Run -> Observation -> Verification. The execution remains completed after verification failure.
@@ -80,7 +80,7 @@ Limits: no clean-clone CI; the reuse gate accepts an externally supplied observe
 Acceptance: two materially different implementations preserve stale/invalid cache material, refuse reuse after source drift or integrity mismatch, and keep cache distinct from Evidence/Authority while cache-backed material remains independently verifiable.
 
 ## G-11 — Stale result / causal ordering
-Status: EXPERIMENTALLY_SUPPORTED
+Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Priority: P0
 Question: Can an older execution result become authoritative after a newer terminal result?
 Action: define minimal monotonic attempt/revision semantics, then reproduce the failure through a production-shaped late-callback path before implementing a fix.
