@@ -6,9 +6,9 @@
     "repository": "Loofy147/Llms-mcp-android",
     "base_ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
     "branch": "conformance/t2-caller-recovery-v0.1",
-    "head_commit": "309b47f323ea2be326cbf788341bd8c83cd58c54",
+    "head_commit": "ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6",
     "pull_request": 16,
-    "workflow_run": 37254867999,
+    "workflow_run": null,
     "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37254867999",
     "workflow": "Build debug APK and Android tests",
     "environment": "GitHub Actions ubuntu-latest; JDK 17; Gradle 8.9; Android API 35; google_apis x86_64; Pixel 7 Pro profile"
@@ -55,15 +55,22 @@
       "result": "INSTRUMENTATION_COMPILE_FAILURE",
       "cause": "CallerRecoveryTest used JUnit assertTrue(message,condition) with the arguments reversed on multiple assertions",
       "disposition": "corrected in 309b47f323ea2be326cbf788341bd8c83cd58c54"
+    },
+    {
+      "head": "309b47f323ea2be326cbf788341bd8c83cd58c54",
+      "workflow_run": 37254867999,
+      "result": "INSTRUMENTATION_HARNESS_FAILURE",
+      "cause": "StackOverflowError in getProcessInstanceId because Kotlin property processInstanceId recursively resolved to the generated getter",
+      "disposition": "corrected in ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6 by renaming the backing property"
     }
   ],
   "current_observation": {
-    "latest_head": "309b47f323ea2be326cbf788341bd8c83cd58c54",
-    "workflow_run": 37254867999,
-    "workflow_status": "QUEUED",
+    "latest_head": "ff0c2b9b8fc5a520f97a0b8a47a9f843190ceec6",
     "prior_build_unit_apk": "PASS",
-    "prior_instrumentation_result": "BUILD_FAILED_BEFORE_TEST_EXECUTION",
-    "latest_instrumentation_status": "PENDING"
+    "prior_instrumentation_result": "HARNESS_FAILURE",
+    "failure": "StackOverflowError in T2CallerService.getProcessInstanceId(): property processInstanceId recursively resolved to its generated getter",
+    "correction": "renamed backing property to callerProcessInstanceId",
+    "latest_instrumentation_status": "PENDING_NEW_WORKFLOW"
   },
   "limits": [
     "B4/B5 are not promoted until connectedDebugAndroidTest executes and concludes.",
