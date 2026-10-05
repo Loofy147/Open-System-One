@@ -19,7 +19,7 @@ Latest evidence: M0 and UWS independently pass the same semantic core for Verifi
 Acceptance: two independent implementations pass the same semantic assertions where represented, with no unsupported semantics fabricated by adapters.
 
 ## G-03 — Capability/Verification boundary
-Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
+Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS_WITH_LIMITS
 Question: What is the smallest contract allowing a Capability to produce an Observation that an independent Verifier can assess?
 Action: reconcile the proven runtime boundary with Android CapabilityExecutor and verify effect identity/verification obligations.
 Latest evidence: M0 and UWS independently execute a completed Run/step, record an Observation with provenance/integrity, apply an independent verifier that rejects value 55, and record Evidence linking Run -> Observation -> Verification. The execution remains completed after verification failure.
@@ -84,9 +84,9 @@ Status: EXPERIMENTALLY_SUPPORTED
 Priority: P0
 Question: Can an older execution result become authoritative after a newer terminal result?
 Action: define minimal monotonic attempt/revision semantics, then reproduce the failure through a production-shaped late-callback path before implementing a fix.
-Latest evidence: deterministic repository-native kill test StaleResultOrderingTest.lateOlderResultMustNotRegressNewerTerminalRun failed on commit e697e1f6a2a60c8336297fc343d2815157b5cc9d under GitHub Actions workflow 37254953362. 36 tests completed, 1 failed; org.junit.ComparisonFailure at StaleResultOrderingTest.kt:46. The test wrote a newer SUCCEEDED result with output new, then appended an older FAILED result with output old; a fresh JournalRuntimeStore reload returned old/FAILED.
+Latest evidence: deterministic repository-native kill test StaleResultOrderingTest.lateOlderResultMustNotRegressNewerTerminalRun failed on commit e697e1f6a2a60c8336297fc343d2815157b5cc9d under GitHub Actions workflow 37254953362. 36 tests completed, 1 failed; org.junit.ComparisonFailure at StaleResultOrderingTest.kt:46. The test wrote a newer SUCCEEDED result with output new, then appended an older FAILED result with output old; a fresh JournalRuntimeStore reload returned old/FAILED. A minimal repair on commit d5d80fd4d55ab4f50195ae90fb1bf7be1e4e7db4 makes terminal Run state write-once in both InMemoryRuntimeStore and JournalRuntimeStore; the full unit-test suite and APK build pass, and the stale-ordering regression test passes within that unit suite.
 Evidence reference: research/conformance/ANDROID_T2_B7_KILL_RESULT_2026-10-05_v0.1.json
-Limits: this proves durable arrival-order regression at JournalRuntimeStore, not yet a Binder callback path. No fix has been applied.
+Limits: the repair is a terminal-state immutability boundary, not a general causal revision system; no Binder late-callback path has been exercised. The same branch's instrumentation job failed on unrelated B4/B5 harness StackOverflowError before semantic execution, so that failure does not invalidate the B7 unit result.
 Acceptance: a stale result cannot regress a newer causal revision; the durable record retains the newer authoritative state; late results are rejected or explicitly recorded as non-authoritative.
 
 ## Priority order
