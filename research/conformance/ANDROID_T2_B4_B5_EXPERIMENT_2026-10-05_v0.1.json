@@ -6,10 +6,10 @@
     "repository": "Loofy147/Llms-mcp-android",
     "base_ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
     "branch": "conformance/t2-caller-recovery-v0.1",
-    "head_commit": "9f7b50849018cab5c7bbc32cfa251c1a093ad22c9",
+    "head_commit": "79b224eec1e215e091c22778666cdf699d5d4875",
     "pull_request": 16,
-    "workflow_run": 37255335292,
-    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255335292",
+    "workflow_run": 37255832130,
+    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255832130",
     "workflow": "Build debug APK and Android tests",
     "environment": "GitHub Actions ubuntu-latest; JDK 17; Gradle 8.9; Android API 35; google_apis x86_64; Pixel 7 Pro profile",
     "workflow_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37255832130"
@@ -26,7 +26,7 @@
         "effects=1",
         "replay=false"
       ],
-      "status": "PENDING_CORRECTED_INSTRUMENTATION"
+      "status": "PENDING_CURRENT_WORKFLOW"
     },
     "B5": {
       "hypothesis": "caller process dies after durable reservation but before provider dispatch; restart proves provider operation absent, reconciles CONFIRMED_NOT_EXECUTED, then dispatches exactly once",
@@ -39,7 +39,7 @@
         "effects=1",
         "replay=true"
       ],
-      "status": "PENDING_CORRECTED_INSTRUMENTATION"
+      "status": "PENDING_CURRENT_WORKFLOW"
     }
   },
   "negative_history": [
@@ -80,16 +80,14 @@
     }
   ],
   "current_observation": {
-    "latest_head": "9f7b50849018cab5c7bbc32cfa251c1a093ad22c9",
-    "workflow_run": 37255335292,
-    "build_job": "PASS",
+    "latest_head": "79b224eec1e215e091c22778666cdf699d5d4875",
+    "workflow_run": 37255832130,
+    "build_job": "IN_PROGRESS",
     "unit_tests": "PASS",
-    "apk_build": "PASS",
-    "instrumentation_job": "FAIL",
-    "failure_class": "HARNESS_BOUNDARY_FAILURE",
-    "failure_detail": "T2CallerService was running in the instrumentation process; killProcess() terminated the runner. This prevented B4/B5 semantic assertions from being observed.",
-    "correction": "T2CallerService now declares android:process=:t2caller in app/src/debug/AndroidManifest.xml",
-    "next_run_required": true
+    "apk_build": "IN_PROGRESS",
+    "instrumentation_job": "PENDING",
+    "latest_change": "B5 recovery now treats provider ABSENT as confirmed non-execution before reconciliation",
+    "next_required": "complete workflow and inspect emulator results"
   },
   "limits": [
     "B4/B5 are not promoted until connectedDebugAndroidTest executes and concludes.",
