@@ -8,14 +8,14 @@
 Status: OPEN
 Question: Which fields are invariant across Run, Observation, Verification, Evidence, Artifact, Claim, Decision, DecisionRevision, Relationship, Contradiction, Gap?
 Action: extract schemas/contracts from Open-System-One, UWS, m0, and Android; classify fields as invariant, adapter-local, unresolved.
-Latest evidence: explicit draft Observation and Verification references now exist, but the common record graph remains only partially represented across implementations.
+Latest evidence: explicit draft Observation, Verification, and Effect references now exist, but the common record graph remains only partially represented across implementations.
 Acceptance: minimal machine-readable kernel without forcing implementation-specific fields into it.
 
 ## G-02 — Cross-repository conformance
 Status: OPEN
 Question: Can materially different implementations satisfy the same semantic contract?
-Action: shared fixtures for identity, terminal states, evidence linkage, replay, contradiction, verification, and cache artifacts, executed through repository-native adapters.
-Latest evidence: M0 passes K-IDENTITY-01, K-VERIFY-01, K-EVIDENCE-01, and K-CACHE-01. UWS passes K-VERIFY-01, K-EVIDENCE-01, and K-CACHE-01, but K-IDENTITY-01 remains NOT_PROVEN. UNKNOWN, authority, and frontier semantics remain absent in both inspected runtimes. Full conformance remains OPEN.
+Action: shared fixtures for identity, terminal states, evidence linkage, replay, contradiction, verification, cache artifacts, and UNKNOWN_OUTCOME, executed through repository-native tests/adapters.
+Latest evidence: M0 and UWS independently pass the same semantic core for Verification/Evidence, Cache reuse, and UNKNOWN_OUTCOME/reconciliation fixtures. UWS still has K-IDENTITY-01 NOT_PROVEN; broader authority/frontier/capability semantics are not common. Full conformance remains OPEN.
 Acceptance: two independent implementations pass the same semantic assertions where represented, with no unsupported semantics fabricated by adapters.
 
 ## G-03 — Capability/Verification boundary
@@ -24,15 +24,17 @@ Question: What is the smallest contract allowing a Capability to produce an Obse
 Action: reconcile the proven runtime boundary with Android CapabilityExecutor and verify effect identity/verification obligations.
 Latest evidence: M0 and UWS independently execute a completed Run/step, record an Observation with provenance/integrity, apply an independent verifier that rejects value 55, and record Evidence linking Run -> Observation -> Verification. The execution remains completed after verification failure.
 Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.6-verification-cross-runtime.json
-Limits: this is still runtime-boundary evidence rather than full Capability/CapabilityInvocation semantics; verifier identity/authority and UNKNOWN effects remain unresolved; no clean-clone CI.
+Limits: this is still runtime-boundary evidence rather than full Capability/CapabilityInvocation semantics; verifier identity/authority and Android caller-side UNKNOWN remain unresolved; no clean-clone CI.
 Acceptance: execute -> observe -> verify -> evidence, including capability/effect identity and verification obligations, reproduced by materially different implementations.
 
 ## G-04 — UNKNOWN outcome semantics
-Status: OPEN across systems; local evidence exists in Android/m0 regimes.
+Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
 Question: How is an ambiguous external effect represented and reconciled without accidental duplicate execution?
-Action: common states + idempotency/reconciliation fixtures.
-Latest evidence: neither M0 nor UWS represents UNKNOWN external-effect reconciliation. M0 replay safety is proven for a completed Run identity, not for an ambiguous effect. UWS retry policy does not establish effect reconciliation.
-Acceptance: UNKNOWN is not silently treated as safe-to-repeat.
+Action: map the proven semantic core onto Android CapabilityExecutor and execute the remaining caller-lifecycle/concurrency cases B4/B5/B6/B7.
+Latest evidence: M0 and UWS both pass the same U-01/U-02/U-03/U-04 reconciliation tests. The exact repository test files each execute 4/4 PASS. A separate two-process restart check in both runtimes preserved UNKNOWN across process exit, blocked replay, allowed reconciliation to CONFIRMED_NOT_EXECUTED, and then allowed one new reservation. The semantic contract is pinned to Android RuntimeStore.kt at ref 78afd5d3d7716fe31a5f109a5796eb3db7f99970, blob 5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e.
+Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.9-unknown-outcome.json
+Limits: this proves the cross-runtime semantic core, not the full Android caller-side lifecycle. B4 caller dies after provider completion, B5 caller dies before dispatch, B6 concurrent recovery, and B7 stale callback/result ordering remain OPEN. No real external provider effect was exercised in M0/UWS; no clean-clone CI; general exactly-once is not claimed.
+Acceptance: UNKNOWN is durable, blocks replay, requires explicit reconciliation, permits a new reservation only after CONFIRMED_NOT_EXECUTED, and remains separate from Evidence/Authority; the same behavior is reproduced at the Android CapabilityExecutor boundary.
 
 ## G-05 — Provenance/egress
 Status: OPEN
@@ -100,10 +102,12 @@ The Verification boundary then moved from a single-runtime result to two materia
 
 G-10 is now EXPERIMENTALLY_SUPPORTED rather than merely OPEN; the remaining work is verification depth and integration boundaries, not whether caches can be valuable reusable Artifacts.
 
-P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, capability/effect semantics, and UNKNOWN external-effect reconciliation are not yet established.
+G-04 is now EXPERIMENTALLY_SUPPORTED_WITH_LIMITS at the semantic-core level. The same UNKNOWN/reconciliation state machine is implemented and exercised in M0 and UWS, and it is directly grounded in the Android RuntimeStore effect semantics. This does not upgrade the unexecuted Android caller-lifecycle cases.
+
+P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, complete Capability/effect semantics, and the remaining Android lifecycle/concurrency cases are not yet established.
 
 Next actions:
-1. implement UNKNOWN_OUTCOME plus reconciliation before replay;
-2. reconcile the verification boundary with Android CapabilityExecutor semantics;
+1. map the UNKNOWN_OUTCOME semantic core into Android CapabilityExecutor and execute B4/B5;
+2. execute B6 concurrent recovery and B7 stale callback ordering;
 3. decide whether UWS should adopt an explicit run-id/request binding invariant or an equivalent identity contract;
 4. add clean-clone CI where repository infrastructure supports it.
