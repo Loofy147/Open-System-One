@@ -1,0 +1,89 @@
+{
+  "schema": "open_system_one.conformance_run.v0.1",
+  "recorded_at": "2026-10-05T01:42:03Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Source files were fetched from the pinned GitHub commits and reconstructed in an isolated local harness. This is not a clean-clone repository test and therefore does not establish repository-native CI conformance.",
+    "fixture_basis": "kernel-fixtures-v0.1 plus the P0 authority/evidence/continuation fixtures added on control-plane/kernel-contract-v0.1",
+    "classification": [
+      "PASS",
+      "FAIL",
+      "NOT_REPRESENTED",
+      "NOT_PROVEN"
+    ]
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "repository": "Loofy147/m0-durable-run",
+      "ref": "69b07a54e4b2f8421532b78b8abffca308bbe3da",
+      "files": [
+        {
+          "path": "core.py",
+          "blob_sha": "7d7b910e5ac4d114af97733d1bf4ddee6fb80a26"
+        },
+        {
+          "path": "schemas.py",
+          "blob_sha": "37bb9613516b8bb9f216ebeb900c4fe8d0503055"
+        }
+      ],
+      "results": {
+        "run_to_evidence_linkage": "PASS",
+        "verification_distinction": "NOT_REPRESENTED",
+        "provenance_pin_in_record": "NOT_REPRESENTED",
+        "same_run_id_replay_safety": "PASS",
+        "process_restart_replay_safety": "PASS",
+        "unknown_external_effect_reconciliation": "NOT_REPRESENTED",
+        "authority_separation": "NOT_REPRESENTED"
+      },
+      "observed_artifacts": {
+        "run_id": "run_m0-precise-001",
+        "evidence_id": "evidence_01ab16b535f3490288b83a94a2d68bd9",
+        "executor_calls_for_replay_test": 1
+      }
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "repository": "Loofy147/unified-knowledge-work-system",
+      "ref": "683c38fdc3c921c1d7977786d5b5ed8617969476",
+      "files": [
+        {
+          "path": "system/scripts/uws_runtime.py",
+          "blob_sha": "0b305cacc50339273f5770f5e229524651716d23"
+        }
+      ],
+      "results": {
+        "run_checkpoint_persistence": "PASS",
+        "resumable_state_projection": "PASS",
+        "retry_policy_classification": "PASS",
+        "run_to_evidence_linkage": "NOT_REPRESENTED",
+        "verification_distinction": "NOT_REPRESENTED",
+        "provenance_pin_in_record": "NOT_REPRESENTED",
+        "same_run_id_replay_safety": "NOT_PROVEN",
+        "unknown_external_effect_reconciliation": "NOT_REPRESENTED",
+        "authority_separation": "NOT_REPRESENTED"
+      },
+      "observed_artifacts": {
+        "run_id": "uws-precise-001",
+        "checkpoint": ".uws/runs/uws-precise-001.json",
+        "last_event_seq": 1,
+        "retryable_error": "network",
+        "non_retryable_error": "authorization"
+      }
+    }
+  ],
+  "interpretation": {
+    "G01_kernel_intersection": "OPEN",
+    "G02_cross_repository_conformance": "OPEN",
+    "G03_capability_verification_boundary": "OPEN",
+    "G04_unknown_effect_reconciliation": "OPEN",
+    "positive_result": "The two implementations already share some operational semantics around durable run state, but they do not yet implement the full same semantic contract.",
+    "negative_result": "The current P0 fixtures cannot be passed wholesale by either implementation without inventing semantics that are not present in source."
+  },
+  "next_discriminating_actions": [
+    "Add a repository-native adapter/conformance runner for M0 and UWS rather than a synthetic compatibility layer.",
+    "Introduce the smallest Verification record in exactly one execution path and test independent verification.",
+    "Introduce UNKNOWN_OUTCOME around a staged external-effect operation and test reconciliation before replay.",
+    "Retain authority/evidence provenance as separate semantics; do not infer them from transport metadata."
+  ]
+}
