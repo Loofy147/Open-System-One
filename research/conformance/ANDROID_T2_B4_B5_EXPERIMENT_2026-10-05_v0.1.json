@@ -1,0 +1,62 @@
+{
+  "schema": "open_system_one.android_t2_b4_b5_experiment.v0.1",
+  "recorded_at": "2026-10-05T02:18:00Z",
+  "status": "IN_PROGRESS",
+  "implementation": {
+    "repository": "Loofy147/Llms-mcp-android",
+    "base_ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
+    "branch": "conformance/t2-caller-recovery-v0.1",
+    "head_commit": "3c2fd3d2dda639c6bfa3f2d6c64589e009299523",
+    "pull_request": 16,
+    "workflow_run": 37254548378,
+    "workflow_run_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37254548378",
+    "workflow": "Build debug APK and Android tests",
+    "environment": "GitHub Actions ubuntu-latest; JDK 17; Gradle 8.9; Android API 35; google_apis x86_64; Pixel 7 Pro profile"
+  },
+  "cases": {
+    "B4": {
+      "hypothesis": "provider completes the effect; caller process dies before local completion persistence; restart classifies UNKNOWN and reconciles by operation identity without redispatch",
+      "test": "app/src/androidTest/java/com/hicham/llmchat/runtime/t2/CallerRecoveryTest.kt:b4_callerDiesAfterProviderCompletion_reconcilesWithoutRedispatch",
+      "acceptance": [
+        "caller processInstanceId changes",
+        "decision=CONFIRMED_COMPLETED",
+        "provider=COMPLETED",
+        "requests=1",
+        "effects=1",
+        "replay=false"
+      ],
+      "status": "PENDING_INSTRUMENTATION_RESULT"
+    },
+    "B5": {
+      "hypothesis": "caller process dies after durable reservation but before provider dispatch; restart proves provider operation absent, reconciles CONFIRMED_NOT_EXECUTED, then dispatches exactly once",
+      "test": "app/src/androidTest/java/com/hicham/llmchat/runtime/t2/CallerRecoveryTest.kt:b5_callerDiesBeforeDispatch_reconcilesNotExecutedThenDispatchesOnce",
+      "acceptance": [
+        "caller processInstanceId changes",
+        "decision=CONFIRMED_NOT_EXECUTED",
+        "provider=COMPLETED",
+        "requests=1",
+        "effects=1",
+        "replay=true"
+      ],
+      "status": "PENDING_INSTRUMENTATION_RESULT"
+    }
+  },
+  "negative_history": {
+    "prior_head": "11db801c3a9e6cc7d4c8b6cda3348daea98a488d",
+    "prior_workflow_run": 37254486898,
+    "prior_result": "BUILD_FAILURE",
+    "cause": "debug caller service was missing imports for runtime primitives",
+    "disposition": "corrected in 3c2fd3d2dda639c6bfa3f2d6c64589e009299523; unit tests now PASS"
+  },
+  "current_observation": {
+    "build_job": "PASS",
+    "unit_tests": "PASS",
+    "apk_build": "PASS",
+    "instrumentation_job": "IN_PROGRESS"
+  },
+  "limits": [
+    "B4/B5 are not promoted until connectedDebugAndroidTest concludes.",
+    "No B6/B7 claims are included in this experiment.",
+    "No general exactly-once guarantee is claimed."
+  ]
+}
