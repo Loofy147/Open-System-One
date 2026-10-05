@@ -65,16 +65,17 @@ Action: define product adapter contract and one read-only vertical.
 Acceptance: product uses stable semantics, not repository internals.
 
 ## G-10 — Cache validity/reuse
-Status: EXPERIMENTALLY_SUPPORTED_WITH_LIMITS
+Status: EXPERIMENTALLY_SUPPORTED
 Question: What minimum semantics preserve the operational value of caches without allowing stale/derived material to become authority?
-Action: apply independent Verification specifically to cache-backed results; add integrity-digest mismatch as a live negative case.
+Action: extend only where discriminating evidence remains: broader integrity acquisition/verification, clean-clone CI, and integration with real Capability/effect identities.
 Evidence:
 - Open-System-One cache-reference schema and CACHE_REUSE_GATE_CONTRACT define artifact identity, provenance, integrity, status, reuse policy, source-match requirements, and explicit revalidation.
 - M0 and UWS both pass source-drift negative cases: source mismatch blocks reuse; revalidate_before_use remains a gate even when source matches; stale material remains preserved.
-- The independent Verification boundary exists in both runtimes, but cache-backed content has not yet been independently verified as an epistemic input.
-Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.7-cache-reuse.json
-Limits: reuse-gate correctness does not establish truth of cached content; integrity digest is recorded but not yet recomputed by the reuse gate; no clean-clone CI.
-Acceptance: two materially different implementations preserve stale/invalid cache material, refuse reuse after source drift or integrity mismatch, and keep cache distinct from Evidence/Authority.
+- M0 and UWS both pass integrity-mismatch negative cases.
+- M0 and UWS both pass cache-backed independent Verification: a reusable cached value of 55 is observed and rejected by an even-sum verifier while the cache remains a distinct Artifact.
+Evidence reference: research/conformance/CONFORMANCE_RUN_2026-10-05_v0.8-cache-backed-verification.json
+Limits: no clean-clone CI; the reuse gate accepts an externally supplied observed digest rather than owning arbitrary content retrieval/recomputation; capability/effect semantics remain outside this cache contract.
+Acceptance: two materially different implementations preserve stale/invalid cache material, refuse reuse after source drift or integrity mismatch, and keep cache distinct from Evidence/Authority while cache-backed material remains independently verifiable.
 
 ## Priority order
 
@@ -91,17 +92,18 @@ A gap closes only after its discriminating action executes and the resulting evi
 
 The initial conformance pass exposed partial shared Run semantics and explicit absent concepts.
 
-The cache tranche established a reusable Artifact boundary in M0 and UWS with provenance, integrity, status, reuse policy, and invalidation conditions. Source-drift reuse gates now refuse reuse on source mismatch and preserve the artifact.
+The cache tranche established a reusable Artifact boundary in M0 and UWS with provenance, integrity, status, reuse policy, invalidation conditions, source-drift refusal, integrity-mismatch refusal, preservation, and independent verification of cache-backed material.
 
 The M0 identity mismatch was exposed, repaired, and converted into a regression boundary that rejects same-run-id reuse for a different execution request.
 
 The Verification boundary then moved from a single-runtime result to two materially different runtime implementations: both can keep execution completed while an independent verifier rejects the Observation and Evidence preserves the linkage.
 
+G-10 is now EXPERIMENTALLY_SUPPORTED rather than merely OPEN; the remaining work is verification depth and integration boundaries, not whether caches can be valuable reusable Artifacts.
+
 P0 gaps remain open because canonical kernel intersection, full cross-repository conformance, capability/effect semantics, and UNKNOWN external-effect reconciliation are not yet established.
 
 Next actions:
-1. verify a cache-backed result through the independent Verification boundary;
-2. add integrity-digest mismatch as a negative reuse case;
-3. implement UNKNOWN_OUTCOME plus reconciliation before replay;
-4. reconcile the verification boundary with Android CapabilityExecutor semantics;
-5. decide whether UWS should adopt an explicit run-id/request binding invariant or an equivalent identity contract.
+1. implement UNKNOWN_OUTCOME plus reconciliation before replay;
+2. reconcile the verification boundary with Android CapabilityExecutor semantics;
+3. decide whether UWS should adopt an explicit run-id/request binding invariant or an equivalent identity contract;
+4. add clean-clone CI where repository infrastructure supports it.
