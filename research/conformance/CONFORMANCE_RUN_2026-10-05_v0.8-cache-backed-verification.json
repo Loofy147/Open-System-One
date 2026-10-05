@@ -1,0 +1,68 @@
+{
+  "schema": "open_system_one.conformance_run.v0.8-cache-backed-verification",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.7-cache-reuse.json",
+  "recorded_at": "2026-10-05T03:40:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "method": {
+    "execution": "Latest cache policy and repository-native test source were fetched from M0 and UWS conformance branches. Focused source-reconstructed checks executed source drift, integrity mismatch, allowed reuse, and independent verification of a cached value. This is not clean-clone CI.",
+    "fixture": "K-CACHE-01 plus cache-backed verification negative cases"
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "pr": 4,
+      "head_commit": "14525ef7e578d8c4a136513fb21167bd0b014774",
+      "files": {
+        "cache.py": "6da6f999b3e2160118cad704ae7f6608c4574da9",
+        "test_m0.py": "4c3dafaecd1643fbc5cb341691c641d97bec74f0"
+      },
+      "results": {
+        "source_drift_reuse": "PASS",
+        "integrity_mismatch_reuse": "PASS",
+        "same_source_matching_digest_reusable": "PASS",
+        "cache_backed_verification": "PASS",
+        "verified_status": "failed",
+        "cache_artifact_preserved": "PASS"
+      }
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "pr": 21,
+      "head_commit": "6e54b471d230263f3f16ef24ee824951aaaae939",
+      "files": {
+        "system/scripts/cache_policy.py": "02da63eb164a15bf77b01ce66a3aad7fb38c5ef9",
+        "system/runtime_tests/test_uws_runtime.py": "c11affb17d968b4627e9b76c257c5c9694a79386",
+        "system/scripts/uws_runtime.py": "6c850552fe592e35247de09bdbdf293662ad5049"
+      },
+      "results": {
+        "source_drift_reuse": "PASS",
+        "integrity_mismatch_reuse": "PASS",
+        "same_source_matching_digest_reusable": "PASS",
+        "cache_backed_verification": "PASS",
+        "verified_status": "failed",
+        "cache_artifact_preserved": "PASS"
+      }
+    }
+  ],
+  "semantics": {
+    "drift": "reusable=false, reason=source_revision_changed",
+    "integrity": "reusable=false, reason=integrity_mismatch",
+    "matching_source_and_digest": "reusable=true when policy=reusable",
+    "revalidation_policy": "reusable=false until independent revalidation",
+    "cache_backed_verification": "cached value 55 is independently observed and rejected by an even-sum verifier; cache remains a Cache Artifact, not Evidence or Authority"
+  },
+  "interpretation": {
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED",
+    "positive_result": "The minimum cache reuse gate is reproduced across two materially different runtimes, including source-drift and integrity-mismatch refusal plus independent verification of a cache-backed result.",
+    "limits": [
+      "No clean-clone CI result.",
+      "Digest validation is supplied with an observed digest; the gate does not itself retrieve or recompute arbitrary remote content.",
+      "The verification chain does not prove that arbitrary cache-backed material is true; it preserves the separation between Artifact and Evidence."
+    ]
+  },
+  "next_discriminating_actions": [
+    "Implement UNKNOWN_OUTCOME plus reconciliation before replay.",
+    "Reconcile cache verification with Capability/effect identity in Android.",
+    "Add repository-native CI execution for the conformance tests where available."
+  ]
+}
