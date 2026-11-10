@@ -1,0 +1,52 @@
+{
+  "schema": "open_system_one.conformance_run.v0.3",
+  "supersedes": "research/conformance/CONFORMANCE_RUN_2026-10-05_v0.2-cache.json",
+  "recorded_at": "2026-10-05T03:02:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "execution": "Repository-native conformance adapter source was fetched from pinned PR branches and its represented cases were executed in isolated local reconstructions. Adapter output is treated as evidence only for cases the adapter actually executes.",
+    "fixture": "research/kernel-conformance-fixtures.v0.2.json"
+  },
+  "results": {
+    "Loofy147/m0-durable-run": {
+      "ref": "conformance/cache-contract-v0.1",
+      "adapter_commit": "cf6fae090147eedeea7e429a02d1577bd782aea8",
+      "adapter_result": {
+        "K-IDENTITY-01": "FAIL",
+        "K-EVIDENCE-01": "NOT_REPRESENTED",
+        "K-VERIFY-01": "NOT_REPRESENTED",
+        "K-UNKNOWN-01": "NOT_REPRESENTED",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "interpretation": "The FAIL is material: the current run lookup returns the existing record when the same run_id is reused for a different goal. Cache representation passes."
+    },
+    "Loofy147/unified-knowledge-work-system": {
+      "ref": "conformance/cache-contract-v0.1",
+      "adapter_commit": "587bb71e476fca9e11e3479f83feddbb72c306cb",
+      "adapter_result": {
+        "K-IDENTITY-01": "NOT_PROVEN",
+        "K-EVIDENCE-01": "NOT_REPRESENTED",
+        "K-VERIFY-01": "NOT_REPRESENTED",
+        "K-UNKNOWN-01": "NOT_REPRESENTED",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "interpretation": "The inspected UWS runtime does not expose a run-identity replay contract. Cache persistence passes."
+    }
+  },
+  "disposition": {
+    "G02_cross_repository_conformance": "OPEN",
+    "G10_cache_validity_reuse": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "identity_negative_result": "M0 exposes a concrete semantic mismatch against K-IDENTITY-01 and this is preserved as a killed/failed case rather than hidden by the adapter."
+  },
+  "next_discriminating_actions": [
+    "Add a repository-native negative regression for M0 same-run-id/different-goal reuse and decide whether the semantic contract should reject or version that reuse.",
+    "Implement the smallest independent Verification record in one runtime.",
+    "Implement UNKNOWN_OUTCOME plus reconciliation before replay.",
+    "Run K-CACHE-01 with a source-drift invalidation case and verify stale/invalid material never upgrades to Evidence or Authority.",
+    "Add repository-native CI execution for the adapter commands."
+  ]
+}

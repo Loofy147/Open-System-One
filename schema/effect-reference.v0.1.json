@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/blob/control-plane/kernel-contract-v0.1/schema/effect-reference.v0.1.json",
+  "title": "Effect Reference v0.1",
+  "description": "Minimal durable side-effect identity and reconciliation state. UNKNOWN is not success, failure, or safe-to-repeat.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "effect_id",
+    "run_id",
+    "capability_id",
+    "action_id",
+    "action_version",
+    "status",
+    "updated_at"
+  ],
+  "properties": {
+    "effect_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capability_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "RESERVED",
+        "COMPLETED",
+        "UNKNOWN",
+        "CONFIRMED_NOT_EXECUTED"
+      ]
+    },
+    "attempt_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reconciliation_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "scope": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "attributed_to": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "parameters_digest": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

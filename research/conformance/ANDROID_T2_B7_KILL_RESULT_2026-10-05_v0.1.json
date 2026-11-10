@@ -1,0 +1,44 @@
+{
+  "schema": "open_system_one.android_t2_b7_kill_result.v0.1",
+  "recorded_at": "2026-10-05T02:20:28Z",
+  "status": "EXPERIMENTALLY_SUPPORTED",
+  "source": {
+    "repository": "Loofy147/Llms-mcp-android",
+    "branch": "conformance/t2-b6-b7-v0.1-r1",
+    "commit": "e697e1f6f2a60c8336297fc343d2815157b5cc9d",
+    "test_file": "app/src/test/java/com/hicham/llmchat/runtime/StaleResultOrderingTest.kt",
+    "workflow_run": 37254953362,
+    "workflow_url": "https://github.com/Loofy147/Llms-mcp-android/actions/runs/37254953362"
+  },
+  "test": {
+    "name": "lateOlderResultMustNotRegressNewerTerminalRun",
+    "result": "FAIL",
+    "runner": "Gradle testDebugUnitTest",
+    "totals": "36 tests completed, 1 failed",
+    "failure": "org.junit.ComparisonFailure at StaleResultOrderingTest.kt:46",
+    "observed": {
+      "newer_output": "new",
+      "older_output": "old",
+      "expected_authoritative_output": "new",
+      "actual_loaded_output": "old",
+      "expected_status": "SUCCEEDED",
+      "actual_status": "FAILED"
+    }
+  },
+  "interpretation": {
+    "claim": "The inspected JournalRuntimeStore can make a later-arriving older RunRecord authoritative over a newer terminal RunRecord for the same run_id.",
+    "evidence_basis": "The kill test writes newer terminal state first, then an older result, reloads through a fresh JournalRuntimeStore, and observes the older result as authoritative.",
+    "epistemic_status": "EXPERIMENTALLY_SUPPORTED",
+    "limits": [
+      "This is a deterministic durable-state ordering test, not a Binder callback integration test.",
+      "The test proves arrival-order regression at the JournalRuntimeStore boundary; it does not yet prove which production callback path can produce the ordering.",
+      "No fix has been applied yet."
+    ]
+  },
+  "next_action": [
+    "Define the smallest causal/attempt ordering invariant before implementation.",
+    "Add the invariant to the convergence contract and conformance fixture.",
+    "Build a production-shaped stale-callback integration test that exercises a real late result path.",
+    "Only then implement the minimal version/revision guard."
+  ]
+}

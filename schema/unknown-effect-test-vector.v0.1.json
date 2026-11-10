@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/blob/control-plane/kernel-contract-v0.1/schema/unknown-effect-test-vector.v0.1.json",
+  "title": "UNKNOWN Effect Test Vector v0.1",
+  "description": "Portable state-transition vector for exercising durable UNKNOWN/reconciliation semantics across independent runtimes. It specifies expected local state and append count, not external provider truth.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "vector_id",
+    "version",
+    "effects",
+    "steps"
+  ],
+  "properties": {
+    "schema": {
+      "const": "open_system_one.unknown_effect_test_vector.v0.1"
+    },
+    "vector_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "effects": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[A-Za-z][A-Za-z0-9_]*$": {
+          "$ref": "#/$defs/effect"
+        }
+      },
+      "additionalProperties": false
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/step"
+      }
+    }
+  },
+  "$defs": {
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "effect_id",
+        "run_id",
+        "capability_id",
+        "action_id",
+        "action_version",
+        "scope",
+        "attributed_to",
+        "parameters_digest"
+      ],
+      "properties": {
+        "effect_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capability_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "attributed_to": {
+          "type": "string",
+          "minLength": 1
+        },
+        "parameters_digest": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "op",
+        "effect_ref",
+        "expected"
+      ],
+      "properties": {
+        "op": {
+          "type": "string",
+          "enum": [
+            "reserve",
+            "mark_unknown",
+            "reconcile"
+          ]
+        },
+        "effect_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "CONFIRMED_COMPLETED",
+            "CONFIRMED_NOT_EXECUTED"
+          ]
+        },
+        "expected": {
+          "$ref": "#/$defs/expected"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "op": {
+                "const": "reconcile"
+              }
+            },
+            "required": [
+              "op"
+            ]
+          },
+          "then": {
+            "required": [
+              "decision"
+            ]
+          },
+          "else": {
+            "not": {
+              "required": [
+                "decision"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "result",
+        "status",
+        "record_count_delta"
+      ],
+      "properties": {
+        "result": {
+          "type": "string",
+          "enum": [
+            "RESERVED",
+            "UNKNOWN",
+            "REPLAY_BLOCKED",
+            "RECONCILED",
+            "CONFLICT",
+            "NOT_FOUND",
+            "NOT_RESERVED",
+            "NOT_UNKNOWN"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "RESERVED",
+            "UNKNOWN",
+            "COMPLETED",
+            "CONFIRMED_NOT_EXECUTED"
+          ]
+        },
+        "record_count_delta": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}

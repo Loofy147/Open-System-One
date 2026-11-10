@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/blob/control-plane/kernel-contract-v0.1/schema/evidence-reference.v0.1.json",
+  "title": "Evidence Reference v0.1",
+  "description": "Minimal cross-system reference to attributable evidence. The reference establishes provenance and integrity metadata; it does not assert truth by itself.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "evidence_id",
+    "run_id",
+    "kind",
+    "source_kind",
+    "source_ref",
+    "status",
+    "recorded_at"
+  ],
+  "properties": {
+    "evidence_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_id": {
+      "type": ["string", "null"]
+    },
+    "integrity_digest": {
+      "type": ["string", "null"]
+    },
+    "scope": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "attributable",
+        "unverified",
+        "invalid",
+        "superseded"
+      ]
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

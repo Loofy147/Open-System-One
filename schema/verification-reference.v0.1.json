@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/blob/control-plane/kernel-contract-v0.1/schema/verification-reference.v0.1.json",
+  "title": "Verification Reference v0.1",
+  "description": "Minimal independent verification record. Verification evaluates an Observation; it may reject a successfully completed execution.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "verification_id",
+    "observation_ref",
+    "verifier_ref",
+    "status",
+    "verified_at"
+  ],
+  "properties": {
+    "verification_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observation_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "verifier_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "passed",
+        "failed",
+        "inconclusive",
+        "unknown"
+      ]
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

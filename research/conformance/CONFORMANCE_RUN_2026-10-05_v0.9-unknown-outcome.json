@@ -1,0 +1,127 @@
+{
+  "schema": "open_system_one.conformance_run.v0.9-unknown-outcome",
+  "recorded_at": "2026-10-05T03:55:00Z",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "method": {
+    "source_refs": "Exact implementation/test files were fetched from pinned GitHub branches. The exact repository test files were reconstructed in isolated local harnesses and executed with unittest; separate two-process restart checks were also executed against the same implementation source. This is not clean-clone repository CI.",
+    "classification": [
+      "PASS",
+      "FAIL",
+      "NOT_REPRESENTED",
+      "NOT_PROVEN"
+    ],
+    "runtime_warning": "The local Python environment emitted an unrelated artifact_tool spreadsheet warmup warning during interpreter startup; both test processes exited 0 and all four intended tests passed in each runtime."
+  },
+  "semantic_contract": {
+    "fixture": "research/conformance/unknown-outcome-fixture.v0.1.json",
+    "source": {
+      "repository": "Loofy147/Llms-mcp-android",
+      "ref": "78afd5d3d7716fe31a5f109a5796eb3db7f99970",
+      "file": "app/src/main/java/com/hicham/llmchat/runtime/RuntimeStore.kt",
+      "blob_sha": "5fee3cf8d2f9197c2d68f6d2cb18aa5ffa11249e"
+    },
+    "states": [
+      "RESERVED",
+      "COMPLETED",
+      "UNKNOWN",
+      "CONFIRMED_NOT_EXECUTED"
+    ],
+    "decisions": [
+      "CONFIRMED_COMPLETED",
+      "CONFIRMED_NOT_EXECUTED"
+    ],
+    "core_invariants": [
+      "UNKNOWN blocks replay",
+      "only explicit reconciliation leaves UNKNOWN",
+      "CONFIRMED_NOT_EXECUTED permits a later reservation",
+      "COMPLETED blocks later replay",
+      "stale RESERVED is recovered to UNKNOWN",
+      "incompatible effect identity is CONFLICT"
+    ]
+  },
+  "implementations": [
+    {
+      "name": "m0-durable-run",
+      "repository": "Loofy147/m0-durable-run",
+      "branch": "conformance/cache-contract-v0.1",
+      "head_commit": "2283ca483192cf56068e161f9b0398a54a7c2c24",
+      "files": {
+        "effect.py": "dd33334bce366b99533ddfbb432438b297b35686",
+        "test_effect_reconciliation.py": "25e605a7bd9475aadf79a29c51b2e6decd964663",
+        "schemas.py": "626f7b5f59080090cf17bf83468375dfb16fe376"
+      },
+      "exact_test_execution": {
+        "tests_run": 4,
+        "passed": 4,
+        "failed": 0,
+        "cases": {
+          "U-01": "PASS",
+          "U-02": "PASS",
+          "U-03": "PASS",
+          "U-04": "PASS"
+        }
+      },
+      "restart_check": {
+        "first_process": [
+          "UNKNOWN"
+        ],
+        "second_process": [
+          "UNKNOWN",
+          "REPLAY_BLOCKED",
+          "RECONCILED",
+          "RESERVED"
+        ],
+        "result": "PASS"
+      }
+    },
+    {
+      "name": "unified-knowledge-work-system",
+      "repository": "Loofy147/unified-knowledge-work-system",
+      "branch": "conformance/cache-contract-v0.1",
+      "head_commit": "da5b6b84bef28e1b512dd77f6b13c5d3ea4f595a",
+      "files": {
+        "system/scripts/effect_recovery.py": "0d8aa1b87f0536fa3a66eefe342b354b1a287340",
+        "system/runtime_tests/test_effect_recovery.py": "3df68879143218a39ca43ddd469ddfc92b20dd0e"
+      },
+      "exact_test_execution": {
+        "tests_run": 4,
+        "passed": 4,
+        "failed": 0,
+        "cases": {
+          "U-01": "PASS",
+          "U-02": "PASS",
+          "U-03": "PASS",
+          "U-04": "PASS"
+        }
+      },
+      "restart_check": {
+        "first_process": [
+          "UNKNOWN"
+        ],
+        "second_process": [
+          "UNKNOWN",
+          "REPLAY_BLOCKED",
+          "RECONCILED",
+          "RESERVED"
+        ],
+        "result": "PASS"
+      }
+    }
+  ],
+  "interpretation": {
+    "G04_unknown_effect_reconciliation": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+    "positive_result": "The same durable semantic core is independently represented in two materially different runtimes. UNKNOWN is durable, blocks replay, requires explicit reconciliation, and allows a new reservation only after CONFIRMED_NOT_EXECUTED. Interrupted RESERVED state is converted to UNKNOWN.",
+    "limits": [
+      "Android caller-side B4/B5/B6/B7 remain open.",
+      "No real external provider/capability side effect was exercised in M0/UWS; the external effect count in fixtures is a deterministic modeled counter.",
+      "This does not establish general exactly-once execution.",
+      "No clean-clone CI result."
+    ]
+  },
+  "next_discriminating_actions": [
+    "Map the semantic core onto Android CapabilityExecutor and execute caller-side UNKNOWN_OUTCOME persistence.",
+    "Execute B4 caller-loss-after-provider-completion.",
+    "Execute B6 concurrent duplicate recovery and B7 stale callback ordering.",
+    "Run repository-native CI for the new effect tests where available."
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/blob/control-plane/kernel-contract-v0.1/schema/repository-conformance-result.v0.1.json",
+  "title": "Repository Conformance Result v0.1",
+  "description": "Machine-readable result emitted by a repository-native conformance adapter. A case may be PASS only when the adapter actually executes the represented semantics.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "implementation",
+    "fixture_set",
+    "results",
+    "limits"
+  ],
+  "properties": {
+    "schema": {
+      "const": "open_system_one.repository_conformance_result.v0.1"
+    },
+    "implementation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "ref"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[^/\\s]+/[^/\\s]+$"
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "fixture_set": {
+      "type": "string",
+      "minLength": 1
+    },
+    "results": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": [
+          "PASS",
+          "FAIL",
+          "NOT_REPRESENTED",
+          "NOT_PROVEN"
+        ]
+      }
+    },
+    "observed_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

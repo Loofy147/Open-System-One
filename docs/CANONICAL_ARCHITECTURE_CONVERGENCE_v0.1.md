@@ -49,6 +49,8 @@ Run
     +--> CapabilityInvocation
     +--> Observation -> Verification -> Evidence
     +--> Artifact
+    |       |
+    |       +--> Cache (valuable reusable artifact)
     |
     v
 Claim / Decision
@@ -98,6 +100,29 @@ A claim can advance epistemic status only after evaluator validity, scope, causa
 Durable state is not chat history.
 
 Ambiguous external effects remain UNKNOWN until reconciled. They are not silently treated as success, failure, or safe-to-repeat.
+
+### Cache artifacts
+
+A cache is a **valuable reusable Artifact**, not disposable implementation noise.
+
+```
+Cache = materialized reusable value
+Cache != Evidence
+Cache != Claim
+Cache != Authorization
+Cache != Semantic Authority
+```
+
+Every promoted cache representation must preserve:
+- source/derivation references;
+- integrity identity;
+- freshness/status;
+- explicit reuse policy;
+- invalidation conditions.
+
+A stale or invalid cache is normally preserved as historical/diagnostic/replay material rather than silently deleted. Reuse may require revalidation before it can participate in an authoritative decision.
+
+Checkpointed Run state and Cache are semantically distinct even when stored in the same persistence substrate.
 
 ### Interoperability
 
@@ -260,6 +285,9 @@ Freeze the actual canonical Machine state-access contract before classifying ind
 ### L8 — Evidence integrity
 Require exact ref, command, inputs, environment, raw receipt, normalized result, verifier, disposition, and regression protection.
 
+### L9 — Cache validity/reuse
+Determine the smallest shared cache semantics for provenance, integrity, freshness, invalidation, and reuse policy without promoting cached material to Evidence or Authority.
+
 ## 9. What we add now
 
 First tranche:
@@ -267,7 +295,8 @@ First tranche:
 2. per-repository adoption pointers;
 3. machine-readable kernel-schema draft;
 4. minimal cross-repository conformance fixtures;
-5. gap/evidence register tied to exact refs.
+5. cache-artifact contract and reference schema;
+6. gap/evidence register tied to exact refs.
 
 Do not simultaneously add a universal workflow engine, provider swarm, plugin marketplace, distributed exactly-once semantics, or automatic repository synchronization.
 
@@ -294,6 +323,7 @@ Success means semantic agreement plus independent evidence, not shared code.
 - Open-System-One is the current integration target for the new unified implementation.
 - Each specialist repository remains authoritative for its local implementation/evidence.
 - Portfolio remains provenance/governance rather than runtime authority.
+- Caches are retained as valuable Artifacts with explicit provenance/freshness/reuse semantics.
 - The frontier remains provisional until exercised by actual implementations.
 
 ## 12. Current key gaps
@@ -306,6 +336,7 @@ Success means semantic agreement plus independent evidence, not shared code.
 | UNKNOWN effect | OPEN cross-system | P0 | common state/replay tests |
 | provenance/egress | OPEN | P1 | define shared fields |
 | evidence integrity | OPEN | P1 | receipt regression gate |
+| cache validity/reuse | EXPERIMENTALLY_SUPPORTED_WITH_LIMITS | P1 | run repo-native conformance against the cache fixture |
 | product adapter boundary | OPEN | P1 | define product contract |
 | Machine substrate contract | OPEN / SPECIFICATION DEBT | P1 | actual interpreter audit |
 | UWS roadmap drift | OPEN | P2 | synchronize status after convergence |
