@@ -46,7 +46,7 @@
       "name": "ambiguous external effect remains unknown",
       "input": {
         "effect_id": "effect_001",
-        "status": "UNKNOWN_OUTCOME"
+        "status": "UNKNOWN"
       },
       "assertions": [
         "UNKNOWN_OUTCOME is not treated as success",
