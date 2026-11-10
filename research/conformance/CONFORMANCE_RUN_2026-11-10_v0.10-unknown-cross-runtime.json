@@ -1,0 +1,151 @@
+{
+  "schema": "open_system_one.conformance_run.v0.10-unknown-cross-runtime",
+  "recorded_on": "2026-11-10",
+  "status": "EXPERIMENTALLY_SUPPORTED_WITH_LIMITS",
+  "purpose": "Record current-head repository-native adapter checks for the common Run/Evidence/Verification/UNKNOWN/cache subset across M0 and UWS.",
+  "fixture": {
+    "repository": "Loofy147/Open-System-One",
+    "path": "research/kernel-conformance-fixtures.v0.2.json",
+    "ref": "control-plane/kernel-contract-v0.1",
+    "blob_sha": "32dddd53a5c44f3bf6d8cdbb1d5b2c9c5f6400a3",
+    "effect_reference_schema": "schema/effect-reference.v0.1.json",
+    "effect_reference_blob_sha": "5b390efb9b617ec9a63956635007e218a0919060",
+    "canonical_effect_state": "UNKNOWN",
+    "semantic_meaning": "An ambiguous effect outcome; not success, failure or safe-to-repeat. UNKNOWN_OUTCOME names the condition; UNKNOWN is the persisted effect state."
+  },
+  "implementations": [
+    {
+      "repository": "Loofy147/m0-durable-run",
+      "pull_request": 4,
+      "branch": "conformance/cache-contract-v0.1",
+      "commit": "10b69d7ddcab61b9e246648e50920affe8148ce6",
+      "workflow_run": {
+        "id": 42861681363,
+        "url": "https://github.com/Loofy147/m0-durable-run/actions/runs/42861681363",
+        "conclusion": "success",
+        "matrix": [
+          "3.11",
+          "3.12",
+          "3.13"
+        ],
+        "checked_steps": [
+          "effect ledger and tests compile",
+          "M0 core invariants",
+          "router invariants",
+          "effect lifecycle and 16-contender reservation regression",
+          "Open-System-One kernel conformance adapter",
+          "two-process restart/replay"
+        ]
+      },
+      "persistence": "append-only SQLite effect events; BEGIN IMMEDIATE serializes state read/validation/append on one local database file",
+      "results": {
+        "K-IDENTITY-01": "PASS",
+        "K-EVIDENCE-01": "PASS",
+        "K-VERIFY-01": "PASS",
+        "K-UNKNOWN-01": "PASS",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "unknown_cases": [
+        "RESERVED -> UNKNOWN",
+        "same effect replay blocked while UNKNOWN",
+        "blocked replay adds no event",
+        "UNKNOWN -> COMPLETED and replay remains blocked",
+        "UNKNOWN -> CONFIRMED_NOT_EXECUTED permits a new reservation"
+      ],
+      "limits": [
+        "Local SQLite topology only; no multi-host/distributed coordination.",
+        "No provider-authoritative effect truth or real external side effect.",
+        "Authority and continuation-frontier fixtures are not represented."
+      ]
+    },
+    {
+      "repository": "Loofy147/unified-knowledge-work-system",
+      "pull_request": 21,
+      "branch": "conformance/cache-contract-v0.1",
+      "commit": "c7a12b383f397975969feda8f5460219ff4c72e5",
+      "workflow_run": {
+        "id": 42862103854,
+        "url": "https://github.com/Loofy147/unified-knowledge-work-system/actions/runs/42862103854",
+        "conclusion": "success",
+        "python": "3.12",
+        "jobs": [
+          "validate-system",
+          "verify-control-plane"
+        ],
+        "checked_steps": [
+          "system tests and validators",
+          "routing and capability suites",
+          "runtime tests including repository-native conformance adapter",
+          "trust, context, assumption, review and revision tests",
+          "Control Plane typecheck and tests",
+          "MySQL migrations twice",
+          "persistence integration tests",
+          "production build"
+        ]
+      },
+      "persistence": "append-only JSONL effect ledger; atomic file append/fsync, but no cross-process writer lock",
+      "results": {
+        "K-IDENTITY-01": "NOT_PROVEN",
+        "K-EVIDENCE-01": "PASS",
+        "K-VERIFY-01": "PASS",
+        "K-UNKNOWN-01": "PASS",
+        "K-AUTHORITY-01": "NOT_REPRESENTED",
+        "K-FRONTIER-01": "NOT_REPRESENTED",
+        "K-CACHE-01": "PASS"
+      },
+      "unknown_cases": [
+        "RESERVED -> UNKNOWN",
+        "same effect replay blocked while UNKNOWN",
+        "blocked replay adds no event",
+        "UNKNOWN -> COMPLETED and replay remains blocked",
+        "UNKNOWN -> CONFIRMED_NOT_EXECUTED permits a new reservation"
+      ],
+      "limits": [
+        "JSONL check-then-append is single-writer only; concurrent-writer safety is not established.",
+        "No provider-authoritative effect truth or real external side effect.",
+        "Same-run-id/different-goal identity binding is NOT_PROVEN.",
+        "Authority and continuation-frontier fixtures are not represented."
+      ]
+    }
+  ],
+  "comparison": {
+    "common_passing_subset": [
+      "K-EVIDENCE-01",
+      "K-VERIFY-01",
+      "K-UNKNOWN-01",
+      "K-CACHE-01"
+    ],
+    "not_common_or_missing": {
+      "K-IDENTITY-01": {
+        "m0-durable-run": "PASS",
+        "unified-knowledge-work-system": "NOT_PROVEN"
+      },
+      "K-AUTHORITY-01": {
+        "m0-durable-run": "NOT_REPRESENTED",
+        "unified-knowledge-work-system": "NOT_REPRESENTED"
+      },
+      "K-FRONTIER-01": {
+        "m0-durable-run": "NOT_REPRESENTED",
+        "unified-knowledge-work-system": "NOT_REPRESENTED"
+      }
+    },
+    "disposition": "The four-item common subset is experimentally supported by current-head repository CI. Full G-02 cross-repository conformance remains OPEN."
+  },
+  "method_and_limits": [
+    "Each repository-native adapter executes equivalent local assertions for the named fixture subset.",
+    "The adapters currently mirror the fixture assertions in code; they do not dynamically interpret the fixture prose at runtime.",
+    "No actual external service effect was dispatched; state transitions use local ledgers and synthetic decisions.",
+    "Passing local UNKNOWN state-machine tests does not prove authoritative reconciliation against an external provider.",
+    "M0 concurrency is tested with 16 simultaneous local workers; UWS is single-writer only.",
+    "The CI results establish the inspected branch commits and workflow scopes only, not production deployment or universal behavior."
+  ],
+  "next_discriminating_actions": [
+    "Convert the shared semantic cases to machine-readable input/output vectors consumed by both adapters, pinned to the fixture blob identity.",
+    "Implement or explicitly reject UWS run-id/different-goal identity binding; close K-IDENTITY-01 through the same fixture.",
+    "Keep authority and frontier separate; add independent conformance cases before claiming those boundaries.",
+    "Exercise Android caller-side UNKNOWN_OUTCOME recovery and stale-callback/concurrent recovery cases against the same semantic assertions.",
+    "Do not promote M0 or UWS local state stores to external effect authority without a separately qualified effect oracle."
+  ]
+}
