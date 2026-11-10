@@ -52,6 +52,119 @@
         "UNKNOWN_OUTCOME is not treated as success",
         "UNKNOWN_OUTCOME is not treated as safe-to-repeat",
         "reconciliation is required before authoritative terminal classification"
+      ],
+      "test_vectors": [
+        {
+          "vector_id": "K-UNKNOWN-01-V1",
+          "version": 1,
+          "effects": {
+            "completed": {
+              "effect_id": "effect-k-unknown-completed",
+              "run_id": "run-k-unknown-completed",
+              "capability_id": "capability:test",
+              "action_id": "action:test",
+              "action_version": 1,
+              "scope": [],
+              "attributed_to": "conformance-adapter",
+              "parameters_digest": "sha256:k-unknown-completed"
+            },
+            "confirmed_absent": {
+              "effect_id": "effect-k-unknown-absent",
+              "run_id": "run-k-unknown-absent",
+              "capability_id": "capability:test",
+              "action_id": "action:test",
+              "action_version": 1,
+              "scope": [],
+              "attributed_to": "conformance-adapter",
+              "parameters_digest": "sha256:k-unknown-absent"
+            }
+          },
+          "steps": [
+            {
+              "op": "reserve",
+              "effect_ref": "completed",
+              "expected": {
+                "result": "RESERVED",
+                "status": "RESERVED",
+                "record_count_delta": 1
+              }
+            },
+            {
+              "op": "mark_unknown",
+              "effect_ref": "completed",
+              "expected": {
+                "result": "UNKNOWN",
+                "status": "UNKNOWN",
+                "record_count_delta": 1
+              }
+            },
+            {
+              "op": "reserve",
+              "effect_ref": "completed",
+              "expected": {
+                "result": "REPLAY_BLOCKED",
+                "status": "UNKNOWN",
+                "record_count_delta": 0
+              }
+            },
+            {
+              "op": "reconcile",
+              "effect_ref": "completed",
+              "decision": "CONFIRMED_COMPLETED",
+              "expected": {
+                "result": "RECONCILED",
+                "status": "COMPLETED",
+                "record_count_delta": 1
+              }
+            },
+            {
+              "op": "reserve",
+              "effect_ref": "completed",
+              "expected": {
+                "result": "REPLAY_BLOCKED",
+                "status": "COMPLETED",
+                "record_count_delta": 0
+              }
+            },
+            {
+              "op": "reserve",
+              "effect_ref": "confirmed_absent",
+              "expected": {
+                "result": "RESERVED",
+                "status": "RESERVED",
+                "record_count_delta": 1
+              }
+            },
+            {
+              "op": "mark_unknown",
+              "effect_ref": "confirmed_absent",
+              "expected": {
+                "result": "UNKNOWN",
+                "status": "UNKNOWN",
+                "record_count_delta": 1
+              }
+            },
+            {
+              "op": "reconcile",
+              "effect_ref": "confirmed_absent",
+              "decision": "CONFIRMED_NOT_EXECUTED",
+              "expected": {
+                "result": "RECONCILED",
+                "status": "CONFIRMED_NOT_EXECUTED",
+                "record_count_delta": 1
+              }
+            },
+            {
+              "op": "reserve",
+              "effect_ref": "confirmed_absent",
+              "expected": {
+                "result": "RESERVED",
+                "status": "RESERVED",
+                "record_count_delta": 1
+              }
+            }
+          ]
+        }
       ]
     },
     {
