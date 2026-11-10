@@ -163,7 +163,8 @@
                 "record_count_delta": 1
               }
             }
-          ]
+          ],
+          "schema": "open_system_one.unknown_effect_test_vector.v0.1"
         }
       ]
     },
