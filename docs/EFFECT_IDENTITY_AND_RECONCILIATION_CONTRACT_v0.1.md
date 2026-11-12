@@ -137,3 +137,57 @@ Migration must preserve old raw records and append a new enriched reference or m
 ## 8. Non-goals
 
 This contract does not guarantee exactly-once execution, solve distributed transactions, define a universal lock service, or nominate one local journal as a provider authority. It defines the minimum semantic boundary needed to reason safely about ambiguous external effects.
+
+
+### 5.1 Full attestation canonical bytes and signature preimage
+
+The full reconciliation attestation uses the versioned algorithm:
+
+`open_system_one.effect_reconciliation_attestation_canonical.v0.1`
+
+It is not canonical JSON. Implementations MUST construct the following ordered string-field sequence:
+
+1. canonicalization identifier;
+2. attestation schema;
+3. effect identity schema;
+4. effect ID;
+5. run ID;
+6. capability ID;
+7. action ID;
+8. action version as base-10 decimal without leading zeroes;
+9. scope item count as base-10 decimal;
+10. each scope string sorted by unsigned lexicographic order of its UTF-8 bytes;
+11. attributed principal;
+12. parameters digest;
+13. attempt ID;
+14. attempt number as base-10 decimal without leading zeroes;
+15. decision;
+16. decided-at timestamp;
+17. authority kind;
+18. authority reference;
+19. observation reference;
+20. queried-at timestamp;
+21. observed-at timestamp;
+22. evidence artifact reference;
+23. evidence digest;
+24. verifier reference;
+25. verifier version;
+26. verifier result;
+27. verified-at timestamp;
+28. accountable principal kind;
+29. accountable principal reference;
+30. authentication scheme;
+31. authentication key reference;
+32. authentication signed digest (full attestation only);
+33. authentication signature (full attestation only);
+34. reason.
+
+For each field, append the ASCII base-10 length of its UTF-8 encoding, a colon byte (`:`), then the UTF-8 bytes. Concatenate all framed fields without any additional separator. The length is a byte length, not a character count. Strings are encoded as supplied; no Unicode normalization, case folding, trimming or newline conversion occurs during canonicalization. Scope is a set: duplicate entries are invalid, and order is normalized by the specified UTF-8 byte ordering. Absent fields are invalid; empty scope is encoded as count `0`.
+
+The full attestation digest is SHA-256 over the full sequence (including `authentication.signed_digest` and `authentication.signature`), represented as `sha256:<64 lowercase hex>`.
+
+The signature preimage is the same sequence with only `authentication.signed_digest` and `authentication.signature` omitted. The `authentication.signed_digest` field MUST equal SHA-256 of those signature-preimage bytes. The signature scheme verifies the actual signature over those exact preimage bytes; the scheme-specific signature encoding does not alter the canonical preimage. This definition avoids self-reference while binding the signature to the attestation semantics and key reference.
+
+The shared golden vector is `research/conformance/effect-attestation-canonicalization-v0.1.json`. Adapter test copies MUST remain byte-identical to the Open-System-One blob. The expected v0.1 preimage digest is `sha256:3f032f89aa6ca5baacfe2d971096f5292eb2bb517b9cc098bc840128a74fd46f`; the expected full attestation digest is `sha256:f4f29ce3a85e07ef63d9a69ac6aa1d4c8a06f0a48516794ebcf7d3525a02073e`.
+
+An adapter using any other field order, framing, scope ordering or byte encoding is not conformant to this canonicalization ID. A future encoding change requires a new canonicalization ID and new golden vectors; it MUST NOT silently change v0.1.
