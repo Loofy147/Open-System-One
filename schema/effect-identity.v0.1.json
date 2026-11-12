@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/schema/effect-identity.v0.1.json",
+  "title": "Open System One Effect Identity v0.1",
+  "description": "Immutable identity shared by all attempts of one logical external effect. Attempt identity is deliberately separate.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "effect_id",
+    "run_id",
+    "capability_id",
+    "action_id",
+    "action_version",
+    "scope",
+    "attributed_to",
+    "parameters_digest"
+  ],
+  "properties": {
+    "schema": {
+      "const": "open_system_one.effect_identity.v0.1"
+    },
+    "effect_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capability_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scope": {
+      "type": "array",
+      "description": "Canonical, explicitly present scope. Empty array means no scope was granted; omission is invalid.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "attributed_to": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parameters_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}
