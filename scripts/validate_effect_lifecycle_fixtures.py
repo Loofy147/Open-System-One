@@ -75,6 +75,116 @@ def assert_invalid(validator: Draft202012Validator, value: dict[str, Any], label
         raise AssertionError(f"{label} expected INVALID but schema accepted it")
 
 
+def canonical_parameter_digest(parameters: dict[str, str]) -> str:
+    import hashlib
+
+    payload = bytearray()
+    for key in sorted(parameters, key=lambda item: item.encode("utf-8")):
+        key_bytes = key.encode("utf-8")
+        value_bytes = parameters[key].encode("utf-8")
+        payload.extend(str(len(key_bytes)).encode("ascii"))
+        payload.extend(b":")
+        payload.extend(key_bytes)
+        payload.extend(str(len(value_bytes)).encode("ascii"))
+        payload.extend(b":")
+        payload.extend(value_bytes)
+    return "sha256:" + hashlib.sha256(payload).hexdigest()
+
+
+def validate_kernel_unknown_v03(identity_validator: Draft202012Validator) -> None:
+    path = ROOT / "research" / "conformance" / "kernel-conformance-fixtures.v0.3.json"
+    document = read_json(path)
+    if document.get("schema") != "open_system_one.kernel_conformance_fixtures.v0.3":
+        raise AssertionError("kernel fixture schema must be v0.3")
+
+    case = next(item for item in document["cases"] if item["id"] == "K-UNKNOWN-01")
+    vector = case["test_vectors"][0]
+    if vector.get("schema") != "open_system_one.unknown_effect_test_vector.v0.2":
+        raise AssertionError("K-UNKNOWN vector schema mismatch")
+    if len(vector["steps"]) != 9:
+        raise AssertionError("K-UNKNOWN vector must contain exactly nine steps")
+
+    for effect_ref, effect in vector["effects"].items():
+        identity = {
+            "schema": "open_system_one.effect_identity.v0.1",
+            "effect_id": effect["effect_id"],
+            "run_id": effect["run_id"],
+            "capability_id": effect["capability_id"],
+            "action_id": effect["action_id"],
+            "action_version": effect["action_version"],
+            "scope": effect["scope"],
+            "attributed_to": effect["attributed_to"],
+            "parameters_digest": effect["parameters_digest"],
+        }
+        assert_valid(identity_validator, identity, f"K-UNKNOWN:{effect_ref}:identity")
+        if effect["parameters_digest"] != canonical_parameter_digest(effect["parameters"]):
+            raise AssertionError(f"K-UNKNOWN:{effect_ref}: parameters_digest mismatch")
+        if effect.get("attempt_number") != 1 or not effect.get("attempt_id"):
+            raise AssertionError(f"K-UNKNOWN:{effect_ref}: initial attempt identity missing")
+
+    latest_status: dict[str, str] = {}
+    record_counts: dict[str, int] = {}
+    attempt_numbers: dict[str, int] = {}
+    seen_attempt_ids: set[str] = set()
+
+    for index, step in enumerate(vector["steps"], start=1):
+        effect = vector["effects"][step["effect_ref"]]
+        effect_id = effect["effect_id"]
+        status = latest_status.get(effect_id)
+        count = record_counts.get(effect_id, 0)
+        operation = step["op"]
+
+        if operation == "reserve":
+            attempt_id = step.get("attempt_id") or effect.get("attempt_id")
+            attempt_number = step.get("attempt_number") or effect.get("attempt_number")
+            if not attempt_id or not attempt_number:
+                raise AssertionError(f"K-UNKNOWN step {index}: reservation attempt metadata missing")
+            previous_attempt = attempt_numbers.get(effect_id, 0)
+            if attempt_id in seen_attempt_ids or attempt_number != previous_attempt + 1:
+                raise AssertionError(f"K-UNKNOWN step {index}: reused or non-monotonic attempt identity")
+            if status is None or status == "CONFIRMED_NOT_EXECUTED":
+                seen_attempt_ids.add(attempt_id)
+                attempt_numbers[effect_id] = attempt_number
+                latest_status[effect_id] = "RESERVED"
+                record_counts[effect_id] = count + 1
+                actual_result = "RESERVED"
+            else:
+                actual_result = "REPLAY_BLOCKED"
+        elif operation == "mark_unknown":
+            if status != "RESERVED":
+                raise AssertionError(f"K-UNKNOWN step {index}: mark_unknown without RESERVED")
+            latest_status[effect_id] = "UNKNOWN"
+            record_counts[effect_id] = count + 1
+            actual_result = "UNKNOWN"
+        elif operation == "reconcile":
+            if status != "UNKNOWN":
+                raise AssertionError(f"K-UNKNOWN step {index}: reconciliation without UNKNOWN")
+            decision = step["decision"]
+            if decision not in ("CONFIRMED_COMPLETED", "CONFIRMED_NOT_EXECUTED"):
+                raise AssertionError(f"K-UNKNOWN step {index}: invalid reconciliation decision")
+            latest_status[effect_id] = (
+                "COMPLETED" if decision == "CONFIRMED_COMPLETED" else "CONFIRMED_NOT_EXECUTED"
+            )
+            record_counts[effect_id] = count + 1
+            actual_result = "RECONCILED"
+        else:
+            raise AssertionError(f"K-UNKNOWN step {index}: unsupported operation {operation}")
+
+        actual_status = latest_status.get(effect_id)
+        delta = record_counts.get(effect_id, 0) - count
+        expected = step["expected"]
+        if (actual_result, actual_status, delta) != (
+            expected["result"], expected["status"], expected["record_count_delta"]
+        ):
+            raise AssertionError(
+                f"K-UNKNOWN step {index} mismatch: "
+                f"{(actual_result, actual_status, delta)!r} != "
+                f"{(expected['result'], expected['status'], expected['record_count_delta'])!r}"
+            )
+
+    print("PASS kernel-conformance:K-UNKNOWN-01-V2")
+    
+
 def main() -> None:
     identity_schema = read_json(SCHEMA_DIR / "effect-identity.v0.1.json")
     attempt_schema = read_json(SCHEMA_DIR / "effect-attempt.v0.1.json")
@@ -195,6 +305,7 @@ def main() -> None:
         raise AssertionError("Forbidden transition is marked legal")
     print("PASS state-machine:legal-and-forbidden-transitions")
 
+    validate_kernel_unknown_v03(identity_validator)
     print("PASS effect lifecycle contract fixtures")
 
 
