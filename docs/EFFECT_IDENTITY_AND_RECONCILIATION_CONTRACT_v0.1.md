@@ -97,6 +97,15 @@ The JSON Schema validates shape, not authenticity. The relying runtime or a desi
 
 ## 5. Canonicalization and privacy
 
+For v0.1 string maps, the interoperable canonical parameter byte sequence is:
+
+1. Encode each key and value as UTF-8 without Unicode normalization.
+2. Sort entries by the unsigned lexicographic order of the UTF-8 key bytes.
+3. For each entry append the ASCII decimal byte length of the key, `:`, the key bytes, the ASCII decimal byte length of the value, `:`, and the value bytes.
+4. Compute SHA-256 over the concatenated bytes and prefix the lowercase hexadecimal digest with `sha256:`.
+
+The canonicalization test vector in `research/conformance/kernel-conformance-fixtures.v0.3.json` exercises this rule. The older v0.2 kernel fixture is retained unchanged for historical reproducibility; its K-UNKNOWN test-vector digests are legacy placeholders and are not valid under the v0.1 identity schema.
+
 Implementations must retain or reference the exact canonical parameter digest used to create the effect identity. Do not export raw parameters when a digest and a minimized evidence reference are sufficient. Scope and attribution must remain explicit.
 
 The canonicalizer is capability-version-specific. It must specify encoding, key ordering, normalization and treatment of absent/empty values. A change in canonicalization that can alter the digest requires a new capability/action version or an explicit schema/adapter revision.
