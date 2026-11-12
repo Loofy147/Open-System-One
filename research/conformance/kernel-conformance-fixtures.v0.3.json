@@ -70,7 +70,8 @@
               "parameters": {
                 "message": "conformance-completed"
               },
-              "attempt_id": "attempt-k-unknown-completed-1"
+              "attempt_id": "attempt-k-unknown-completed-1",
+              "attempt_number": 1
             },
             "confirmed_absent": {
               "effect_id": "effect-k-unknown-absent",
@@ -84,7 +85,8 @@
               "parameters": {
                 "message": "conformance-absent"
               },
-              "attempt_id": "attempt-k-unknown-absent-1"
+              "attempt_id": "attempt-k-unknown-absent-1",
+              "attempt_number": 1
             }
           },
           "steps": [
@@ -96,7 +98,8 @@
                 "status": "RESERVED",
                 "record_count_delta": 1
               },
-              "attempt_id": "attempt-k-unknown-completed-1"
+              "attempt_id": "attempt-k-unknown-completed-1",
+              "attempt_number": 1
             },
             {
               "op": "mark_unknown",
@@ -143,7 +146,8 @@
                 "status": "RESERVED",
                 "record_count_delta": 1
               },
-              "attempt_id": "attempt-k-unknown-absent-1"
+              "attempt_id": "attempt-k-unknown-absent-1",
+              "attempt_number": 1
             },
             {
               "op": "mark_unknown",
@@ -172,7 +176,8 @@
                 "status": "RESERVED",
                 "record_count_delta": 1
               },
-              "attempt_id": "attempt-k-unknown-absent-2"
+              "attempt_id": "attempt-k-unknown-absent-2",
+              "attempt_number": 2
             }
           ],
           "schema": "open_system_one.unknown_effect_test_vector.v0.2",
