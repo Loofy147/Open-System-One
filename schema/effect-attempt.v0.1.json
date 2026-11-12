@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/schema/effect-attempt.v0.1.json",
+  "title": "Open System One Effect Attempt v0.1",
+  "description": "One reservation/execution attempt for an immutable logical effect identity.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "effect_identity",
+    "attempt_id",
+    "attempt_number",
+    "reserved_at",
+    "status"
+  ],
+  "properties": {
+    "schema": {
+      "const": "open_system_one.effect_attempt.v0.1"
+    },
+    "effect_identity": {
+      "$ref": "effect-identity.v0.1.json"
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Unique and never-reused identifier for this attempt."
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "reserved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "const": "RESERVED"
+    }
+  }
+}

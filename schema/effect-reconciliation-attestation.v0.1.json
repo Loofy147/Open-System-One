@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Loofy147/Open-System-One/schema/effect-reconciliation-attestation.v0.1.json",
+  "title": "Open System One Effect Reconciliation Attestation v0.1",
+  "description": "Evidence-bearing decision about one exact effect attempt. The record stores the authority and verifier references; a relying system must still validate their trust and applicability.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "effect_identity",
+    "attempt_id",
+    "attempt_number",
+    "decision",
+    "decided_at",
+    "authority",
+    "evidence",
+    "verifier",
+    "accountable_principal",
+    "authentication",
+    "reason"
+  ],
+  "properties": {
+    "schema": {
+      "const": "open_system_one.effect_reconciliation_attestation.v0.1"
+    },
+    "effect_identity": {
+      "$ref": "effect-identity.v0.1.json"
+    },
+    "attempt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "attempt_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "decision": {
+      "enum": [
+        "CONFIRMED_COMPLETED",
+        "CONFIRMED_NOT_EXECUTED",
+        "UNRESOLVED"
+      ]
+    },
+    "decided_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ref",
+        "observation_ref",
+        "queried_at",
+        "observed_at"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Authority class, e.g. provider_api, operating_system, database, filesystem."
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Versioned authority or provider identity."
+        },
+        "observation_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "queried_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_ref",
+        "digest"
+      ],
+      "properties": {
+        "artifact_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "version",
+        "result",
+        "verified_at"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "INCONCLUSIVE"
+          ]
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "accountable_principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "ref"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "human",
+            "service"
+          ]
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scheme",
+        "key_ref",
+        "signed_digest",
+        "signature"
+      ],
+      "properties": {
+        "scheme": {
+          "enum": [
+            "ed25519",
+            "jws"
+          ]
+        },
+        "key_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "MUST equal sha256:<64 lowercase hex> of the v0.1 canonical signature preimage (the complete ordered attestation field sequence excluding only authentication.signed_digest and authentication.signature)."
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "enum": [
+              "CONFIRMED_COMPLETED",
+              "CONFIRMED_NOT_EXECUTED"
+            ]
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "verifier": {
+            "properties": {
+              "result": {
+                "const": "PASS"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "decision": {
+            "const": "UNRESOLVED"
+          }
+        },
+        "required": [
+          "decision"
+        ]
+      },
+      "then": {
+        "properties": {
+          "verifier": {
+            "properties": {
+              "result": {
+                "enum": [
+                  "FAIL",
+                  "INCONCLUSIVE"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
