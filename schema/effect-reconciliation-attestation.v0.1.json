@@ -16,6 +16,7 @@
     "evidence",
     "verifier",
     "accountable_principal",
+    "authentication",
     "reason"
   ],
   "properties": {
@@ -151,6 +152,36 @@
     "reason": {
       "type": "string",
       "minLength": 1
+    },
+    "authentication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scheme",
+        "key_ref",
+        "signed_digest",
+        "signature"
+      ],
+      "properties": {
+        "scheme": {
+          "enum": [
+            "ed25519",
+            "jws"
+          ]
+        },
+        "key_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "signed_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "signature": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   },
   "allOf": [
