@@ -1,0 +1,213 @@
+{
+  "schema": "open_system_one.effect_lifecycle_fixtures.v0.1",
+  "status": "DRAFT",
+  "identity_schema": "schema/effect-identity.v0.1.json",
+  "attempt_schema": "schema/effect-attempt.v0.1.json",
+  "attestation_schema": "schema/effect-reconciliation-attestation.v0.1.json",
+  "valid_identity": {
+    "schema": "open_system_one.effect_identity.v0.1",
+    "effect_id": "effect-42",
+    "run_id": "run-17",
+    "capability_id": "message.send",
+    "action_id": "send_once",
+    "action_version": 2,
+    "scope": [],
+    "attributed_to": "principal:user-1",
+    "parameters_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "identity_cases": [
+    {
+      "id": "EI-VALID-EMPTY-SCOPE",
+      "identity_ref": "valid_identity",
+      "expected": "VALID"
+    },
+    {
+      "id": "EI-MISSING-SCOPE",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/scope"
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "EI-MISSING-ATTRIBUTION",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/attributed_to"
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "EI-MISSING-PARAMETERS-DIGEST",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/parameters_digest"
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "EI-BLANK-RUN",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/run_id",
+          "value": ""
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "EI-INVALID-ACTION-VERSION",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/action_version",
+          "value": 0
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "EI-MALFORMED-DIGEST",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/parameters_digest",
+          "value": "md5:0000"
+        }
+      ],
+      "expected": "INVALID"
+    }
+  ],
+  "attempt_cases": [
+    {
+      "id": "EA-NEW-ATTEMPT",
+      "effect_identity_ref": "valid_identity",
+      "attempt_1": {
+        "attempt_id": "attempt-1",
+        "attempt_number": 1
+      },
+      "attempt_2": {
+        "attempt_id": "attempt-2",
+        "attempt_number": 2
+      },
+      "expected": "SAME_EFFECT_NEW_ATTEMPT"
+    },
+    {
+      "id": "EA-REUSED-ATTEMPT-ID",
+      "attempt_1": {
+        "attempt_id": "attempt-1",
+        "attempt_number": 1
+      },
+      "attempt_2": {
+        "attempt_id": "attempt-1",
+        "attempt_number": 2
+      },
+      "expected": "INVALID"
+    }
+  ],
+  "reconciliation_cases": [
+    {
+      "id": "RA-CONFIRMED-COMPLETED",
+      "decision": "CONFIRMED_COMPLETED",
+      "verifier_result": "PASS",
+      "authority_ref": "provider:messaging:v2",
+      "observation_ref": "provider-query:receipt-42",
+      "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "expected": "RESOLVE_COMPLETED"
+    },
+    {
+      "id": "RA-CONFIRMED-NOT-EXECUTED",
+      "decision": "CONFIRMED_NOT_EXECUTED",
+      "verifier_result": "PASS",
+      "authority_ref": "provider:messaging:v2",
+      "observation_ref": "provider-query:absence-42",
+      "evidence_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "expected": "RESOLVE_CONFIRMED_NOT_EXECUTED"
+    },
+    {
+      "id": "RA-UNRESOLVED",
+      "decision": "UNRESOLVED",
+      "verifier_result": "INCONCLUSIVE",
+      "authority_ref": "provider:messaging:v2",
+      "observation_ref": "provider-query:unknown-42",
+      "evidence_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "expected": "REMAIN_UNKNOWN"
+    },
+    {
+      "id": "RA-MISSING-AUTHORITY",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/authority/ref"
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "RA-MISSING-EVIDENCE",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/evidence/digest"
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
+      "id": "RA-CONFIRMED-WITHOUT-VERIFIER-PASS",
+      "decision": "CONFIRMED_COMPLETED",
+      "verifier_result": "INCONCLUSIVE",
+      "expected": "INVALID"
+    },
+    {
+      "id": "RA-STALE-ATTEMPT",
+      "attestation_attempt_id": "attempt-1",
+      "current_attempt_id": "attempt-2",
+      "expected": "REJECT_STALE_ATTESTATION"
+    }
+  ],
+  "state_machine": {
+    "states": [
+      "RESERVED",
+      "UNKNOWN",
+      "COMPLETED",
+      "CONFIRMED_NOT_EXECUTED"
+    ],
+    "legal_transitions": [
+      {
+        "from": "RESERVED",
+        "to": "COMPLETED",
+        "requires": "execution acknowledgement"
+      },
+      {
+        "from": "RESERVED",
+        "to": "UNKNOWN",
+        "requires": "ambiguous execution boundary"
+      },
+      {
+        "from": "UNKNOWN",
+        "to": "COMPLETED",
+        "requires": "valid attestation for exact effect identity and attempt"
+      },
+      {
+        "from": "UNKNOWN",
+        "to": "CONFIRMED_NOT_EXECUTED",
+        "requires": "valid attestation for exact effect identity and attempt"
+      }
+    ],
+    "replay_rules": [
+      "UNKNOWN blocks execution for that attempt.",
+      "COMPLETED is terminal for the logical effect identity.",
+      "CONFIRMED_NOT_EXECUTED permits only a new attempt_id and incremented attempt_number; prior attempt history remains append-only.",
+      "An attestation for an old attempt cannot resolve a newer attempt.",
+      "UNRESOLVED is recorded but leaves the effect in UNKNOWN."
+    ]
+  }
+}
