@@ -135,20 +135,21 @@ def validate_kernel_unknown_v03(identity_validator: Draft202012Validator) -> Non
         operation = step["op"]
 
         if operation == "reserve":
-            attempt_id = step.get("attempt_id") or effect.get("attempt_id")
-            attempt_number = step.get("attempt_number") or effect.get("attempt_number")
-            if not attempt_id or not attempt_number:
-                raise AssertionError(f"K-UNKNOWN step {index}: reservation attempt metadata missing")
-            previous_attempt = attempt_numbers.get(effect_id, 0)
-            if attempt_id in seen_attempt_ids or attempt_number != previous_attempt + 1:
-                raise AssertionError(f"K-UNKNOWN step {index}: reused or non-monotonic attempt identity")
             if status is None or status == "CONFIRMED_NOT_EXECUTED":
+                attempt_id = step.get("attempt_id") or effect.get("attempt_id")
+                attempt_number = step.get("attempt_number") or effect.get("attempt_number")
+                if not attempt_id or not attempt_number:
+                    raise AssertionError(f"K-UNKNOWN step {index}: admitted reservation attempt metadata missing")
+                previous_attempt = attempt_numbers.get(effect_id, 0)
+                if attempt_id in seen_attempt_ids or attempt_number != previous_attempt + 1:
+                    raise AssertionError(f"K-UNKNOWN step {index}: reused or non-monotonic attempt identity")
                 seen_attempt_ids.add(attempt_id)
                 attempt_numbers[effect_id] = attempt_number
                 latest_status[effect_id] = "RESERVED"
                 record_counts[effect_id] = count + 1
                 actual_result = "RESERVED"
             else:
+                # A rejected reservation request does not create a new attempt.
                 actual_result = "REPLAY_BLOCKED"
         elif operation == "mark_unknown":
             if status != "RESERVED":
