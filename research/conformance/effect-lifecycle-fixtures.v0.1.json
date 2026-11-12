@@ -83,6 +83,17 @@
         }
       ],
       "expected": "INVALID"
+    },
+    {
+      "id": "EI-CHANGED-PARAMETERS-SAME-EFFECT",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/parameters_digest",
+          "value": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+        }
+      ],
+      "expected": "IDENTITY_CONFLICT"
     }
   ],
   "attempt_cases": [
@@ -115,29 +126,49 @@
   "reconciliation_cases": [
     {
       "id": "RA-CONFIRMED-COMPLETED",
-      "decision": "CONFIRMED_COMPLETED",
-      "verifier_result": "PASS",
-      "authority_ref": "provider:messaging:v2",
-      "observation_ref": "provider-query:receipt-42",
-      "evidence_digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "attestation_ref": "valid_attestation",
       "expected": "RESOLVE_COMPLETED"
     },
     {
       "id": "RA-CONFIRMED-NOT-EXECUTED",
-      "decision": "CONFIRMED_NOT_EXECUTED",
-      "verifier_result": "PASS",
-      "authority_ref": "provider:messaging:v2",
-      "observation_ref": "provider-query:absence-42",
-      "evidence_digest": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/decision",
+          "value": "CONFIRMED_NOT_EXECUTED"
+        },
+        {
+          "op": "replace",
+          "path": "/authority/observation_ref",
+          "value": "provider-query/absence-42"
+        },
+        {
+          "op": "replace",
+          "path": "/evidence/artifact_ref",
+          "value": "artifact/absence-42"
+        },
+        {
+          "op": "replace",
+          "path": "/evidence/digest",
+          "value": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        }
+      ],
       "expected": "RESOLVE_CONFIRMED_NOT_EXECUTED"
     },
     {
       "id": "RA-UNRESOLVED",
-      "decision": "UNRESOLVED",
-      "verifier_result": "INCONCLUSIVE",
-      "authority_ref": "provider:messaging:v2",
-      "observation_ref": "provider-query:unknown-42",
-      "evidence_digest": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/decision",
+          "value": "UNRESOLVED"
+        },
+        {
+          "op": "replace",
+          "path": "/verifier/result",
+          "value": "INCONCLUSIVE"
+        }
+      ],
       "expected": "REMAIN_UNKNOWN"
     },
     {
@@ -161,9 +192,24 @@
       "expected": "INVALID"
     },
     {
+      "id": "RA-MISSING-AUTHENTICATION",
+      "mutations": [
+        {
+          "op": "remove",
+          "path": "/authentication"
+        }
+      ],
+      "expected": "INVALID"
+    },
+    {
       "id": "RA-CONFIRMED-WITHOUT-VERIFIER-PASS",
-      "decision": "CONFIRMED_COMPLETED",
-      "verifier_result": "INCONCLUSIVE",
+      "mutations": [
+        {
+          "op": "replace",
+          "path": "/verifier/result",
+          "value": "INCONCLUSIVE"
+        }
+      ],
       "expected": "INVALID"
     },
     {
@@ -209,5 +255,69 @@
       "An attestation for an old attempt cannot resolve a newer attempt.",
       "UNRESOLVED is recorded but leaves the effect in UNKNOWN."
     ]
+  },
+  "valid_attempt": {
+    "schema": "open_system_one.effect_attempt.v0.1",
+    "effect_identity": {
+      "schema": "open_system_one.effect_identity.v0.1",
+      "effect_id": "effect-42",
+      "run_id": "run-17",
+      "capability_id": "message.send",
+      "action_id": "send_once",
+      "action_version": 2,
+      "scope": [],
+      "attributed_to": "principal:user-1",
+      "parameters_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "attempt_id": "attempt-1",
+    "attempt_number": 1,
+    "reserved_at": "2026-11-12T12:00:00Z",
+    "status": "RESERVED"
+  },
+  "valid_attestation": {
+    "schema": "open_system_one.effect_reconciliation_attestation.v0.1",
+    "effect_identity": {
+      "schema": "open_system_one.effect_identity.v0.1",
+      "effect_id": "effect-42",
+      "run_id": "run-17",
+      "capability_id": "message.send",
+      "action_id": "send_once",
+      "action_version": 2,
+      "scope": [],
+      "attributed_to": "principal:user-1",
+      "parameters_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "attempt_id": "attempt-1",
+    "attempt_number": 1,
+    "decision": "CONFIRMED_COMPLETED",
+    "decided_at": "2026-11-12T12:01:00Z",
+    "authority": {
+      "kind": "provider_api",
+      "ref": "provider:messaging:v2",
+      "observation_ref": "provider-query:receipt-42",
+      "queried_at": "2026-11-12T12:00:30Z",
+      "observed_at": "2026-11-12T12:00:31Z"
+    },
+    "evidence": {
+      "artifact_ref": "artifact:provider-receipt-42",
+      "digest": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "verifier": {
+      "ref": "verifier:provider-receipt-v1",
+      "version": "1.0.0",
+      "result": "PASS",
+      "verified_at": "2026-11-12T12:00:50Z"
+    },
+    "accountable_principal": {
+      "kind": "service",
+      "ref": "service:reconciliation-worker"
+    },
+    "authentication": {
+      "scheme": "ed25519",
+      "key_ref": "key:reconciliation-service-v1",
+      "signed_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "signature": "base64url:example-signature"
+    },
+    "reason": "Provider receipt matched the exact effect identity and attempt."
   }
 }
