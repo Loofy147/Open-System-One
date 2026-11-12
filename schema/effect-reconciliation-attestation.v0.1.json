@@ -175,7 +175,8 @@
         },
         "signed_digest": {
           "type": "string",
-          "pattern": "^sha256:[0-9a-f]{64}$"
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "MUST equal sha256:<64 lowercase hex> of the v0.1 canonical signature preimage (the complete ordered attestation field sequence excluding only authentication.signed_digest and authentication.signature)."
         },
         "signature": {
           "type": "string",
